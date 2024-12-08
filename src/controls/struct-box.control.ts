@@ -46,7 +46,7 @@ export class StructBoxControl extends UserControl {
 
             canvas // Draw key label
                 .textAlign("left")
-                .font('10px sans-serif')
+                .font('400 11px sans-serif')
                 .fillStyle("#999")
                 .fillText(`${entry.key}`, entry.x + Constants.DEFAULT_VALUE_BOX_TEXT_PADDING, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING)
 

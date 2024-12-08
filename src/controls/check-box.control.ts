@@ -21,12 +21,12 @@ export class CheckBoxControl extends UserControl {
 
         canvas  // Draws background box
             .roundedRectangle(0, 0 - Constants.DEFAULT_BOX_HEIGHT / 2, Constants.DEFAULT_BOX_HEIGHT -1, Constants.DEFAULT_BOX_HEIGHT-1, Constants.DEFAULT_BOX_RADIUS)
-            .fillStyle('rgba(50,50,50,0.5)')
+            .fillStyle(this.isTrue ? '#4772b3ff' : '#545454ff')
             .fill()
 
         canvas  // Draws stroke
-            .strokeStyle('rgba(70,70,70,0.7)')
-            .lineWidth(2)
+            .strokeStyle('#3d3d3dff')
+            .lineWidth(1)
             .stroke();
 
         if(this.isTrue) {

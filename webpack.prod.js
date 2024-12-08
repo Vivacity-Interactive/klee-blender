@@ -13,9 +13,9 @@ module.exports = merge(common, {
         ],
     },
     output: {
-        filename: 'klee.min.js',
+        filename: 'klee-blender.min.js',
         path: path.resolve(__dirname, 'dist'),
-        library: 'Klee',
+        library: 'KleeBlender',
         libraryTarget: "umd",
     }
 });

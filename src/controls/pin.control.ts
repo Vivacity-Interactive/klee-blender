@@ -16,7 +16,7 @@ export class PinControl extends UserControl {
 
     private static readonly PIN_NAME_PADDING_LEFT = 14;
     private static readonly PIN_ICON_WIDTH = 10;
-    private static readonly PINS_PADDING_HORIZONTAL = 16;
+    private static readonly PINS_PADDING_HORIZONTAL = 0;
     private static readonly PINS_PADDING_LEFT_DEFAULT_BOX = 8;
 
     private _pinProperty: PinProperty;
@@ -287,7 +287,7 @@ export class PinControl extends UserControl {
         else
             canvas.textAlign("right")
 
-        canvas.font('12px sans-serif')
+        canvas.font('400 11px sans-serif')
         .fillStyle("#eee");
 
         return textX;

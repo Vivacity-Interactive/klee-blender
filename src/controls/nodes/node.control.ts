@@ -14,14 +14,15 @@ import { IconLibrary } from "../utils/icon-library";
 
 export abstract class NodeControl extends Container {
 
-    private static readonly _SELECTION_COLOR = 'rgb(231,158,0)';
-    private static readonly _SELECTION_LINE_WIDTH = 2.5;
+    private static readonly _SELECTION_COLOR = '#ffffff';
+    //private static readonly _ACTIVE_COLOR = '#ed5700';
+    private static readonly _SELECTION_LINE_WIDTH = 1.0;
 
     private _node: Node;
     protected pins: Array<PinControl> = [];
 
     protected mainPanel: VerticalPanel;
-    protected pinPanel: HorizontalPanel;
+    protected pinPanel: VerticalPanel;
     protected inputPinPanel: VerticalPanel;
     protected outputPinPanel: VerticalPanel;
 
@@ -43,7 +44,7 @@ export abstract class NodeControl extends Container {
         this._selected = false;
         this._stroke = {
             lineWidth: 1,
-            style: 'rgb(0,0,0)'
+            style: '#000000'
         }
 
         this.showAdvanced = node.advancedPinDisplay;
@@ -52,7 +53,7 @@ export abstract class NodeControl extends Container {
         this.mainPanel.fillParentHorizontal = true;
         this.add(this.mainPanel);
         
-        this.pinPanel = new HorizontalPanel();
+        this.pinPanel = new VerticalPanel();
         this.pinPanel.fillParentHorizontal = true;
 
         this.mainPanel.add(this.pinPanel);
@@ -62,8 +63,8 @@ export abstract class NodeControl extends Container {
         this.outputPinPanel.childAlignment = HorizontalAlignment.RIGHT;
         this.outputPinPanel.fillParentHorizontal = true;
         
-        this.pinPanel.add(this.inputPinPanel);
         this.pinPanel.add(this.outputPinPanel);
+        this.pinPanel.add(this.inputPinPanel);
         
         this.initErrorBar();
         this.addInfoIcons();

@@ -14,7 +14,7 @@ import { PinControl } from "./pin.control";
 export class Header extends HorizontalPanel {
 
     private static readonly HEADER_TITLE_HEIGHT = 23;
-    private static readonly NODE_DEFAULT_BACKGROUND_COLOR = '78, 117, 142';
+    private static readonly NODE_DEFAULT_BACKGROUND_COLOR = '78, 117, 142'; //#CCCC00
 
     private fillStyleHeader: CanvasGradient;
     protected headerHeight = Header.HEADER_TITLE_HEIGHT;
@@ -69,9 +69,10 @@ export class Header extends HorizontalPanel {
 
     private getHeaderFillStyle(): CanvasGradient {
         const backgroundColor = this.node.backgroundColor || Header.NODE_DEFAULT_BACKGROUND_COLOR;
+        //const gradient = this.app.canvas.fillStyle(`rgb(${backgroundColor})`);
         const gradient = this.app.canvas.getContext().createLinearGradient(0, 0, 150, 0);
         gradient.addColorStop(0, `rgb(${backgroundColor})`);
-        gradient.addColorStop(1, `rgba(${backgroundColor},0.15)`);
+        gradient.addColorStop(1, `rgba(${backgroundColor},1.0)`);
         return gradient;
     }
 

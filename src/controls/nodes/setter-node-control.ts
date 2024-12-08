@@ -14,7 +14,7 @@ export class SetterNodeControl extends HeadlessNodeControl implements DrawableCo
 
     protected drawTitle(canvas: Canvas2D) {
         canvas
-            .font("bold 18px sans-serif")
+            .font("400 11px sans-serif")
             .textAlign('center')
             .fillStyle(Constants.NODE_MATHFUNC_TITLE_COLOR)
             .fillText('SET', this.size.x / 2, 22);

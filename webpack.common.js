@@ -5,7 +5,7 @@ const ifdefOptions = {
 }
 
 module.exports = {
-    entry: './src/klee.ts',
+    entry: './src/klee-blender.ts',
     module: {
         rules: [
             {

@@ -1,6 +1,6 @@
 import { Application } from "./application";
 
-export class Klee {
+export class KleeBlender {
 
     private app: Application;
 
@@ -19,7 +19,7 @@ export class Klee {
     public static getInstance(canvas: HTMLCanvasElement) {
         let app = Application.getInstance(canvas);
         if (app !== undefined) {
-            return new Klee(canvas, app);
+            return new KleeBlender(canvas, app);
         }
         return undefined;
     }
@@ -30,11 +30,11 @@ export class Klee {
 }
 
 export function init(canvas: HTMLCanvasElement) {
-    return new Klee(canvas);
+    return new KleeBlender(canvas);
 }
 
 export function get(canvas: HTMLCanvasElement) {
-    return Klee.getInstance(canvas);
+    return KleeBlender.getInstance(canvas);
 }
 
 
@@ -42,8 +42,8 @@ export function get(canvas: HTMLCanvasElement) {
 
 
 function initialize() {
-    document.querySelectorAll('canvas.klee').forEach((canvas: HTMLCanvasElement) => {
-        new Klee(canvas);
+    document.querySelectorAll('canvas.klee-blender').forEach((canvas: HTMLCanvasElement) => {
+        new KleeBlender(canvas);
     });
 }
 

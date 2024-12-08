@@ -1,7 +1,7 @@
 {
-    "name": "klee",
-    "version": "1.0.0",
-    "description": "Unreal Engine Blueprint Visualizer for the Web",
+    "name": "klee-blender",
+    "version": "0.5.1",
+    "description": "Blender Node Groups Visualizer for the Web Based on Klee",
     "private": "true",
     "scripts": {
         "dev": "webpack serve --config webpack.dev.js",
@@ -12,17 +12,18 @@
         "/dist"
     ],
     "keywords": [
-        "Unreal",
-        "Unreal Engine",
-        "Blueprint",
+        "Blender",
+        "Node Groups",
+        "Geometry Nodes",
         "NodeGraph"
     ],
     "author": {
-        "email": "contact@tinu.io",
-        "name": "Martin Hodler",
-        "url": "https://tinu.io"
+        "email": "wind.randy@gmail.com",
+        "name": "Randy Wind",
+        "url": "https://www.vivacityinteractive.nl"
     },
     "contributors": [
+        "Martin Hodler <contact@tinu.io>",
         "Pascal Aregger <pascal.aregger97@gmail.com>"
     ],
     "devDependencies": {

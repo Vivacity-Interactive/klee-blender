@@ -8,8 +8,8 @@ import { NodeControl } from "./node.control";
 
 export class CommentNodeControl extends NodeControl implements DrawableControl {
 
-    private static readonly _HEADER_TEXT_COLOR = "rgb(238,238,238)";
-    private static readonly _DEFAULT_COMMENT_COLOR = "rgba(255,255,255,1)";
+    private static readonly _HEADER_TEXT_COLOR = "#eeeeee";
+    private static readonly _DEFAULT_COMMENT_COLOR = "#eeeeee";
 
     private headerBackgroundColor: string;
     private bodyBackgroundColor: string;
@@ -59,7 +59,7 @@ export class CommentNodeControl extends NodeControl implements DrawableControl {
         canvas.fillStyle(this.headerBackgroundColor)
             .roundedRectangle(0, 0, this.width, headerHeight, { radiusTopLeft: 5, radiusTopRight: 5, radiusBottomLeft: 0, radiusBottomRight: 0 })
             .fill()
-            .font("600 18px sans-serif")
+            .font("400 11px sans-serif")
             .textAlign('left')
             .strokeStyle('#333')
             .lineWidth(1.5)
