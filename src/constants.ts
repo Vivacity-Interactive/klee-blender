@@ -8,13 +8,13 @@ export class Constants {
 
     public static readonly NODE_MATHFUNC_TITLE_FONT = "400 11px sans-serif";
     public static readonly NODE_MATHFUNC_SUBTITLE_FONT = "400 11px sans-serif";
-    public static readonly NODE_MATHFUNC_TITLE_COLOR = "#EEEEEE";
+    public static readonly NODE_MATHFUNC_TITLE_COLOR = "#EEEEEE80";
 
     public static readonly DEFAULT_VALUE_BOX_TEXT_PADDING = 4;
     public static readonly DEFAULT_VALUE_BOX_MARGIN_LEFT = 8;
 
-    public static readonly DEFAULT_FUNC_BACKGROUND_COLOR = '0, 149, 114';
-    public static readonly DEFAULT_FUNC_PURE_BACKGROUND_COLOR = '151, 60, 60';
+    public static readonly DEFAULT_FUNC_BACKGROUND_COLOR = '0, 214, 163';
+    public static readonly DEFAULT_FUNC_PURE_BACKGROUND_COLOR = '0, 214, 163';
     public static readonly DEFAULT_FUNC_ENTRY_BACKGROUND_COLOR = '0, 0, 0';
 
     public static readonly DEFAULT_BOX_HEIGHT = 16;

@@ -50,6 +50,19 @@ export class PinProperty extends CustomProperty {
     hideName: boolean;
     showInHead: boolean;
 
+    // Blender Extension
+    forceNoneField: boolean;
+    layerSelection: boolean;
+    hideInModifier: boolean;
+
+    attributeDomain: string; //PinAttributeDomain (POINT, EDGE, FACE, CORNER, CURVE, INSTANCE, LAYER)
+    defaultAttributeName: string;
+    
+    maxValue: any;
+    minValue: any;
+    defaultInput: string; //PinDefaultInput (VALUE, INDEX, ID_OR_INDEX, INSTANCE_TRANSFORM)
+
+
     constructor(nodeName: string) {
         super();
         this.nodeName = nodeName;

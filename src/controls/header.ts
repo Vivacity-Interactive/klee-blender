@@ -71,8 +71,8 @@ export class Header extends HorizontalPanel {
         const backgroundColor = this.node.backgroundColor || Header.NODE_DEFAULT_BACKGROUND_COLOR;
         //const gradient = this.app.canvas.fillStyle(`rgb(${backgroundColor})`);
         const gradient = this.app.canvas.getContext().createLinearGradient(0, 0, 150, 0);
-        gradient.addColorStop(0, `rgb(${backgroundColor})`);
-        gradient.addColorStop(1, `rgba(${backgroundColor},1.0)`);
+        gradient.addColorStop(0, `rgba(${backgroundColor},0.5)`);
+        gradient.addColorStop(1, `rgba(${backgroundColor},0.5)`);
         return gradient;
     }
 

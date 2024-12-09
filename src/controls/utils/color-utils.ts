@@ -52,6 +52,45 @@ export class ColorUtils {
                 return 'rgb(230, 123, 169)';
             case PinCategory.byte:
                 return 'rgb(0, 110, 100)';
+            
+            // Blender Pin Categories
+            case PinCategory.VALUE:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.INT:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.BOOLEAN:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.VECTOR:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.ROTATION:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.MATRIX:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.STRING:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.RGBA:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.SHADER:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.OBJECT:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.GEOMETRY:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.COLLECTION:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.TEXTURE:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.MATERIAL:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.MENU:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.IMAGE:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.VIRTUAL:
+                return 'rgb(255, 56, 56)';
+            case PinCategory.CUSTOM:
+                return 'rgb(255, 56, 56)';
+            
             default: 
                 return 'rgb(230, 230, 230)';
         }
