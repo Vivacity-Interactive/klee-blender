@@ -136,9 +136,10 @@ class UEOEF:
             self.properties.append(UEOEF.Property("LinkedTo", self.links.serialize()))
     
     class Object:
-        fm_begin = "\nBegin Object Class=%X% Name=%Y%"
+        fm_begin = "\nBegin Object"
         fm_end = "\nEnd Object"
         fm_property = "\n\t"
+        fm_attribute = " "
         
         def __init__(self, type="", name="", enum=""):
             self.reference = UEOEF.Tuple()
@@ -147,12 +148,15 @@ class UEOEF:
             self.enum = enum
             self.name = name
             self.position = mathutils.Vector((0.0, 0.0, 0.0))
+            self.attributes = []
             self.properties = []
             self.pins = []
             
         def serialize(self):
             self._default()
-            text = UEOEF.Object.fm_begin.replace("%X%", self.type).replace("%Y%", json.dumps(self.name))
+            text = UEOEF.Object.fm_begin
+            for attribute in self.attributes:
+                text += UEOEF.Object.fm_attribute + attribute.serialize()
             for property in self.properties:
                 text += UEOEF.Object.fm_property + property.serialize()
             for pin in self.pins:
@@ -161,6 +165,9 @@ class UEOEF:
             return text
         
         def _default(self):
+            self.attributes.append(UEOEF.Property("Class", self.type))
+            self.attributes.append(UEOEF.Property("Name", json.dumps(self.name)))
+            
             self.properties.append(UEOEF.Property("NodeGuid", _to_uid(self.id)))
             self.properties.append(UEOEF.Property("NodeType", json.dumps(self.enum)))
             self.properties.append(UEOEF.Property("NodePosX", int(self.position.x)))
