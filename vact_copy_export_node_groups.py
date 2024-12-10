@@ -23,14 +23,14 @@ class UEOEF:
         fm_set = "="
         
         def __init__(self, name="", value="", flag = 0):
-            self.flag = 0
+            self.flag = flag
             self.name = name
             self.value = value
             
         def serialize(self):
             self._default()
             text = self.name + UEOEF.Property.fm_set
-            text += str(self.value if not self.flag else json.dumps(self.value))
+            text += str(self.value if self.flag == 0 else json.dumps(self.value))
             return text
         
         def _default(self):
@@ -83,6 +83,20 @@ class UEOEF:
             self.enum = enum
             self.direction = 0
             self.description = ""
+            #self.attribute_domain = ""
+            #self.attribute_name = ""
+            #self.default_input = ""
+            
+            self.value = None
+            #self.value_min = None
+            #self.value_max = None
+            
+            #self.hidden = False
+            #self.not_connectable = False
+            #self.force_none_field = False
+            #self.layer_selection = False
+            #self.hide_in_modifier = False
+            
             self.links = UEOEF.Tuple()
             self.properties = []
             
@@ -96,21 +110,18 @@ class UEOEF:
             
         def _default(self):
             self.properties.append(UEOEF.Property("PinId", _to_uid(self.id)))
-            #self.properties.append(UEOEF.Property("PersistentGuid", UEOEF.DEFAULT_NO_ID))
-            self.properties.append(UEOEF.Property("Direction", json.dumps("EGPD_Input" if self.direction == 0 else "EGPD_Output")))
+            self.properties.append(UEOEF.Property("PinName", self.name, 1))
             
-            self.properties.append(UEOEF.Property("PinName", json.dumps(self.name)))
+            #self.properties.append(UEOEF.Property("PinToolTip", self.description, 1))
+            #self.properties.append(UEOEF.Property("PinAttributeDomain", self.attribute_domain, 1))
+            #self.properties.append(UEOEF.Property("PinDefaultAttributeName", self.attribute_name, 1))
+            #self.properties.append(UEOEF.Property("PinDefaultInput", self.default_input, 1))
+            self.properties.append(UEOEF.Property("PinValue", self.value))
+            #self.properties.append(UEOEF.Property("PinMinValue", self.value_min))
+            #self.properties.append(UEOEF.Property("PinMaxValue", self.value_max))
             
-            #self.properties.append(UEOEF.Property("PinToolTip", json.dumps(self.description)))
-            #self.properties.append(UEOEF.Property("PinAttributeDomain", json.dumps(self.description)))
-            #self.properties.append(UEOEF.Property("PinDefaultAttributeName", json.dumps(self.description)))
-            #self.properties.append(UEOEF.Property("PinDefaultInput", json.dumps(self.description)))
-            #self.properties.append(UEOEF.Property("PinValue", json.dumps(self.value)))
-            #self.properties.append(UEOEF.Property("PinMinValue", json.dumps(self.description)))
-            #self.properties.append(UEOEF.Property("PinMaxValue", json.dumps(self.description)))
-            
-            self.properties.append(UEOEF.Property("PinType.PinCategory", json.dumps(self.enum)))
-            self.properties.append(UEOEF.Property("PinType.PinSubCategory", json.dumps(self.subtype)))
+            self.properties.append(UEOEF.Property("PinType.PinCategory", self.enum, 1))
+            self.properties.append(UEOEF.Property("PinType.PinSubCategory", self.subtype, 1))
             self.properties.append(UEOEF.Property("PinType.PinSubCategoryObject", self.type))
  
             self.properties.append(UEOEF.Property("bHidden", False))
@@ -119,20 +130,7 @@ class UEOEF:
             self.properties.append(UEOEF.Property("bLayerSelection", False))
             self.properties.append(UEOEF.Property("bHideInModifier", False))
             
-            #self.properties.append(UEOEF.Property("PinFriendlyName", json.dumps(self.subtype)))
-            #self.properties.append(UEOEF.Property("PinType.PinSubCategoryMemberReference", "None"))
-            #self.properties.append(UEOEF.Property("PinType.PinValueType", "()"))
-            #self.properties.append(UEOEF.Property("PinType.ContainerType", "None"))
-            #self.properties.append(UEOEF.Property("PinType.bIsReference", False))
-            #self.properties.append(UEOEF.Property("PinType.bIsConst", False))
-            #self.properties.append(UEOEF.Property("PinType.bIsWeakPointer", False))
-            #self.properties.append(UEOEF.Property("PinType.bIsUObjectWrapper", False))
-            #self.properties.append(UEOEF.Property("PinType.bSerializeAsSinglePrecisionFloat", False))
-            #self.properties.append(UEOEF.Property("bDefaultValueIsReadOnly", False))
-            #self.properties.append(UEOEF.Property("bDefaultValueIsIgnored", False))
-            #self.properties.append(UEOEF.Property("bAdvancedView", False))
-            #self.properties.append(UEOEF.Property("bOrphanedPin", False))
-            
+            self.properties.append(UEOEF.Property("Direction", "EGPD_Input" if self.direction == 0 else "EGPD_Output", 1))
             self.properties.append(UEOEF.Property("LinkedTo", self.links.serialize()))
     
     class Object:
@@ -142,7 +140,6 @@ class UEOEF:
         fm_attribute = " "
         
         def __init__(self, type="", name="", enum=""):
-            self.reference = UEOEF.Tuple()
             self.id = UEOEF.DEFAULT_NO_ID
             self.type = type
             self.enum = enum
@@ -166,10 +163,10 @@ class UEOEF:
         
         def _default(self):
             self.attributes.append(UEOEF.Property("Class", self.type))
-            self.attributes.append(UEOEF.Property("Name", json.dumps(self.name)))
+            self.attributes.append(UEOEF.Property("Name", self.name, 1))
             
             self.properties.append(UEOEF.Property("NodeGuid", _to_uid(self.id)))
-            self.properties.append(UEOEF.Property("NodeType", json.dumps(self.enum)))
+            self.properties.append(UEOEF.Property("NodeType", self.enum, 1))
             self.properties.append(UEOEF.Property("NodePosX", int(self.position.x)))
             self.properties.append(UEOEF.Property("NodePosY", int(self.position.y)))
             #Do something with reference
