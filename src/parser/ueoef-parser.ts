@@ -55,8 +55,12 @@ export class UEOEFPinParser extends NodeParser {
     public static readonly FM_BEGIN = "CustomProperties Pin (";
     public static readonly FM_END = ")";
     public static readonly FM_PROPERTY = ",";
+    public static readonly FM_LINKS = "LinkedTo"
 
     protected _cursor: _ParseCursor;
+
+    public properties: Array<UEOEFPropertyParser>;
+    public links: UEOEFTupleParser;
 
     public parse(data: ParsingNodeData): NodeControl {
 
