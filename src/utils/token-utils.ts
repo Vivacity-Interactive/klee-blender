@@ -1,5 +1,6 @@
 import { _ParseCursor, _ParseData } from "./parse-utils";
 
+export const TOKEN_UTILS_SPACE_STRICT: string = " \t"
 export const TOKEN_UTILS_SPACE: string = " \t\n\r\v\b\f\a"
 export const TOKEN_UTILS_STRING: string = "\"'`"
 export const TOKEN_UTILS_ESCAPE: string = "\\"
@@ -59,7 +60,7 @@ export function tokenString(cursor: _ParseCursor, bConsume: boolean = true, char
     return bValid;
 }
 
-export function tokenValue(cursor: _ParseCursor, bConsume: boolean = true, space: string = TOKEN_UTILS_SPACE): boolean {
+export function tokenValue(cursor: _ParseCursor, bConsume: boolean = true, space: string = TOKEN_UTILS_SPACE_STRICT): boolean {
     let data: _ParseData = cursor.data;
     let bValid: boolean = cursor.to.index < data.raw.length;
     let _index: number = cursor.to.index;

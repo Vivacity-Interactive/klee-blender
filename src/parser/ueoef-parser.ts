@@ -3,7 +3,7 @@ import { NodeControl } from "../controls/nodes/node.control";
 import { ParsingNodeData } from "parsing-node-data";
 import { _ParseCursor } from "../utils/parse-utils";
 
-export class UEORFObjectParser extends NodeParser {
+export class UEOEFObjectParser extends NodeParser {
     public static readonly FM_BEGIN = "Begin Object";
     public static readonly FM_END = "End Object";
     public static readonly FM_PROPERTY = ",";
@@ -11,9 +11,9 @@ export class UEORFObjectParser extends NodeParser {
 
     protected _cursor: _ParseCursor;
 
-    public attributes: Array<UEORFPropertyParser>
-    public properties: Array<UEORFPropertyParser>
-    public pins: Array<UEORFPinParser>
+    public attributes: Array<UEOEFPropertyParser>
+    public properties: Array<UEOEFPropertyParser>
+    public pins: Array<UEOEFPinParser>
 
     public parse(data: ParsingNodeData): NodeControl {
 
@@ -21,7 +21,7 @@ export class UEORFObjectParser extends NodeParser {
     }
 }
 
-export class UEORFPropertyParser extends NodeParser {
+export class UEOEFPropertyParser extends NodeParser {
     public static readonly FM_SET = "=";
 
     protected _cursor: _ParseCursor;
@@ -36,14 +36,14 @@ export class UEORFPropertyParser extends NodeParser {
     }
 }
 
-export class UEORFTupleParser extends NodeParser {
+export class UEOEFTupleParser extends NodeParser {
     public static readonly FM_BEGIN = "(";
     public static readonly FM_END = ")";
     public static readonly FM_PROPERTY = ",";
 
     protected _cursor: _ParseCursor;
 
-    public properties: Array<UEORFPropertyParser>
+    public properties: Array<UEOEFPropertyParser>
 
     public parse(data: ParsingNodeData): NodeControl {
 
@@ -51,7 +51,7 @@ export class UEORFTupleParser extends NodeParser {
     }
 }
 
-export class UEORFPinParser extends NodeParser {
+export class UEOEFPinParser extends NodeParser {
     public static readonly FM_BEGIN = "CustomProperties Pin (";
     public static readonly FM_END = ")";
     public static readonly FM_PROPERTY = ",";
@@ -65,7 +65,7 @@ export class UEORFPinParser extends NodeParser {
 }
 
 
-export class UEORFLinkParser extends NodeParser {
+export class UEOEFLinkParser extends NodeParser {
     public static readonly FM_PIPE = " ";
 
     protected _cursor: _ParseCursor;
@@ -79,12 +79,12 @@ export class UEORFLinkParser extends NodeParser {
     }
 }
 
-export class UEORFParser extends NodeParser {
+export class UEOEFParser extends NodeParser {
     public static readonly DEFAULT_NO_ID = "00000000000"
 
     protected _cursor: _ParseCursor;
 
-    public objects: Array<UEORFObjectParser>
+    public objects: Array<UEOEFObjectParser>
     
     public parse(data: ParsingNodeData): NodeControl {
 
