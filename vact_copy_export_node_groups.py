@@ -212,7 +212,7 @@ class VActCopyExportNodeGroups:
     
     def from_node_group_nodes(self, context, scope, lot, settings):
         for node in context:
-            _node = UEOEF.Object(type(node).__name__, node.name, node.type)
+            _node = UEOEF.Object(type(node).__name__, node.name, node.bl_static_type)
             _node.position = node.location
             _node.id = node.as_pointer()
             #lot[_node.id] = _node;
