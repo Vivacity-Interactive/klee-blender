@@ -1,15 +1,17 @@
 import { _ParseCursor, _ParseData } from "./parse-utils";
 
-export const TOKEN_UTILS_SPACE_STRICT: string = " \t"
-export const TOKEN_UTILS_SPACE: string = " \t\n\r\v\b\f\a"
-export const TOKEN_UTILS_STRING: string = "\"'`"
-export const TOKEN_UTILS_ESCAPE: string = "\\"
-export const TOKEN_UTILS_LINE: string = "\n\r"
+export const TOKEN_UTILS_SPACE_STRICT: string = " \t";
+export const TOKEN_UTILS_SPACE_LINELESS: string = " \t\v\f\a\b";
+export const TOKEN_UTILS_SPACE: string = " \t\n\r\v\f\a\b";
+export const TOKEN_UTILS_SPACE_RANGE: string = "\x01\x20";
+export const TOKEN_UTILS_STRING: string = "\"'`";
+export const TOKEN_UTILS_ESCAPE: string = "\\";
+export const TOKEN_UTILS_LINE: string = "\n\r";
 
 export function token(cursor: _ParseCursor, token: string, bConsume: boolean = true): boolean {
     let data: _ParseData = cursor.data;
     let _index: number = cursor.to.index;
-    let bValid: boolean = (_index + token.length) <= data.raw.length;
+    let bValid: boolean = (_index + token.length - 1) <= data.raw.length && token.length > 0;
 
     for (let i = 0; i < token.length && bValid; i++) {
         bValid &&= data.raw[_index + i] == token[i];
@@ -22,16 +24,60 @@ export function token(cursor: _ParseCursor, token: string, bConsume: boolean = t
 
 export function tokenAny(cursor: _ParseCursor, chars: string, bConsume: boolean = true): boolean {
     let data: _ParseData = cursor.data;
-    let bValid: boolean = cursor.to.index < data.raw.length;
+    let bValid: boolean = false;
+    let bContext: boolean = cursor.to.index < data.raw.length && chars.length > 0;
     let _index: number = cursor.to.index;
-
-    for (; _index < data.raw.length && bValid; _index++) {
-        bValid = false;
-        for (let j = 0; j < chars.length && !bValid; j++) {
-            bValid ||= data.raw[_index] == chars[j];
+    
+    for (; _index < data.raw.length && bContext; _index++) {
+        bValid = bContext;
+        bContext = false;
+        for (let j = 0; j < chars.length && !bContext; j++) {
+            bContext ||= data.raw[_index] == chars[j];
         }
     }
 
+    bValid &&= (_index - 1) != cursor.to.index;
+
+    if (bValid && bConsume) { cursor.to.index = _index; }
+
+    return bValid;
+}
+
+export function tokenRange(cursor: _ParseCursor, range: string = TOKEN_UTILS_SPACE_RANGE, bConsume: boolean = true): boolean {
+    let data: _ParseData = cursor.data;
+    let bValid: boolean = false;
+    let bContext: boolean = cursor.to.index < data.raw.length && range.length >= 2;
+    let _index: number = cursor.to.index;
+    let _char: string = "";
+
+    for (; _index < data.raw.length && bContext; _index++) {
+        bValid = bContext;
+        _char = data.raw[_index];
+        bContext = _char >= range[0] && _char <= range[1];
+    }
+
+    bValid &&= (_index - 1) != cursor.to.index;
+    
+    if (bValid && bConsume) { cursor.to.index = _index; }
+
+    return bValid;
+}
+
+export function tokenNotRange(cursor: _ParseCursor, range: string = TOKEN_UTILS_SPACE_RANGE, bConsume: boolean = true): boolean {
+    let data: _ParseData = cursor.data;
+    let bValid: boolean = false;
+    let bContext: boolean = cursor.to.index < data.raw.length && range.length >= 2;
+    let _index: number = cursor.to.index;
+    let _char: string = "";
+
+    for (; _index < data.raw.length && bContext; _index++) {
+        bValid = bContext;
+        _char = data.raw[_index];
+        bContext = _char < range[0] || _char > range[1];
+    }
+
+    bValid &&= (_index - 1) != cursor.to.index;
+    
     if (bValid && bConsume) { cursor.to.index = _index; }
 
     return bValid;
@@ -39,20 +85,26 @@ export function tokenAny(cursor: _ParseCursor, chars: string, bConsume: boolean 
 
 export function tokenString(cursor: _ParseCursor, bConsume: boolean = true, chars: string = TOKEN_UTILS_STRING, escape: string = TOKEN_UTILS_ESCAPE): boolean {
     let data: _ParseData = cursor.data;
-    let bValid: boolean = cursor.to.index < data.raw.length;
+    let bValid: boolean = false;
+    let bContext: boolean = cursor.to.index < data.raw.length && chars.length > 0;
     let bEscape: boolean = false;
     let _index: number = cursor.to.index;
     let index:number = 0;
-    
-    for (; index < chars.length && !bValid; index++) {
-        bValid ||= data.raw[_index] == chars[index];
-        _index++;
-    }
+    let token:string = "";
 
-    let token:string = chars[index];
-    for (; _index < data.raw.length && !bValid; _index++) {
-        bEscape = (data.raw[_index] == escape) != bEscape;
-        bValid = !bEscape && data.raw[_index] == token;
+    if (bContext) {
+        bContext = false;
+        for (; index < chars.length && !bContext; index++) {
+            bContext ||= data.raw[_index] == chars[index];
+            _index++;
+        }
+
+        token = chars[index - 1];
+        for (; _index < data.raw.length && !bValid && bContext; _index++) {
+            // TODO Fix Escape Sequence
+            bEscape = (data.raw[_index] == escape) != bEscape;
+            bValid = !bEscape && data.raw[_index] == token;
+        }
     }
 
     if (bValid && bConsume) { cursor.to.index = _index; }
@@ -62,16 +114,21 @@ export function tokenString(cursor: _ParseCursor, bConsume: boolean = true, char
 
 export function tokenValue(cursor: _ParseCursor, bConsume: boolean = true, space: string = TOKEN_UTILS_SPACE_STRICT): boolean {
     let data: _ParseData = cursor.data;
-    let bValid: boolean = cursor.to.index < data.raw.length;
+    let bValid: boolean = false;
+    let bContext: boolean = cursor.to.index < data.raw.length && space.length > 0;
     let _index: number = cursor.to.index;
 
-    for (; _index < data.raw.length && !bValid; _index++) {
-        bValid = false;
-        for (let j = 0; j < space.length && !bValid; j++) {
-            bValid ||= data.raw[_index] == space[j];
+    if (bContext) {
+        for (; _index < data.raw.length && bContext; _index++) {
+            bValid = bContext;
+            for (let j = 0; j < space.length && bContext; j++) {
+                bContext &&= data.raw[_index] != space[j];
+            }
         }
+    
+        bValid &&= (_index - 1) != cursor.to.index;
     }
-
+    
     if (bValid && bConsume) { cursor.to.index = _index; }
 
     return bValid;

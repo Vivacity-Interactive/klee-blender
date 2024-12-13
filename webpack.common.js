@@ -2,7 +2,7 @@ const path = require('path');
 
 const ifdefOptions = {
     DEBUG_UI: false,
-    UNIT_TEST: false,
+    UNIT_TEST: true,
 }
 
 module.exports = {

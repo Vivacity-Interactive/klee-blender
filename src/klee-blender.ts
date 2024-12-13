@@ -48,3 +48,16 @@ function initialize() {
 }
 
 window.addEventListener("load", initialize);
+
+/// #if UNIT_TEST
+import { UnitTest } from "./tests/unit-test";
+import { UnitTestTokenUtils } from "./tests/unit-test-token-utils";
+
+window.addEventListener("load", () => {
+    let units: Array<UnitTest> = [
+        new UnitTestTokenUtils(),
+    ];
+    
+    for (const unit of units) { unit.execute(); }
+});
+/// #endif
