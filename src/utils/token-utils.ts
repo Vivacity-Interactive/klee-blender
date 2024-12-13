@@ -7,6 +7,8 @@ export const TOKEN_UTILS_SPACE_RANGE: string = "\x01\x20";
 export const TOKEN_UTILS_STRING: string = "\"'`";
 export const TOKEN_UTILS_ESCAPE: string = "\\";
 export const TOKEN_UTILS_LINE: string = "\n\r";
+export const TOKEN_UTILS_ALPHA_RANGE: string = "azAZ";
+export const TOKEN_UTILS_DIGIT_RANGE: string = "09";
 
 export function token(cursor: _ParseCursor, token: string, bConsume: boolean = true): boolean {
     let data: _ParseData = cursor.data;
@@ -74,6 +76,53 @@ export function tokenNotRange(cursor: _ParseCursor, range: string = TOKEN_UTILS_
         bValid = bContext;
         _char = data.raw[_index];
         bContext = _char < range[0] || _char > range[1];
+    }
+
+    bValid &&= (_index - 1) != cursor.to.index;
+    
+    if (bValid && bConsume) { cursor.to.index = bContext ? _index : _index - 1; }
+
+    return bValid;
+}
+
+export function tokenRanges(cursor: _ParseCursor, ranges: string, bConsume: boolean = true): boolean {
+    let data: _ParseData = cursor.data;
+    let bValid: boolean = false;
+    let bContext: boolean = ranges.length >= 2;
+    let _index: number = cursor.to.index;
+    let _char: string = "";
+    let N: number = Math.floor(ranges.length/2);
+    
+    for (; _index < data.raw.length && bContext; _index++) {
+        bValid = bContext;
+        _char = data.raw[_index];
+        bContext = false;
+        for (let j = 0; j < N && !bContext; j++) {
+            bContext ||= _char >= ranges[j*2] && _char <= ranges[j*2 + 1];
+        } 
+    }
+
+    bValid &&= (_index - 1) != cursor.to.index;
+    
+    if (bValid && bConsume) { cursor.to.index = bContext ? _index : _index - 1; }
+
+    return bValid;
+}
+
+export function tokenNotRanges(cursor: _ParseCursor, ranges: string, bConsume: boolean = true): boolean {
+    let data: _ParseData = cursor.data;
+    let bValid: boolean = false;
+    let bContext: boolean = ranges.length >= 2;
+    let _index: number = cursor.to.index;
+    let _char: string = "";
+    let N: number = Math.floor(ranges.length/2);
+
+    for (; _index < data.raw.length && bContext; _index++) {
+        bValid = bContext;
+        _char = data.raw[_index];
+        for (let j = 0; j < N && bContext; j++) {
+            bContext &&= _char < ranges[j*2] || _char > ranges[j*2 + 1];
+        } 
     }
 
     bValid &&= (_index - 1) != cursor.to.index;
