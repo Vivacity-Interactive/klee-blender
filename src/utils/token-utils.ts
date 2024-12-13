@@ -25,7 +25,7 @@ export function token(cursor: _ParseCursor, token: string, bConsume: boolean = t
 export function tokenAny(cursor: _ParseCursor, chars: string, bConsume: boolean = true): boolean {
     let data: _ParseData = cursor.data;
     let bValid: boolean = false;
-    let bContext: boolean = cursor.to.index < data.raw.length && chars.length > 0;
+    let bContext: boolean = chars.length > 0;
     let _index: number = cursor.to.index;
     
     for (; _index < data.raw.length && bContext; _index++) {
@@ -38,7 +38,7 @@ export function tokenAny(cursor: _ParseCursor, chars: string, bConsume: boolean 
 
     bValid &&= (_index - 1) != cursor.to.index;
 
-    if (bValid && bConsume) { cursor.to.index = _index; }
+    if (bValid && bConsume) { cursor.to.index = bContext ? _index : _index - 1; }
 
     return bValid;
 }
@@ -46,10 +46,10 @@ export function tokenAny(cursor: _ParseCursor, chars: string, bConsume: boolean 
 export function tokenRange(cursor: _ParseCursor, range: string = TOKEN_UTILS_SPACE_RANGE, bConsume: boolean = true): boolean {
     let data: _ParseData = cursor.data;
     let bValid: boolean = false;
-    let bContext: boolean = cursor.to.index < data.raw.length && range.length >= 2;
+    let bContext: boolean = range.length >= 2;
     let _index: number = cursor.to.index;
     let _char: string = "";
-
+    
     for (; _index < data.raw.length && bContext; _index++) {
         bValid = bContext;
         _char = data.raw[_index];
@@ -58,7 +58,7 @@ export function tokenRange(cursor: _ParseCursor, range: string = TOKEN_UTILS_SPA
 
     bValid &&= (_index - 1) != cursor.to.index;
     
-    if (bValid && bConsume) { cursor.to.index = _index; }
+    if (bValid && bConsume) { cursor.to.index = bContext ? _index : _index - 1; }
 
     return bValid;
 }
@@ -66,7 +66,7 @@ export function tokenRange(cursor: _ParseCursor, range: string = TOKEN_UTILS_SPA
 export function tokenNotRange(cursor: _ParseCursor, range: string = TOKEN_UTILS_SPACE_RANGE, bConsume: boolean = true): boolean {
     let data: _ParseData = cursor.data;
     let bValid: boolean = false;
-    let bContext: boolean = cursor.to.index < data.raw.length && range.length >= 2;
+    let bContext: boolean = range.length >= 2;
     let _index: number = cursor.to.index;
     let _char: string = "";
 
@@ -78,7 +78,7 @@ export function tokenNotRange(cursor: _ParseCursor, range: string = TOKEN_UTILS_
 
     bValid &&= (_index - 1) != cursor.to.index;
     
-    if (bValid && bConsume) { cursor.to.index = _index; }
+    if (bValid && bConsume) { cursor.to.index = bContext ? _index : _index - 1; }
 
     return bValid;
 }
@@ -114,21 +114,19 @@ export function tokenString(cursor: _ParseCursor, bConsume: boolean = true, char
 export function tokenValue(cursor: _ParseCursor, bConsume: boolean = true, space: string = TOKEN_UTILS_SPACE_STRICT): boolean {
     let data: _ParseData = cursor.data;
     let bValid: boolean = false;
-    let bContext: boolean = cursor.to.index < data.raw.length && space.length > 0;
+    let bContext: boolean = space.length > 0;
     let _index: number = cursor.to.index;
 
-    if (bContext) {
-        for (; _index < data.raw.length && bContext; _index++) {
-            bValid = bContext;
-            for (let j = 0; j < space.length && bContext; j++) {
-                bContext &&= data.raw[_index] != space[j];
-            }
+    for (; _index < data.raw.length && bContext; _index++) {
+        bValid = bContext;
+        for (let j = 0; j < space.length && bContext; j++) {
+            bContext &&= data.raw[_index] != space[j];
         }
-    
-        bValid &&= (_index - 1) != cursor.to.index;
     }
+
+    bValid &&= (_index - 1) != cursor.to.index;
     
-    if (bValid && bConsume) { cursor.to.index = _index; }
+    if (bValid && bConsume) { cursor.to.index = bContext ? _index : _index - 1; }
 
     return bValid;
 }

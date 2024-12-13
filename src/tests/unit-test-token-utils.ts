@@ -28,15 +28,23 @@ export class UnitTestTokenUtils extends UnitTest {
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
         this.Assert.Error(TypeError, () => token(cursor, this.TOKEN));
-        
+        this.Assert.True(cursor.to.index == 0);
+
         cursor.reset();
         cursor.data.raw = this.DATA_EMPTY;
         this.Assert.False(token(cursor, this.TOKEN));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = " ";
+        this.Assert.False(token(cursor, this.TOKEN));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.TOKEN;
         this.Assert.True(token(cursor, this.TOKEN));
         this.Assert.False(token(cursor, this.TOKEN));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
         cursor.data.raw = this.TOKEN.repeat(N);
@@ -49,11 +57,13 @@ export class UnitTestTokenUtils extends UnitTest {
         cursor.reset();
         cursor.data.raw = " "+this.TOKEN;
         this.Assert.False(token(cursor, this.TOKEN));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.TOKEN+" ";
         this.Assert.True(token(cursor, this.TOKEN));
         this.Assert.False(token(cursor, this.TOKEN));
+        this.Assert.False(cursor.to.index == cursor.data.raw.length);
     }
 
     public testTokenAny()
@@ -62,25 +72,35 @@ export class UnitTestTokenUtils extends UnitTest {
 
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
-        this.Assert.Error(TypeError, () => token(cursor, TOKEN_UTILS_LINE));
-        
+        this.Assert.Error(TypeError, () => tokenAny(cursor, TOKEN_UTILS_LINE));
+        this.Assert.True(cursor.to.index == 0);
+
         cursor.reset();
         cursor.data.raw = this.DATA_EMPTY;
-        this.Assert.False(token(cursor, TOKEN_UTILS_LINE));
+        this.Assert.False(tokenAny(cursor, TOKEN_UTILS_LINE));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = " ";
+        this.Assert.False(tokenAny(cursor, TOKEN_UTILS_LINE));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_LINE;
         this.Assert.True(tokenAny(cursor, TOKEN_UTILS_LINE));
         this.Assert.False(tokenAny(cursor, TOKEN_UTILS_LINE));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
         cursor.data.raw = " "+this.DATA_LINE;
         this.Assert.False(tokenAny(cursor, TOKEN_UTILS_LINE));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_LINE+" ";
         this.Assert.True(tokenAny(cursor, TOKEN_UTILS_LINE));
         this.Assert.False(tokenAny(cursor, TOKEN_UTILS_LINE));
+        this.Assert.False(cursor.to.index == cursor.data.raw.length);
     }
 
     public testTokenRange()
@@ -90,23 +110,33 @@ export class UnitTestTokenUtils extends UnitTest {
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
         this.Assert.Error(TypeError, () => tokenRange(cursor));
-        
+        this.Assert.True(cursor.to.index == 0);
+
         cursor.reset();
         cursor.data.raw = this.DATA_EMPTY;
         this.Assert.False(tokenRange(cursor));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = "_";
+        this.Assert.False(tokenRange(cursor));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_SPACE;
         this.Assert.True(tokenRange(cursor));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
         cursor.data.raw = "_"+this.DATA_SPACE;
         this.Assert.False(tokenRange(cursor));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_SPACE+"_";
         this.Assert.True(tokenRange(cursor));
         this.Assert.False(tokenRange(cursor));
+        this.Assert.False(cursor.to.index == cursor.data.raw.length);
     }
 
     public testTokenNotRange()
@@ -117,24 +147,34 @@ export class UnitTestTokenUtils extends UnitTest {
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
         this.Assert.Error(TypeError, () => tokenNotRange(cursor));
-        
+        this.Assert.True(cursor.to.index == 0);
+
         cursor.reset();
         cursor.data.raw = this.DATA_EMPTY;
         this.Assert.False(tokenNotRange(cursor));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = " ";
+        this.Assert.False(tokenNotRange(cursor));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_VALUE;
         this.Assert.True(tokenNotRange(cursor));
         this.Assert.False(tokenNotRange(cursor));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
         cursor.data.raw = " "+this.DATA_VALUE;
         this.Assert.False(tokenNotRange(cursor));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_VALUE+" ";
         this.Assert.True(tokenNotRange(cursor));
         this.Assert.False(tokenNotRange(cursor));
+        this.Assert.False(cursor.to.index == cursor.data.raw.length);
     }
 
     public testTokenString()
@@ -145,15 +185,18 @@ export class UnitTestTokenUtils extends UnitTest {
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
         this.Assert.Error(TypeError, () => tokenString(cursor));
-        
+        this.Assert.True(cursor.to.index == 0);
+
         cursor.reset();
         cursor.data.raw = this.DATA_EMPTY;
         this.Assert.False(tokenString(cursor));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_STRING;
         this.Assert.True(tokenString(cursor));
         this.Assert.False(tokenString(cursor));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
         cursor.data.raw = this.DATA_STRING.repeat(N);
@@ -166,11 +209,13 @@ export class UnitTestTokenUtils extends UnitTest {
         cursor.reset();
         cursor.data.raw = " "+this.DATA_STRING;
         this.Assert.False(tokenString(cursor));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_STRING+" ";
         this.Assert.True(tokenString(cursor));
         this.Assert.False(tokenString(cursor));
+        this.Assert.False(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
         cursor.data.raw = this.DATA_STRING_A;
@@ -236,14 +281,17 @@ export class UnitTestTokenUtils extends UnitTest {
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
         this.Assert.Error(TypeError, () => tokenValue(cursor));
-        
+        this.Assert.True(cursor.to.index == 0);
+
         cursor.reset();
         cursor.data.raw = this.DATA_EMPTY;
         this.Assert.False(tokenValue(cursor));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = " ";
         this.Assert.False(tokenValue(cursor));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_VALUE;
@@ -254,10 +302,12 @@ export class UnitTestTokenUtils extends UnitTest {
         cursor.reset();
         cursor.data.raw = " "+this.DATA_VALUE;
         this.Assert.False(tokenValue(cursor));
+        this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
         cursor.data.raw = this.DATA_VALUE+" ";
         this.Assert.True(tokenValue(cursor));
         this.Assert.False(tokenValue(cursor));
+        this.Assert.False(cursor.to.index == cursor.data.raw.length);
     }
 }
