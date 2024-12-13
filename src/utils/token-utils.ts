@@ -101,9 +101,8 @@ export function tokenString(cursor: _ParseCursor, bConsume: boolean = true, char
 
         token = chars[index - 1];
         for (; _index < data.raw.length && !bValid && bContext; _index++) {
-            // TODO Fix Escape Sequence
-            bEscape = (data.raw[_index] == escape) != bEscape;
             bValid = !bEscape && data.raw[_index] == token;
+            bEscape = (data.raw[_index] == escape) && !bEscape;
         }
     }
 
