@@ -94,7 +94,7 @@ export class UEOFObjectParser extends Parser {
 export class UEOFPropertyParser extends Parser {
     public static readonly FM_SET = "=";
 
-    public name: UEOFNameParser = new UEOFNameParser();
+    public name: UEOFValueParser = new UEOFValueParser();
     public value: UEOFValueParser = new UEOFValueParser();
 
     public parse(cursor: _ParseCursor): boolean {
@@ -338,7 +338,7 @@ export class UEOFCustomParser extends Parser  {
 export class UEOFParser extends Parser  {
     public static readonly DEFAULT_NO_ID = "00000000000"
     //public static readonly FM_VAR = "azAZ09//\\\\::-.__@@";
-    public static readonly FM_VAR = "azAZ09::-.__";
+    public static readonly FM_VAR = "azAZ09//\\\\::-.__";
     public static readonly FM_DIGIT = "09";
     public static readonly FM_CLEAR = "\x01\x20";
     public static readonly FM_SPACE = " \t";

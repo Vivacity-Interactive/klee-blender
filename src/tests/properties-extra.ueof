@@ -1,3 +1,11 @@
 MemberName="MakeVector"
 MemberParent=Class'"/Script/Engine.KismetMathLibrary"'
 FunctionReference=(MemberParent=Class'"/Script/Engine.KismetMathLibrary"',MemberName="MakeVector")
+SubPins=(K2Node_VariableGet_0 F57931A94B02E81FD62024873EFFD8AC,K2Node_VariableGet_0 4F560793472D8B54B07AD4B0F0B9E829,K2Node_VariableGet_0 D685463344B2288CA6B8E78DBBAC2374)
+PinType.PinSubCategoryObject=/Script/CoreUObject.ScriptStruct'"/Script/CoreUObject.Transform"'
+PinType.PinSubCategoryObject=/Script/CoreUObject.ScriptStruct'"/Script/CoreUObject.Vector"'
+PinFriendlyName=NSLOCTEXT("KismetSchema","SplitPinFriendlyNameFormat","{PinDisplayName} {ProtoPinDisplayName}")
+PinFriendlyName=LOCGEN_FORMAT_NAMED(NAME,"PinDisplayName","Transform","ProtoPinDisplayName","Location")
+PinFriendlyName=LOCGEN_FORMAT_NAMED(NSLOCTEXT("KismetSchema","SplitPinFriendlyNameFormat","{PinDisplayName} {ProtoPinDisplayName}"),"PinDisplayName","Transform","ProtoPinDisplayName","Location")
+EnumEntries(0)="NoSession"
+ParentPin=K2Node_VariableGet_0 6F7A1B8A42EFF6E2BE34978F6087EB37

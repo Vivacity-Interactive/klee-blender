@@ -18,7 +18,10 @@ export class UnitTestUEOFParser extends UnitTest {
     protected DATA_SIMPLE_PINS: string = <string>require("./simple-pins.ueof").default;
     protected DATA_VALUES: string = <string>require("./values.ueof").default;
     protected DATA_PROPERTIES: string = <string>require("./properties.ueof").default;
+    
     protected DATA_PROPERTIES_EXTRA: string = <string>require("./properties-extra.ueof").default;
+    protected DATA_ALL_UE: string = <string>require("./all-ue.ueof").default;
+    protected DATA_FIX_OBJECT_UE: string = <string>require("./fix-object-ue.ueof").default;
 
     public testObjectParser() {
         const _Parser = UEOFObjectParser;
@@ -115,7 +118,6 @@ export class UnitTestUEOFParser extends UnitTest {
         let index = 0;
         let format = "";
         let properties = this.DATA_PROPERTIES.split(/\r?\n/);
-        let propertiesExtra = this.DATA_PROPERTIES_EXTRA.split(/\r?\n/);
 
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
@@ -131,21 +133,6 @@ export class UnitTestUEOFParser extends UnitTest {
 
         index = 0;
         for (const data of properties) {
-            cursor.reset();
-            cursor.data.raw = data;
-            parser = new _Parser();
-            this.Assert.True(parser.parse(cursor), `${index} not a property: ${data}`);
-            this.Assert.True(cursor.to.index == cursor.data.raw.length, `${index} has invalid cursor: ${data}`);
-            
-            format = parser.format();
-            this.Assert.Equal(data, format, `${index} not equal: \n\t\t:${format}\n\t\t:${data}`);
-            //console.log(format);
-
-            index++;
-        }
-
-        index = 0;
-        for (const data of propertiesExtra) {
             cursor.reset();
             cursor.data.raw = data;
             parser = new _Parser();
@@ -200,7 +187,6 @@ export class UnitTestUEOFParser extends UnitTest {
         const _Parser = UEOFTupleParser;
         let cursor = new _ParseCursor();;
         let parser = null;
-        let N = 5;
 
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
@@ -219,7 +205,6 @@ export class UnitTestUEOFParser extends UnitTest {
         const _Parser = UEOFStringParser;
         let cursor = new _ParseCursor();;
         let parser = null;
-        let N = 5;
 
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
@@ -238,7 +223,6 @@ export class UnitTestUEOFParser extends UnitTest {
         const _Parser = UEOFRawParser;
         let cursor = new _ParseCursor();;
         let parser = null;
-        let N = 5;
 
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
@@ -257,7 +241,6 @@ export class UnitTestUEOFParser extends UnitTest {
         const _Parser = UEOFLinkParser;
         let cursor = new _ParseCursor();;
         let parser = null;
-        let N = 5;
 
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
@@ -276,7 +259,6 @@ export class UnitTestUEOFParser extends UnitTest {
         const _Parser = UEOFCustomParser;
         let cursor = new _ParseCursor();;
         let parser = null;
-        let N = 5;
 
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
@@ -295,7 +277,6 @@ export class UnitTestUEOFParser extends UnitTest {
         const _Parser = UEOFParser;
         let cursor = new _ParseCursor();;
         let parser = null;
-        let N = 5;
 
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
@@ -319,6 +300,58 @@ export class UnitTestUEOFParser extends UnitTest {
 
         cursor.reset();
         cursor.data.raw = this.DATA_COMPLEX_UE;
+        parser = new _Parser();
+        this.Assert.True(parser.parse(cursor));
+        this.Assert.False(parser.parse(cursor));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
+        //console.log(parser.format());
+    }
+
+    public testParserExtraProperties() {
+        const _Parser = UEOFPropertyParser;
+        let cursor = new _ParseCursor();;
+        let parser = null;
+        let index = 0;
+        let format = "";
+        let propertiesExtra = this.DATA_PROPERTIES_EXTRA.split(/\r?\n/);
+
+        index = 0;
+        for (const data of propertiesExtra) {
+            cursor.reset();
+            cursor.data.raw = data;
+            parser = new _Parser();
+            this.Assert.True(parser.parse(cursor), `${index} not a property: ${data}`);
+            this.Assert.True(cursor.to.index == cursor.data.raw.length, `${index} has invalid cursor: ${data}`);
+            
+            format = parser.format();
+            this.Assert.Equal(data, format, `${index} not equal: \n\t\t:${format}\n\t\t:${data}`);
+            //console.log(format);
+
+            index++;
+        }
+    }
+
+    public DISABLED_testParserAll() {
+        const _Parser = UEOFParser;
+        let cursor = new _ParseCursor();;
+        let parser = null;
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_ALL_UE;
+        parser = new _Parser();
+        this.Assert.True(parser.parse(cursor));
+        this.Assert.False(parser.parse(cursor));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
+        //console.log(parser.format());
+    }
+
+    public DISABLED_testParserFixObject() {
+        const _Parser = UEOFObjectParser;
+        let cursor = new _ParseCursor();;
+        let parser = null;
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_FIX_OBJECT_UE;
         parser = new _Parser();
         this.Assert.True(parser.parse(cursor));
         this.Assert.False(parser.parse(cursor));
