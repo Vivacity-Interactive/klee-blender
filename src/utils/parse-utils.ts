@@ -23,6 +23,18 @@ export class _ParsePosition {
         this.index = other.index;
     }
 
+    public min(other: _ParsePosition) {
+        this.line = Math.min(this.line, other.line);
+        this.char = Math.min(this.char, other.char);
+        this.index = Math.min(this.index, other.index);
+    }
+
+    public max(other: _ParsePosition) {
+        this.line = Math.max(this.line, other.line);
+        this.char = Math.max(this.char, other.char);
+        this.index = Math.max(this.index, other.index);
+    }
+
     public reset() {
         this.line = 0;
         this.char = 0;
@@ -76,6 +88,11 @@ export class _ParseCursor {
 
     public recover(cursor: _ParseCursor) {
         this.to.assign(cursor.from);
+    }
+
+    public union(cursor: _ParseCursor) {
+        this.from.min(cursor.from);
+        this.to.max(cursor.to);
     }
 
     public reset() {

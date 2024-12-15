@@ -21,6 +21,7 @@ export class UnitTestUEOFParser extends UnitTest {
     
     protected DATA_PROPERTIES_EXTRA: string = <string>require("./properties-extra.ueof").default;
     protected DATA_ALL_UE: string = <string>require("./all-ue.ueof").default;
+    protected DATA_ALL_BLENDER: string = <string>require("./all-blender.ueof").default;
     protected DATA_FIX_OBJECT_UE: string = <string>require("./fix-object-ue.ueof").default;
 
     public testObjectParser() {
@@ -177,7 +178,7 @@ export class UnitTestUEOFParser extends UnitTest {
             
             format = parser.format();
             this.Assert.Equal(data, format, `${index} not equal: \n\t\t:${format}\n\t\t:${data}`);
-            //console.log(format);
+            //console.log(parser.flag, format);
             
             index++;
         }
@@ -255,7 +256,7 @@ export class UnitTestUEOFParser extends UnitTest {
         this.Assert.True(cursor.to.index == 0);
     }
 
-    public testPinParser() {
+    public testCustomParser() {
         const _Parser = UEOFCustomParser;
         let cursor = new _ParseCursor();;
         let parser = null;
@@ -338,6 +339,14 @@ export class UnitTestUEOFParser extends UnitTest {
 
         cursor.reset();
         cursor.data.raw = this.DATA_ALL_UE;
+        parser = new _Parser();
+        this.Assert.True(parser.parse(cursor));
+        this.Assert.False(parser.parse(cursor));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
+        //console.log(parser.format());
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_ALL_BLENDER;
         parser = new _Parser();
         this.Assert.True(parser.parse(cursor));
         this.Assert.False(parser.parse(cursor));

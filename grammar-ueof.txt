@@ -1,0 +1,28 @@
+// Composits
+<ueof>          := CLEAR* <object> SPACE* [ LINE+ SPACE* <object> SPACE* ]*
+<object>        := OBJECT-BEGIN SPACE+ NAME [ SPACE+ <attribute> ]* LINE+ [ SPACE* ( <custom> | <property> ) SPACE* LINE+ ]* SPACE* OBJECT-END SPACE+ NAME
+<attribute>     := [ <value> SPACE* SET SPACE* ] <value>
+<property>      := <attribute> [ SPACE+ <link> ]
+<custom>        := CUSTOM-BEGIN SPACE+ NAME SPACE* <tuple>
+<value>         := (( NAME | RAW ) @ ( STRING | <tuple> ))+
+<tuple>         := TUPLE-BEGIN SPACE* <property> [ SPACE* DELIM SPACE* [ <property> ] ]* SPACE* TUPLE-END
+<link>          := <property> [ SPACE+ <property> ]
+
+// Tokens
+CLEAR           := '\x01'-'\x20'
+SPACE           := ' ' | '\t'
+LINE            := '\n'-'\r'
+SET             := '='
+DELIM           := ','
+CUSTOM-BEGIN    := "CustomProperty"~
+TUPLE-BEGIN     := '('
+TUPLE-END       := ')'
+OBJECT-BEGIN    := "Begin"~
+OBJECT-END      := "End"~
+LITERAL         := '\'' | '"' | '`'
+_ALPHA           := 'A'-'Z' | '0'-'9'
+_DIGIT           := '0'-'9'
+
+STRING          := LITERAL [ '\'%2 LITERAL | !LITERAL ]* LITERAL 
+NAME            := _DIGIT! ( 'a'-'z' | _ALPHA | _DIGIT | '\\' | '/' | ':' | '-'-'.' | '_' )
+RAW             := ( '\x00' | CLEAR | SET | DELIM | LITERAL | TUPLE-BEGIN | TUPLE-END | '\x7f' )!
