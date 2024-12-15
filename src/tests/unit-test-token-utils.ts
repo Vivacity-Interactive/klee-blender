@@ -1,16 +1,18 @@
 import { UnitTest } from "./unit-test";
 import { _ParseCursor, _ParseData } from "../utils/parse-utils";
-import { token, TOKEN_UTILS_LINE, tokenAny, tokenRange, tokenString, tokenValue, tokenNotRange, tokenRanges, tokenNotRanges } from "../utils/token-utils"
+import { token, TOKEN_UTILS_LINE, tokenAny, tokenRange, tokenString, tokenValue, tokenNotRange, tokenRanges, tokenNotRanges, tokenChar, tokenNotChar } from "../utils/token-utils"
 
 export class UnitTestTokenUtils extends UnitTest {
     protected TOKEN = "token";
     protected TOKEN_RANGES = "azAZ\x01\x2009";
+    protected TOKEN_CHAR = "=";
     protected DATA_NULL = null;
     protected DATA_EMPTY = "";
     protected DATA_SPACE_STRICT = "  \t  ";
     protected DATA_LINE = "\n\n\r";
     protected DATA_SPACE = " \x01\t\r  \x20 ";
     protected DATA_VALUE = "dowe:jl_^rnelr";
+    protected DATA_CHAR = "======";
     protected DATA_STRING = "\"hiding in context\"";
     protected DATA_STRING_ESCAPE = "\"hiding \\ \\\"in \\\" context\"";
     protected DATA_STRING_ESCAPE_A = "\"hiding in context\\\\\"";
@@ -18,6 +20,7 @@ export class UnitTestTokenUtils extends UnitTest {
     protected DATA_STRING_ESCAPE_EVEN_A = "\"hiding in \\\\\"context\"";
     protected DATA_STRING_ESCAPE_ODD_B = "\"hiding in \\\\\\\"context\"";
     protected DATA_STRING_ESCAPE_EVEN_B = "\"hiding in \\\\\\\\\"context\"";
+    protected DATA_STRING_UE_CLASS = "'\"/Script/Engine.KismetMathLibrary\"'";
     protected DATA_STRING_A = "\"`'hiding in context'`\"";
     protected DATA_STRING_B = "`'\"hiding in context\"'`";
     protected DATA_RANGES = " \x01\t\r  \x20 adloeyrnAsfG834950";
@@ -59,12 +62,12 @@ export class UnitTestTokenUtils extends UnitTest {
         this.Assert.True(cursor.to.index == cursor.data.raw.length);
         
         cursor.reset();
-        cursor.data.raw = " "+this.TOKEN;
+        cursor.data.raw = " " + this.TOKEN;
         this.Assert.False(token(cursor, this.TOKEN));
         this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
-        cursor.data.raw = this.TOKEN+" ";
+        cursor.data.raw = this.TOKEN + " ";
         this.Assert.True(token(cursor, this.TOKEN));
         this.Assert.False(token(cursor, this.TOKEN));
         this.Assert.False(cursor.to.index == cursor.data.raw.length);
@@ -96,14 +99,86 @@ export class UnitTestTokenUtils extends UnitTest {
         this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
-        cursor.data.raw = " "+this.DATA_LINE;
+        cursor.data.raw = " " + this.DATA_LINE;
         this.Assert.False(tokenAny(cursor, TOKEN_UTILS_LINE));
         this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
-        cursor.data.raw = this.DATA_LINE+" ";
+        cursor.data.raw = this.DATA_LINE + " ";
         this.Assert.True(tokenAny(cursor, TOKEN_UTILS_LINE));
         this.Assert.False(tokenAny(cursor, TOKEN_UTILS_LINE));
+        this.Assert.False(cursor.to.index == cursor.data.raw.length);
+    }
+
+    public testTokenChar()
+    {
+        let cursor = new _ParseCursor();
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_NULL;
+        this.Assert.Error(TypeError, () => tokenChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_EMPTY;
+        this.Assert.False(tokenChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = " ";
+        this.Assert.False(tokenChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_CHAR;
+        this.Assert.True(tokenChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
+
+        cursor.reset();
+        cursor.data.raw = " " + this.DATA_CHAR;
+        this.Assert.False(tokenChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_CHAR + " ";
+        this.Assert.True(tokenChar(cursor, this.TOKEN_CHAR));
+        this.Assert.False(tokenChar(cursor, this.TOKEN_CHAR));
+        this.Assert.False(cursor.to.index == cursor.data.raw.length);
+    }
+
+    public testTokenNotChar()
+    {
+        let cursor = new _ParseCursor();
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_NULL;
+        this.Assert.Error(TypeError, () => tokenNotChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_EMPTY;
+        this.Assert.False(tokenNotChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_CHAR;
+        this.Assert.False(tokenNotChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = this.TOKEN;
+        this.Assert.True(tokenNotChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == cursor.data.raw.length);
+
+        cursor.reset();
+        cursor.data.raw = this.TOKEN_CHAR + this.TOKEN;
+        this.Assert.False(tokenNotChar(cursor, this.TOKEN_CHAR));
+        this.Assert.True(cursor.to.index == 0);
+
+        cursor.reset();
+        cursor.data.raw = this.TOKEN + this.TOKEN_CHAR;
+        this.Assert.True(tokenNotChar(cursor, this.TOKEN_CHAR));
+        this.Assert.False(tokenNotChar(cursor, this.TOKEN_CHAR));
         this.Assert.False(cursor.to.index == cursor.data.raw.length);
     }
 
@@ -132,12 +207,12 @@ export class UnitTestTokenUtils extends UnitTest {
         this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
-        cursor.data.raw = "_"+this.DATA_SPACE;
+        cursor.data.raw = "_" + this.DATA_SPACE;
         this.Assert.False(tokenRange(cursor));
         this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
-        cursor.data.raw = this.DATA_SPACE+"_";
+        cursor.data.raw = this.DATA_SPACE + "_";
         this.Assert.True(tokenRange(cursor));
         this.Assert.False(tokenRange(cursor));
         this.Assert.False(cursor.to.index == cursor.data.raw.length);
@@ -170,12 +245,12 @@ export class UnitTestTokenUtils extends UnitTest {
         this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
-        cursor.data.raw = " "+this.DATA_VALUE;
+        cursor.data.raw = " " + this.DATA_VALUE;
         this.Assert.False(tokenNotRange(cursor));
         this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
-        cursor.data.raw = this.DATA_VALUE+" ";
+        cursor.data.raw = this.DATA_VALUE + " ";
         this.Assert.True(tokenNotRange(cursor));
         this.Assert.False(tokenNotRange(cursor));
         this.Assert.False(cursor.to.index == cursor.data.raw.length);
@@ -206,12 +281,12 @@ export class UnitTestTokenUtils extends UnitTest {
         this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
-        cursor.data.raw = "_"+this.DATA_RANGES;
+        cursor.data.raw = "_" + this.DATA_RANGES;
         this.Assert.False(tokenRanges(cursor, this.TOKEN_RANGES));
         this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
-        cursor.data.raw = this.DATA_RANGES+"_";
+        cursor.data.raw = this.DATA_RANGES + "_";
         this.Assert.True(tokenRanges(cursor, this.TOKEN_RANGES));
         this.Assert.False(tokenRanges(cursor, this.TOKEN_RANGES));
         this.Assert.False(cursor.to.index == cursor.data.raw.length);
@@ -247,12 +322,12 @@ export class UnitTestTokenUtils extends UnitTest {
         this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
-        cursor.data.raw = " "+this.DATA_NOT_RANGES;
+        cursor.data.raw = " " + this.DATA_NOT_RANGES;
         this.Assert.False(tokenNotRanges(cursor, this.TOKEN_RANGES));
         this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
-        cursor.data.raw = this.DATA_NOT_RANGES+" ";
+        cursor.data.raw = this.DATA_NOT_RANGES + " ";
         this.Assert.True(tokenNotRanges(cursor, this.TOKEN_RANGES));
         this.Assert.False(tokenNotRanges(cursor, this.TOKEN_RANGES));
         this.Assert.False(cursor.to.index == cursor.data.raw.length);
@@ -293,12 +368,12 @@ export class UnitTestTokenUtils extends UnitTest {
         this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
-        cursor.data.raw = " "+this.DATA_STRING;
+        cursor.data.raw = " " + this.DATA_STRING;
         this.Assert.False(tokenString(cursor));
         this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
-        cursor.data.raw = this.DATA_STRING+" ";
+        cursor.data.raw = this.DATA_STRING + " ";
         this.Assert.True(tokenString(cursor));
         this.Assert.False(tokenString(cursor));
         this.Assert.False(cursor.to.index == cursor.data.raw.length);
@@ -358,6 +433,11 @@ export class UnitTestTokenUtils extends UnitTest {
         cursor.data.raw = this.DATA_STRING_ESCAPE_ODD_B;
         this.Assert.True(tokenString(cursor));
         this.Assert.False(tokenString(cursor));
+
+        cursor.reset();
+        cursor.data.raw = this.DATA_STRING_UE_CLASS;
+        this.Assert.True(tokenString(cursor));
+        this.Assert.False(tokenString(cursor));
     }
 
     public testTokenValue()
@@ -386,12 +466,12 @@ export class UnitTestTokenUtils extends UnitTest {
         this.Assert.True(cursor.to.index == cursor.data.raw.length);
 
         cursor.reset();
-        cursor.data.raw = " "+this.DATA_VALUE;
+        cursor.data.raw = " " + this.DATA_VALUE;
         this.Assert.False(tokenValue(cursor));
         this.Assert.True(cursor.to.index == 0);
 
         cursor.reset();
-        cursor.data.raw = this.DATA_VALUE+" ";
+        cursor.data.raw = this.DATA_VALUE + " ";
         this.Assert.True(tokenValue(cursor));
         this.Assert.False(tokenValue(cursor));
         this.Assert.False(cursor.to.index == cursor.data.raw.length);

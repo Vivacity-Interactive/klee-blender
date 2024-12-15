@@ -52,10 +52,12 @@ window.addEventListener("load", initialize);
 /// #if UNIT_TEST
 import { UnitTest } from "./tests/unit-test";
 import { UnitTestTokenUtils } from "./tests/unit-test-token-utils";
+import { UnitTestUEOFParser } from "./tests/unit-test-ueof-parser";
 
 window.addEventListener("load", () => {
     let units: Array<UnitTest> = [
         new UnitTestTokenUtils(),
+        new UnitTestUEOFParser(),
     ];
     
     for (const unit of units) { unit.execute(); }

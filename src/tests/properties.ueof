@@ -1,0 +1,17 @@
+PropertyName=B1D7077247C0FAAF9C5ABD9E62C0A4EC
+PropertyRawNamed=Named^RawValue
+PropertyRaw=^RawValue
+PropertyInt=1234
+PropertyNumber=1.2304
+PropertyENumber=.08e-2
+PropertyBool=True
+PropertyString="string"
+PropertyStringEscaped="escaped \" string"
+PropertyStringNamed=Named"string"
+PropertyPath=\Root\DirA\DirB\Leafe
+PropertyTupleEmpty=()
+PropertyTupleNamedEmpty=Named()
+PropertyTuple=(TuplePropertyA=1,TuplePropertyB=2,TuplePropertyC=3,TuplePropertyD=())
+PropertyTupleLinks=(LinkA1 LinkA2 LinkA3,LinkB1 LinkB1)
+PropertyTupleSingle=(ItemA,ItemB,"itemc",42)
+PropertyTupleMixed=Named(TuplePropertyA=1,LinkB1 LinkB2 LinkB3,TuplePropertyC=3,TuplePropertyD=(),"Value")

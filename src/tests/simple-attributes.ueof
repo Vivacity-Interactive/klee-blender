@@ -1,0 +1,2 @@
+Begin Object AttributeName=B1D7077247C0FAAF9C5ABD9E62C0A4EC AttributeInt=1234 AttributeNumber=1.2304 AttributeBool=True AttributeString="string" AttributeStringNamed=Named"string" AttributeTupleEmpty=() AttributeTupleNamedEmpty=Named() AttributeTuple=(TupleAttributeA=1,TupleAttributeB=2,TupleAttributeC=3,TupleAttributeD=()) AttributeTupleLinks=(LinkA1 LinkA2,LinkB1 LinkB1)
+End Object

@@ -28,6 +28,7 @@
     ],
     "devDependencies": {
         "ifdef-loader": "^2.3.2",
+        "raw-loader": "^4.0.2",
         "ts-loader": "^9.4.1",
         "typescript": "^4.9.3",
         "webpack": "^5.75.0",

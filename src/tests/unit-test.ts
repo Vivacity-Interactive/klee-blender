@@ -15,6 +15,14 @@ class _UnitTestAssert {
         if (expected != value) {throw new Error(msg)}
     }
 
+    public NotEqual(expected: any, value: any, msg: string = "not equal") {
+        if (expected == value) {throw new Error(msg)}
+    }
+
+    public Similar(expected: any, value: any, compare: (a:any, b:any) => number, error: number = 0, msg: string = "not similar") {
+        if (compare(expected, value) <= error) {throw new Error(msg)}
+    }
+
     public NoError(call: () => void, msg: string = "has error") {
         try {
             call();
@@ -46,14 +54,15 @@ export class UnitTest {
         this.setup();
         let _obj = Object.getPrototypeOf(this);
         let _fxs = Object.getOwnPropertyNames(_obj);
+        console.info(`${this.constructor.name}`);
         for (let fx of _fxs ) {
             let bRun = fx.startsWith(UnitTest.UNIT_TEST_PREFIX);
             if (bRun) {
                 try {
                     this[fx]();
-                    console.info(`\x1b[32m${fx} : success\x1b[0m`);
+                    console.info(`\t\x1b[32m${fx} : success\x1b[0m`);
                 } catch (error) {
-                    console.error(`${fx} : failed - ${error}`);
+                    console.error(`\t${fx} : failed - ${error}`);
                 }
                 
             }

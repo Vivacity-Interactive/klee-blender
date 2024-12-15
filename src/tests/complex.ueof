@@ -1,0 +1,22 @@
+Begin Object AttributeName=B1D7077247C0FAAF9C5ABD9E62C0A4EC AttributeRawNamed=Named^RawValue AttributeRaw=^RawValue AttributeInt=1234 AttributeNumber=1.2304 AttributeENumber=.08e-2 AttributeBool=True AttributeString="string" AttributeStringEscaped="escaped \" string" AttributeStringNamed=Named"string" AttributePath=\Root\DirA\DirB\Leafe AttributeTupleEmpty=() AttributeTupleNamedEmpty=Named() AttributeTuple=(TupleAttributeA=1, TupleAttributeB=2, TupleAttributeC=3, TupleAttributeD=()) AttributeTupleLinks=(LinkA1 LinkA2 LinkA3, LinkB1 LinkB1) AttributeTupleSingle=(ItemA, ItemB, "itemc", 42) AttributeTupleMixed=Named(TupleAttributeA=1, LinkB1 LinkB2 LinkB3, TupleAttributeC=3, TupleAttributeD=(), "Value")
+   PropertyName=B1D7077247C0FAAF9C5ABD9E62C0A4EC
+   PropertyRawNamed=Named^RawValue
+   PropertyRaw=^RawValue
+   PropertyInt=1234
+   PropertyNumber=1.2304
+   PropertyENumber=.08e-2
+   PropertyBool=True
+   PropertyString="string"
+   PropertyStringEscaped="escaped \" string"
+   PropertyStringNamed=Named"string"
+   PropertyPath=\Root\DirA\DirB\Leafe
+   PropertyTupleEmpty=()
+   PropertyTupleNamedEmpty=Named()
+   PropertyTuple=(TuplePropertyA=1, TuplePropertyB=2, TuplePropertyC=3, TuplePropertyD=())
+   PropertyTupleLinks=(LinkA1 LinkA2 LinkA3, LinkB1 LinkB1)
+   PropertyTupleSingle=(ItemA, ItemB, "itemc", 42)
+   PropertyTupleMixed=Named(TuplePropertyA=1, LinkB1 LinkB2 LinkB3, "linkc1" LinkC2() (), TuplePropertyC=3, TuplePropertyD=(), "Value")
+   CustomProperties Pin ()
+   CustomProperties Pin (PropertyA=A, PropertyB=B)
+   CustomProperties Pin (PropertyName=B1D7077247C0FAAF9C5ABD9E62C0A4EC,PropertyRawNamed=Named^RawValue,PropertyRaw=^RawValue,PropertyInt=1234,PropertyNumber=1.2304,PropertyENumber=.08e-2,PropertyBool=True,PropertyString="string",PropertyStringEscaped="escaped \" string",PropertyStringNamed=Named"string",PropertyPath=\Root\DirA\DirB\Leafe,PropertyTupleEmpty=(),PropertyTupleNamedEmpty=Named(),PropertyTuple=(TuplePropertyA=1, TuplePropertyB=2, TuplePropertyC=3, TuplePropertyD=()),PropertyTupleLinks=(LinkA1 LinkA2 LinkA3, LinkB1 LinkB1),PropertyTupleSingle=(ItemA, ItemB, "itemc", 42),PropertyTupleMixed=Named(TuplePropertyA=1, LinkB1 LinkB2 LinkB3, TuplePropertyC=3, TuplePropertyD=(), "Value"))
+End Object

@@ -1,0 +1,17 @@
+B1D7077247C0FAAF9C5ABD9E62C0A4EC
+Named^RawValue
+^RawValue
+1234
+1.2304
+.08e-2
+True
+"string"
+"escaped \" string"
+Named"string"
+\Root\DirA\DirB\Leafe
+()
+NamedTuple()
+(TuplePropertyA=1,TuplePropertyB=2,TuplePropertyC=3,TuplePropertyD=())
+(LinkA1 LinkA2 LinkA3,LinkB1 LinkB1)
+(ItemA,ItemB,"itemc",42)
+Named(TuplePropertyA=1,LinkB1 LinkB2 LinkB3,TuplePropertyC=3,TuplePropertyD=(),"Value")

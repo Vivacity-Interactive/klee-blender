@@ -18,6 +18,10 @@ module.exports = {
                 ],
                 exclude: /node_modules/,
             },
+            {
+                test: /\.(txt|ueof)$/i,
+                loader: 'raw-loader',
+             },
         ],
     },
     resolve: {

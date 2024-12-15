@@ -1,0 +1,3 @@
+MemberName="MakeVector"
+MemberParent=Class'"/Script/Engine.KismetMathLibrary"'
+FunctionReference=(MemberParent=Class'"/Script/Engine.KismetMathLibrary"',MemberName="MakeVector")

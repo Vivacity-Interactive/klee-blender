@@ -1,0 +1,12 @@
+Begin Object
+   PropertyName=B1D7077247C0FAAF9C5ABD9E62C0A4EC
+   PropertyInt=1234
+   PropertyNumber=1.2304
+   PropertyBool=True
+   PropertyString="string"
+   PropertyStringNamed=Named"string"
+   PropertyTupleEmpty=()
+   PropertyTupleNamedEmpty=Named()
+   PropertyTuple=(TuplePropertyA=1,TuplePropertyB=2,TuplePropertyC=3,TuplePropertyD=())
+   PropertyTupleLinks=(LinkA1 LinkA2,LinkB1 LinkB1)
+End Object

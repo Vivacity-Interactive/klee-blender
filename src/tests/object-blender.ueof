@@ -1,0 +1,12 @@
+Begin Object Class=NodeGroupInput Name="Group Input"
+   NodeGuid=2B66C349B60
+   NodeType="GROUP_INPUT"
+   NodePosX=-591
+   NodePosY=32
+   CustomProperties Pin (PinId=2B66A6E3DA0,Direction="EGPD_Output",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Delete Geometry" 2B66A6E15A0,"Delete Geometry.001" 2B6475BEEA0,"Reroute" 2B6475C29A0,),)
+   CustomProperties Pin (PinId=2B66A6E3B20,Direction="EGPD_Output",PinName="Radius",PinType.PinCategory="VALUE",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketFloat,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Curve Circle" 2B66A6E0420,"UV Sphere" 2B6475BF620,),)
+   CustomProperties Pin (PinId=2B66A6E38A0,Direction="EGPD_Output",PinName="Resolution",PinType.PinCategory="INT",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketInt,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Curve Circle" 2B66A6E0E20,"UV Sphere" 2B6475BFB20,"Math" 2B6475BC420,),)
+   CustomProperties Pin (PinId=2B66A6E3620,Direction="EGPD_Output",PinName="Shade Smooth",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Set Shade Smooth" 2B6475BC920,),)
+   CustomProperties Pin (PinId=2B66A6E33A0,Direction="EGPD_Output",PinName="Format",PinType.PinCategory="MENU",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketMenu,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Menu Switch" 2B6475C38A0,),)
+   CustomProperties Pin (PinId=2B66A6E3120,Direction="EGPD_Output",PinName="",PinType.PinCategory="CUSTOM",PinType.PinSubCategory="",PinType.PinSubCategoryObject=NodeSocketVirtual,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+End Object
