@@ -84,6 +84,11 @@ export class _ParseCursor {
         this.complete = false;
     }
 
+    public rollback() {
+        this.to.assign(this.from);
+        this.complete = false;
+    }
+
     public assert(): boolean {
         return this.to.index >= this.data.raw.length;
     }

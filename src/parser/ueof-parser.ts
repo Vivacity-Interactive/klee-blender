@@ -10,9 +10,11 @@ export enum EValueParser {
     VALUE = 1 << 1,
     TUPLE = 1 << 2,
     NAME = 1 << 3,
+    //LINK = 1 << 4,
     NAMED_STRING = NAME | STRING,
-    NAMED_VALUE = NAME | STRING,
     NAMED_TUPLE = NAME | TUPLE,
+    NAMED_VALUE = NAME | VALUE, // should never happen
+    //NAMED_LINK = NAME | LINK, // should never happen
 }
 
 export class UEOFObjectParser extends Parser {
@@ -267,10 +269,16 @@ export class UEOFValueParser extends Parser  {
     public named: UEOFNameParser = new UEOFNameParser();
     public raw: Parser = null;
 
-    public option(flag: EValueParser, raw: Parser = null) : boolean {
+    protected option(flag: EValueParser, raw: Parser = null, nameless: boolean = false) : boolean {
         this.flag |= flag;
         this.raw = raw;
+        if (nameless) { this.named.cursor.rollback(); }
         return true;
+    }
+
+    protected recover(cursor: _ParseCursor): _ParseCursor {
+        cursor.recover(this.named.cursor);
+        return cursor;
     }
 
     public parse(cursor: _ParseCursor): boolean {
@@ -280,6 +288,7 @@ export class UEOFValueParser extends Parser  {
         let _tuple = new UEOFTupleParser();
         let _string = new UEOFStringParser();
         let _raw = new UEOFRawParser();
+        //let _link = new UEOFLinkParser();
         
         this._cursor = cursor.snapshot();
         this._cursor.start(cursor);
@@ -289,7 +298,8 @@ export class UEOFValueParser extends Parser  {
         _bValid = false
             || (_string.parse(cursor) && this.option(EValueParser.STRING, _string))
             || (_tuple.parse(cursor) && this.option(EValueParser.TUPLE, _tuple))
-            || (_raw.parse(cursor) && this.option(EValueParser.VALUE, _raw));
+            //|| (_link.parse(this.recover(cursor)) && this.option(EValueParser.LINK, _link, true))
+            || (_raw.parse(this.recover(cursor)) && this.option(EValueParser.VALUE, _raw, true));
         
         bValid ||= _bValid;
 
