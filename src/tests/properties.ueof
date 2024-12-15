@@ -15,3 +15,5 @@ PropertyTuple=(TuplePropertyA=1,TuplePropertyB=2,TuplePropertyC=3,TuplePropertyD
 PropertyTupleLinks=(LinkA1 LinkA2 LinkA3,LinkB1 LinkB1)
 PropertyTupleSingle=(ItemA,ItemB,"itemc",42)
 PropertyTupleMixed=Named(TuplePropertyA=1,LinkB1 LinkB2 LinkB3,TuplePropertyC=3,TuplePropertyD=(),"Value")
+"Value"
+LinkB1 LinkB2 LinkB3

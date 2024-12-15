@@ -10,6 +10,7 @@ export enum EValueParser {
     VALUE = 1 << 1,
     TUPLE = 1 << 2,
     NAME = 1 << 3,
+    CONCAT = 1 << 4,
     NAMED_STRING = NAME | STRING,
     NAMED_TUPLE = NAME | TUPLE,
     VALUED_STRING = VALUE | STRING,
@@ -321,7 +322,7 @@ export class UEOFValueParser extends Parser  {
         this._cursor.start(cursor);
 
         bValid = this.name.parse(cursor) && this.option(EValueParser.NAME);
-        _bValid = _raw.parse(cursor) && this.option(EValueParser.VALUE);
+        _bValid = _raw.parse(cursor);
         if (_bValid) {
             this.flag = EValueParser.VALUE;
             _raw.cursor.union(this.name.cursor);
@@ -342,7 +343,11 @@ export class UEOFValueParser extends Parser  {
                 _concat.concats = null;
                 bConcat = _concat.parse(cursor);
                 if (bConcat) { this.concats.push(_concat); }
+                
             }
+
+            bConcat = this.concats.length > 0;
+            if (bConcat) { this.flag |= EValueParser.CONCAT; }
         }
 
         this._cursor.end(cursor, bValid);
@@ -352,8 +357,8 @@ export class UEOFValueParser extends Parser  {
 
     public format(): string {
         let _format: string = this.name.format() + (this.raw ? this.raw.format() : "");
-        if (this.concats) for (const item of this.concats) { _format += item.format(); }
-        //console.log(_format);
+        if (this.concats) { for (const item of this.concats) { _format += item.format(); }; }
+        // console.log(this.flag, _format);
         return _format;
     }
 }

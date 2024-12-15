@@ -15,3 +15,5 @@ NamedTuple()
 (LinkA1 LinkA2 LinkA3,LinkB1 LinkB1)
 (ItemA,ItemB,"itemc",42)
 Named(TuplePropertyA=1,LinkB1 LinkB2 LinkB3,TuplePropertyC=3,TuplePropertyD=(),"Value")
+ValuedTuple^RawValue()
+Concat::Path\Root\"string dir name"\DirA\DirB\Leafe

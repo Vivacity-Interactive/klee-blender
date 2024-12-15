@@ -14,11 +14,11 @@ SPACE           := ' ' | '\t'
 LINE            := '\n'-'\r'
 SET             := '='
 DELIM           := ','
-CUSTOM-BEGIN    := "CustomProperty"~
 TUPLE-BEGIN     := '('
 TUPLE-END       := ')'
-OBJECT-BEGIN    := "Begin"~
-OBJECT-END      := "End"~
+OBJECT-BEGIN    := "Begin"
+OBJECT-END      := "End"
+CUSTOM-BEGIN    := "CustomProperty"
 LITERAL         := '\'' | '"' | '`'
 _ALPHA           := 'A'-'Z' | '0'-'9'
 _DIGIT           := '0'-'9'
