@@ -1,7 +1,7 @@
 export class _ParseData {
     public offset: number = 0;
     public raw: String = "";
-    public lines: Array<number> = [];
+    public lines: Array<number> = null;
 }
 
 export class _ParsePosition {
@@ -21,6 +21,12 @@ export class _ParsePosition {
         this.line = other.line;
         this.char = other.char;
         this.index = other.index;
+    }
+
+    public origin(other: _ParsePosition) {
+        this.line -= other.line;
+        this.char -= other.char;
+        this.index -= other.index;
     }
 
     public min(other: _ParsePosition) {
@@ -104,6 +110,14 @@ export class _ParseCursor {
     public rollback() {
         this.to.assign(this.from);
         this.complete = false;
+    }
+
+    public realize() {
+        let data: _ParseData = new _ParseData();
+        data.raw = this.result();
+        this.data = data;
+        this.to.origin(this.from);
+        this.from.reset();
     }
 
     public assert(): boolean {

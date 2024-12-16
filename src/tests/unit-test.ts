@@ -1,5 +1,5 @@
 class _UnitTestAssert {
-    public Fail(msg: string = "forced") {
+    public Fail(msg: string = "forced fail") {
         throw new Error(msg);
     }
 
@@ -15,11 +15,15 @@ class _UnitTestAssert {
         if (expected != value) {throw new Error(msg)}
     }
 
-    public NotEqual(expected: any, value: any, msg: string = "not equal") {
+    public NotEqual(expected: any, value: any, msg: string = "are equal") {
         if (expected == value) {throw new Error(msg)}
     }
 
     public Similar(expected: any, value: any, compare: (a:any, b:any) => number, error: number = 0, msg: string = "not similar") {
+        if (compare(expected, value) > error) {throw new Error(msg)}
+    }
+
+    public NotSimilar(expected: any, value: any, compare: (a:any, b:any) => number, error: number = 0, msg: string = "are similar") {
         if (compare(expected, value) <= error) {throw new Error(msg)}
     }
 

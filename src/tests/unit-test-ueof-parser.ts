@@ -28,7 +28,6 @@ export class UnitTestUEOFParser extends UnitTest {
         const _Parser = UEOFObjectParser;
         let cursor = new _ParseCursor();;
         let parser = null;
-        let format = "";
 
         cursor.reset();
         cursor.data.raw = this.DATA_NULL;
