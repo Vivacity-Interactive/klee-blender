@@ -116,7 +116,7 @@ class UEOEF:
             #self.properties.append(UEOEF.Property("PinAttributeDomain", self.attribute_domain, 1))
             #self.properties.append(UEOEF.Property("PinDefaultAttributeName", self.attribute_name, 1))
             #self.properties.append(UEOEF.Property("PinDefaultInput", self.default_input, 1))
-            self.properties.append(UEOEF.Property("PinValue", self.value))
+            self.properties.append(UEOEF.Property("DefaultValue", self.value))
             #self.properties.append(UEOEF.Property("PinMinValue", self.value_min))
             #self.properties.append(UEOEF.Property("PinMaxValue", self.value_max))
             

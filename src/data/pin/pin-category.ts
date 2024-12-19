@@ -1,5 +1,5 @@
-
 export enum PinCategory {
+    ///
     delegate = "delegate",
     exec = "exec",
     object = "object",
@@ -14,9 +14,8 @@ export enum PinCategory {
     name = "name",
     wildcard = "wildcard",
     byte = "byte",
-    
-    // Blender Pin Categories
-    VALUE = "NodeSocketFloat",
+    ///
+	VALUE = "NodeSocketFloat",
     INT = "NodeSocketInt",
     BOOLEAN = "NodeSocketBool",
     VECTOR = "NodeSocketVector",
@@ -34,5 +33,49 @@ export enum PinCategory {
     IMAGE = "NodeSocketImage",
     VIRTUAL = "NodeSocketVirtual",
     CUSTOM = "NodeSocketStandard"
-}
+};
 
+export const LOT_BLENDER_SOCKETS = {
+    BOOL: "NodeSocketBool",
+    COLLECTION: "NodeSocketCollection",
+    COLOR: "NodeSocketColor",
+    FLOAT: {
+    	ANGLE: "NodeSocketFloatAngle",
+    	COLOR_TEMPERATURE: "NodeSocketFloatColorTemperature",
+    	DISTANCE: "NodeSocketFloatDistance",
+    	FACTOR: "NodeSocketFloatFactor",
+    	FREQUENCY: "NodeSocketFloatFrequency",
+    	PERCENTAGE: "NodeSocketFloatPercentage",
+    	TIME: "NodeSocketFloatTime",
+    	TIME_ABSOLUTE: "NodeSocketFloatTimeAbsolute",
+    	UNSIGNED: "NodeSocketFloatUnsigned",
+    	WAVELENGTH: "NodeSocketFloatWavelength",
+	},
+    GEOMETRY: "NodeSocketGeometry",
+    IMAGE: "NodeSocketImage",
+    INT: {
+		INT_FACTOR: "NodeSocketIntFactor",
+		INT_PERCENTAGE: "NodeSocketIntPercentage",
+		INT_UNSIGNED: "NodeSocketIntUnsigned",
+	},
+    MATERIAL: "NodeSocketMaterial",
+    MATRIX: "NodeSocketMatrix",
+    MENU: "NodeSocketMenu",
+    OBJECT: "NodeSocketObject",
+    ROTATION: "NodeSocketRotation",
+    SHADER: "NodeSocketShader",
+    STANDARD: "NodeSocketStandard",
+    STRING: {
+		STRING_FILE_PATH: "NodeSocketStringFilePath",
+	},
+    TEXTURE: "NodeSocketTexture",
+    VECTOR: {
+		VECTOR_ACCELERATION: "NodeSocketVectorAcceleration",
+		VECTOR_DIRECTION: "NodeSocketVectorDirection",
+		VECTOR_EULER: "NodeSocketVectorEuler",
+		VECTOR_TRANSLATION: "NodeSocketVectorTranslation",
+		VECTOR_VELOCITY: "NodeSocketVectorVelocity",
+		VECTOR_XYZ: "NodeSocketVectorXYZ",
+	},
+    VIRTUAL: "NodeSocketVirtual"
+};
