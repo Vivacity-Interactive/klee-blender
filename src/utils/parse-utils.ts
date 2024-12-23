@@ -128,6 +128,10 @@ export class _ParseCursor {
 export class Parser {
     protected _cursor: _ParseCursor = new _ParseCursor();
 
+    protected _token: number = 0;
+
+    public get token(): number { return this._token; }
+
     public get cursor(): _ParseCursor { return this._cursor; }
     
     public parse(cursor: _ParseCursor): boolean {

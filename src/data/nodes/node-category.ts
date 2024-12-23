@@ -1,10 +1,33 @@
-export enum NodeCategory {
+export enum NodeGroup {
     COMPOSITOR_NODE = "CompositorNode",
     FUNCTION_NODE = "FunctionNode",
     GEOMETRY_NODE = "GeometryNode",
-    NODE = "Node",
     SHADER_NODE = "ShaderNode",
     TEXTURE_NODE = "TextureNode"
+};
+
+export enum NodeCategory {
+    CONVERTER_NODE,
+    COLOR_NODE,
+    GROUP_NODE,
+    GROUP_SOCKET_NODE,
+    FRAME_NODE,
+    MATTE_NODE,
+    DISTOR_NODE,
+    INPUT_NODE,
+    OUTPUT_NODE,
+    FILTER_NODE,
+    VECTOR_NODE,
+    TEXTURE_NODE,
+    SHADER_NODE,
+    SCRIPT_NODE,
+    PATTERN_NODE,
+    LAYOUT_NODE,
+    GEOMETRY_NODE,
+    ATTRIBUTE_NODE,
+    SIMULATION_ZONE,
+    REPEAT_ZONE,
+    FOREACH_GEOMETRY_ELEMENT_ZONE
 };
 
 export enum NodeSubCategory {

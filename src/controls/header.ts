@@ -8,7 +8,7 @@ import { HorizontalAlignment, VerticalPanel } from "./vertical-panel";
 import { HorizontalPanel } from "./horizontal-panel";
 import { Icon } from "./icon";
 import { Label } from "./label";
-import { PinControl } from "./pin.control";
+import { PinControl } from "./pin-control";
 
 
 export class Header extends HorizontalPanel {
@@ -43,11 +43,11 @@ export class Header extends HorizontalPanel {
         title.padding = { top: 6, right: 0, bottom: 3, left: 0 };
         this.titlePanel.add(title);
 
-        let subTitles = this.node.subTitles.sort((a, b) => (b.orderIndex || 0) - (a.orderIndex || 0))
-        for (const subTitle of subTitles) {
-            let label = new Label(subTitle.text, Constants.NODE_FONT, Constants.NODE_SUBTITLE_COLOR)
-            this.titlePanel.add(label);
-        }
+        // let subTitles = this.node.subTitles.sort((a, b) => (b.orderIndex || 0) - (a.orderIndex || 0))
+        // for (const subTitle of subTitles) {
+        //     let label = new Label(subTitle.text, Constants.NODE_FONT, Constants.NODE_SUBTITLE_COLOR)
+        //     this.titlePanel.add(label);
+        // }
 
         this.add(this.titlePanel);
 

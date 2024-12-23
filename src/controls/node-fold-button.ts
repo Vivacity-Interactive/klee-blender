@@ -5,7 +5,7 @@ import { InteractableUserControl } from "./interactable-user-control";
 import { DrawableControl } from "./interfaces/drawable";
 import { InteractableControl } from "./interfaces/interactable";
 import { FoldableHeadedNodeControl } from "./nodes/foldable-headed-node.control";
-import { NodeControl } from "./nodes/node.control";
+import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
 
 export class NodeFoldButton extends InteractableUserControl implements InteractableControl {

@@ -1,7 +1,10 @@
 import { Canvas2D } from "./canvas";
 import { Controller } from "./controller";
-import { BlueprintParser } from "./parser/blueprint-parser";
+import { UEOFBlenderPopulate } from "./parser/ueof-blender-populate";
+import { UEOFParser } from "./parser/ueof-parser";
+//import { BlueprintParser } from "./parser/blueprint-parser";
 import { Scene } from "./scene";
+import { _ParseCursor } from "./utils/parse-utils";
 
 export class Application {
 
@@ -9,7 +12,7 @@ export class Application {
     private _canvas: Canvas2D;
 
     private _controller: Controller;
-    private _parser: BlueprintParser;
+    private _populator: UEOFBlenderPopulate;
     private _element: HTMLCanvasElement;
 
     private static firefox: boolean;
@@ -30,7 +33,7 @@ export class Application {
 
         this.initializeHtmlAttributes();
 
-        this._parser = new BlueprintParser();
+        this._populator = new UEOFBlenderPopulate(new UEOFParser());
         this.loadBlueprintIntoScene(element.innerHTML);
 
         this._controller = new Controller(element, this);
@@ -123,12 +126,14 @@ export class Application {
 
     public loadBlueprintIntoScene(text) {
         this._scene.unload();
-        const nodes = this._parser.parseBlueprint(text);
-        this._scene.load(nodes);
-        this.refresh();
-
-        this.recenterCamera();
-        
+        let cursor = new _ParseCursor(text);
+        const bValid = this._populator.parser.parse(cursor);
+        if (bValid) {
+            this._populator.populate();
+            this._scene.load(this._populator.controls);
+            this.refresh();
+            this.recenterCamera();
+        }
     }
 
     recenterCamera() {

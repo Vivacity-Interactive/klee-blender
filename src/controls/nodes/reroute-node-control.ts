@@ -1,10 +1,9 @@
 import { Canvas2D } from "../../canvas";
 import { DrawableControl } from "../interfaces/drawable";
-import { NodeControl } from "./node.control";
+import { NodeControl } from "./node-control";
 import { Node } from "../../data/nodes/node";
 import { PinProperty } from "../../data/pin/pin-property";
-import { PinControl } from "../pin.control";
-import { PinDirection } from "../../data/pin/pin-direction";
+import { PinControl } from "../pin-control";
 import { ColorUtils } from "../utils/color-utils";
 
 

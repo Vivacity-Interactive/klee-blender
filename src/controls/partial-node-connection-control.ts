@@ -3,7 +3,7 @@ import { PinCategory } from "../data/pin/pin-category";
 import { PinDirection } from "../data/pin/pin-direction";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
-import { PinControl } from "./pin.control";
+import { PinControl } from "./pin-control";
 import { ColorUtils } from "./utils/color-utils";
 
 export class NodePartialConnectionControl extends Control implements DrawableControl {
@@ -23,7 +23,8 @@ export class NodePartialConnectionControl extends Control implements DrawableCon
 
         this._color = ColorUtils.getPinColor(this._pin.pinProperty);
         this._isDirectionOutput = this._pin.pinProperty.direction == PinDirection.EGPD_Output;
-        this._lineWidth = (this._pin.pinProperty.category === PinCategory.exec) ? 2.5 : 1.5;
+        //this._lineWidth = (this._pin.pinProperty.category === PinCategory.exec) ? 2.5 : 1.5;
+        this._lineWidth = 1.5;
     }
 
     draw(canvas: Canvas2D): void {

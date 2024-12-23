@@ -1,12 +1,12 @@
 import { Canvas2D } from "../../canvas";
 import { Constants } from "../../constants";
 import { Color } from "../../data/color";
-import { CommentNode } from "../../data/nodes/comment.node";
+import { ZoneNode } from "../../data/nodes/zone-node";
 import { Vector2 } from "../../math/vector2";
 import { DrawableControl } from "../interfaces/drawable";
-import { NodeControl } from "./node.control";
+import { NodeControl } from "./node-control";
 
-export class CommentNodeControl extends NodeControl implements DrawableControl {
+export class ZoneNodeControl extends NodeControl implements DrawableControl {
 
     private static readonly _HEADER_TEXT_COLOR = "#eeeeee";
     private static readonly _DEFAULT_COMMENT_COLOR = "#eeeeee";
@@ -14,7 +14,7 @@ export class CommentNodeControl extends NodeControl implements DrawableControl {
     private headerBackgroundColor: string;
     private bodyBackgroundColor: string;
 
-    constructor(node: CommentNode) {
+    constructor(node: ZoneNode) {
         super(node);
 
         this.zIndex = -100;
@@ -40,7 +40,7 @@ export class CommentNodeControl extends NodeControl implements DrawableControl {
 
     private applyCommentColor(nodeColor: string) {
         if (nodeColor == undefined || nodeColor == '')
-            nodeColor = CommentNodeControl._DEFAULT_COMMENT_COLOR;
+            nodeColor = ZoneNodeControl._DEFAULT_COMMENT_COLOR;
 
         let color = new Color(nodeColor);
 
@@ -64,7 +64,7 @@ export class CommentNodeControl extends NodeControl implements DrawableControl {
             .strokeStyle('#333')
             .lineWidth(1.5)
             .strokeText(this.node.title, textPosition.x + 1, textPosition.y + 1)
-            .fillStyle(CommentNodeControl._HEADER_TEXT_COLOR)
+            .fillStyle(ZoneNodeControl._HEADER_TEXT_COLOR)
             .fillText(this.node.title, textPosition.x, textPosition.y)
     }
 }

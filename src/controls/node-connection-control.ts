@@ -3,7 +3,7 @@ import { PinCategory } from "../data/pin/pin-category";
 import { Vector2 } from "../math/vector2";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
-import { PinControl } from "./pin.control";
+import { PinControl } from "./pin-control";
 import { UserControl } from "./user-control";
 import { ColorUtils } from "./utils/color-utils";
 
@@ -33,7 +33,7 @@ export class NodeConnectionControl extends UserControl {
         this.curveValue = distance * 0.4;
         this.color = ColorUtils.getPinColor(this.pinStart.pinProperty);
 
-        this.lineWidth = (this.pinStart.pinProperty.category === PinCategory.exec) ? 2.5 : 1.5;
+        this.lineWidth = 1.5;
     }
 
     onDraw(canvas: Canvas2D): void {

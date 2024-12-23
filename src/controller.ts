@@ -1,5 +1,5 @@
 import { Application } from "./application";
-import { NodeControl } from "./controls/nodes/node.control";
+import { NodeControl } from "./controls/nodes/node-control";
 import { BoundingBox } from "./math/boundingbox";
 import { Vector2 } from "./math/vector2";
 import { InteractableControl, isInteractableControl } from "./controls/interfaces/interactable";

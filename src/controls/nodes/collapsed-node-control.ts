@@ -7,7 +7,7 @@ import { DrawableControl } from "../interfaces/drawable";
 import { NodeFoldButton } from "../node-fold-button";
 import { HeadedNodeControl } from "./headed-node-control";
 
-export class FoldableHeadedNodeControl extends HeadedNodeControl implements DrawableControl {
+export class CollapsedNodeControl extends HeadedNodeControl implements DrawableControl {
 
     nodeButton: NodeFoldButton;
     foldState: boolean = false;

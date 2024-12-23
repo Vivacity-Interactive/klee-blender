@@ -1,15 +1,13 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
 import { PinCategory } from "../data/pin/pin-category";
-import { PinContainerType } from "../data/pin/pin-container-type";
 import { PinDirection } from "../data/pin/pin-direction";
 import { PinProperty } from "../data/pin/pin-property";
 import { Vector2 } from "../math/vector2";
-import { NodeConnectionControl } from "./node-connection.control";
-import { NodeControl } from "./nodes/node.control";
+import { NodeConnectionControl } from "./node-connection-control";
+import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
 import { ColorUtils } from "./utils/color-utils";
-import { IconLibrary } from "./utils/icon-library";
 
 
 export class PinControl extends UserControl {
@@ -42,7 +40,7 @@ export class PinControl extends UserControl {
         this._isInput = this._pinProperty.direction !== PinDirection.EGPD_Output;
         this._color = ColorUtils.getPinColor(this._pinProperty);
         if (this._pinProperty.valueType)
-            this._secondaryColor = ColorUtils.getPinColorByCategory(this._pinProperty.valueType as PinCategory);
+            //this._secondaryColor = ColorUtils.getPinColorByCategory(this._pinProperty.valueType as PinCategory);
 
         
         this.width = 0;
@@ -68,30 +66,7 @@ export class PinControl extends UserControl {
     
 
     private initPinIcons() {
-        switch (this._pinProperty.containerType) {
-            case PinContainerType.Array:
-                this.icon = (this._pinProperty.isLinked) ? new Path2D(IconLibrary.PIN_ARRAY_CONNECTED) : new Path2D(IconLibrary.PIN_ARRAY_DISCONNECTED);
-                break;
-            case PinContainerType.Set:
-                this.icon = new Path2D(IconLibrary.PIN_SET);
-                break;
-            case PinContainerType.Map:
-                this.icon = new Path2D(IconLibrary.PIN_MAP_KEY);
-                this.secondaryIcon = new Path2D(IconLibrary.PIN_MAP_VALUE);
-                break;
-            case PinContainerType.None:
-            default:
-                this.icon = undefined;
-                break;
-        }
-
-        // Overwrite only if there is no icon (Container icons stay even when they are references)
-        if (this.icon === undefined && this._pinProperty.isReference) {
-            if (this._pinProperty.isLinked)
-                this.icon = new Path2D(IconLibrary.PIN_REFERENCE_CONNECTED);
-            else
-                this.icon = new Path2D(IconLibrary.PIN_REFERENCE_DISCONNECTED);
-        }
+        //this.icon = this._pinProperty.attributeDomain
     }
 
     get pinProperty(): PinProperty {
@@ -103,9 +78,9 @@ export class PinControl extends UserControl {
 
         let nodeControl = this.findParent(NodeControl) as NodeControl;
         if (nodeControl) {
-            if (this.pinProperty.advancedView == true && !nodeControl.showAdvanced && !this.pinProperty.isLinked) {
-                this.visible = false;
-            }
+            // if (this.pinProperty.optionView == true && !nodeControl.showOptions && !this.pinProperty.isLinked) {
+            //     this.visible = false;
+            // }
         }
     }
 
@@ -147,12 +122,6 @@ export class PinControl extends UserControl {
         canvas.translate(paddingX, Math.floor(this.height * 0.5));
 
         switch (pinCategory) {
-            case PinCategory.exec:
-                this.drawExecutionPin(canvas);
-                break;
-            case PinCategory.delegate:
-                this.drawDelegatePin(canvas);
-                break;
             default:
                 this.drawPin(canvas);
         }
@@ -245,9 +214,9 @@ export class PinControl extends UserControl {
         let textX = this.setupTextDrawing(canvas);
         let pinX = this.getPinX();
 
-        if(!this.pinProperty.showInHead) {
-            pinX -= 4;
-        }
+        // if(!this.pinProperty.showInHead) {
+        //     pinX -= 4;
+        // }
 
         // Draw pin text
         canvas.fillText(this._pinProperty.formattedName, textX, 4);
@@ -303,8 +272,8 @@ export class PinControl extends UserControl {
 
         if (this.pinProperty.direction === PinDirection.EGPD_Output) {
             position.x += (this.width || this.size.x) - PinControl.PINS_PADDING_HORIZONTAL;
-            if (this.pinProperty.category === PinCategory.delegate)
-                position.x += 8;
+            // if (this.pinProperty.category === PinCategory.delegate)
+            //     position.x += 8;
         } else {
             position.x += PinControl.PINS_PADDING_HORIZONTAL;
         }

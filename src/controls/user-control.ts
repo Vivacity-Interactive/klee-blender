@@ -3,7 +3,7 @@ import { Canvas2D } from "../canvas";
 import { Vector2 } from "../math/vector2";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
-import { PinControl } from "./pin.control";
+import { PinControl } from "./pin-control";
 import { Thickness } from "./thickness";
 
 export abstract class UserControl extends Control implements DrawableControl {

@@ -1,5 +1,20 @@
 import { _ParseCursor, Parser } from "../utils/parse-utils";
-import { token, tokenAny, tokenChar, tokenCharOnce, tokenNotRanges, tokenRange, tokenRangeOnce, tokenRanges, tokenString } from "../utils/token-utils";
+import { token, TOKEN_UTILS_ESCAPE, TOKEN_UTILS_STRING, tokenAny, tokenChar, tokenCharOnce, tokenNotRanges, tokenRange, tokenRangeOnce, tokenRanges, tokenString } from "../utils/token-utils";
+
+export enum EUEOFToken {
+    NONE = 0,
+    ROOT,
+    OBJECT,
+    ATTRIBUTE,
+    PROPERTY,
+    CUSTOM,
+    VALUE,
+    RAW,
+    NAME,
+    TUPLE,
+    STRING,
+    LINK
+}
 
 export enum EValueParser {
     NONE = 0,
@@ -21,6 +36,7 @@ export class UEOFObjectParser extends Parser {
     public customs: Array<UEOFCustomParser> = []
 
     public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.OBJECT;
         let bValid: boolean = false;
         let bLine: boolean = false;
         let bNext: boolean = true;
@@ -101,6 +117,7 @@ export class UEOFAttributeParser extends Parser {
     public value: UEOFValueParser = new UEOFValueParser();
 
     public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.ATTRIBUTE;
         let bValid: boolean = false;
 
         this._cursor = cursor.snapshot();
@@ -130,6 +147,8 @@ export class UEOFPropertyParser extends Parser {
     public link: UEOFLinkParser = null;
 
     public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.PROPERTY;
+        
         let bValid: boolean = false;
         let bLink: boolean = false;
 
@@ -159,7 +178,8 @@ export class UEOFPropertyParser extends Parser {
 }
 
 export class UEOFNameParser extends Parser  {
-    public parse(cursor: _ParseCursor): boolean { 
+    public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.NAME;
         let bValid: boolean = false;
         
         this._cursor = cursor.snapshot();
@@ -179,7 +199,8 @@ export class UEOFNameParser extends Parser  {
 }
 
 export class UEOFStringParser extends Parser  {
-    public parse(cursor: _ParseCursor): boolean { 
+    public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.STRING;
         let bValid: boolean = false;
         
         this._cursor = cursor.snapshot();
@@ -198,7 +219,8 @@ export class UEOFStringParser extends Parser  {
 }
 
 export class UEOFRawParser extends Parser  {
-    public parse(cursor: _ParseCursor): boolean { 
+    public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.RAW;
         let bValid: boolean = false;
         
         this._cursor = cursor.snapshot();
@@ -219,6 +241,7 @@ export class UEOFTupleParser extends Parser  {
     public properties: Array<UEOFPropertyParser> = [];
 
     public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.TUPLE;
         let bValid: boolean = false;
         let bNext: boolean = true;
         let bProperty: boolean = false;
@@ -260,6 +283,7 @@ export class UEOFLinkParser extends Parser  {
     public relations: Array<UEOFPropertyParser> = [];
 
     public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.LINK;
         let bValid: boolean = false;
         let bNext: boolean = true;
         let bRelation: boolean = false;
@@ -308,6 +332,7 @@ export class UEOFValueParser extends Parser  {
     }
 
     public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.VALUE;
         let bValid: boolean = false;
         let _bValid: boolean = false;
 
@@ -365,6 +390,7 @@ export class UEOFCustomParser extends Parser  {
     public properties: UEOFTupleParser = new UEOFTupleParser();
 
     public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.CUSTOM;
         let bValid: boolean = false;
         
         this._cursor = cursor.snapshot();
@@ -396,6 +422,8 @@ export class UEOFParser extends Parser  {
     public static readonly T_SPACE = " \t";
     public static readonly T_LINE = "\x0a\x0d";
     public static readonly T_RAW = "\x00\x20\x22\x22\x27\x29\x2c\x2c\x3d\x3d\x7f\x7f";
+    public static readonly T_ESCAPE = TOKEN_UTILS_ESCAPE;
+    public static readonly T_LITERAL = TOKEN_UTILS_STRING;
 
     public static readonly FM_SET = "=";
     public static readonly FM_CUSTOM = "CustomProperties";
@@ -411,6 +439,7 @@ export class UEOFParser extends Parser  {
     public objects: Array<UEOFObjectParser> = [];
     
     public parse(cursor: _ParseCursor): boolean {
+        this._token = EUEOFToken.ROOT;
         let bValid: boolean = false;
         let bNext: boolean = true;
 
@@ -428,7 +457,7 @@ export class UEOFParser extends Parser  {
         }
 
         this._cursor.end(cursor, bValid);
-        return bValid;
+        return true;
     }
 
     public format(): string {

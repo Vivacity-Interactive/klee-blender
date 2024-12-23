@@ -1,7 +1,7 @@
 import { Canvas2D } from "../../canvas";
 import { Node } from "../../data/nodes/node";
 import { DrawableControl } from "../interfaces/drawable";
-import { NodeControl } from "./node.control";
+import { NodeControl } from "./node-control";
 import { Application } from "../../application";
 import { Vector2 } from "../../math/vector2";
 import { Constants } from "../../constants";
@@ -9,7 +9,7 @@ import { Header } from "../header";
 import { HorizontalPanel } from "../horizontal-panel";
 import { VerticalPanel } from "../vertical-panel";
 import { PinProperty } from "../../data/pin/pin-property";
-import { PinControl } from "../pin.control";
+import { PinControl } from "../pin-control";
 import { PinDirection } from "../../data/pin/pin-direction";
 import { PinCategory } from "../../data/pin/pin-category";
 import { WarningBar } from "../warning-bar";
@@ -43,9 +43,9 @@ export class HeadedNodeControl extends NodeControl implements DrawableControl {
     }
 
     protected initializeEnabledState(): void {
-        if (this.node.enabledState !== undefined) {
-            this.mainPanel.add(new WarningBar(prettifyText(this.node.enabledState)));
-        }
+        // if (this.node.enabledState !== undefined) {
+        //     this.mainPanel.add(new WarningBar(prettifyText(this.node.enabledState)));
+        // }
     }
 
     protected createPin(property: PinProperty) {
@@ -53,11 +53,11 @@ export class HeadedNodeControl extends NodeControl implements DrawableControl {
         this.pins.push(pinControl);
 
         if (property.direction == PinDirection.EGPD_Output) {
-            if (property.showInHead) {
-                pinControl.fillParentVertical = true;
-                this.header.addDelegate(pinControl);
-                return;
-            }
+            // if (property.showInHead) {
+            //     pinControl.fillParentVertical = true;
+            //     this.header.addDelegate(pinControl);
+            //     return;
+            // }
             this.outputPinPanel.add(pinControl);
         } else {
             this.inputPinPanel.add(pinControl);

@@ -1,9 +1,9 @@
 import { Canvas2D } from "../../canvas";
-import { NodeControl } from "./node.control";
+import { NodeControl } from "./node-control";
 import { Vector2 } from "../../math/vector2";
 import { Node } from "../../data/nodes/node";
 import { Constants } from "../../constants";
-import { HorizontalSpacerControl } from "../horizontal-spacer.control";
+import { HorizontalSpacerControl } from "../horizontal-spacer-control";
 
 
 export class HeadlessNodeControl extends NodeControl {
@@ -50,13 +50,13 @@ export class HeadlessNodeControl extends NodeControl {
 
 
     protected drawFirstSubTitle(canvas: Canvas2D) {
-        if(!this.node.subTitles || this.node.subTitles.length === 0) { return; }
+        // if(!this.node.subTitles || this.node.subTitles.length === 0) { return; }
 
-        canvas
-            .font(Constants.NODE_MATHFUNC_SUBTITLE_FONT)
-            .textAlign('center')
-            .fillStyle(Constants.NODE_MATHFUNC_TITLE_COLOR)
-            .fillText(this.node.subTitles[0].text, this.size.x * 0.5, this.size.y * 0.5 + 22);
+        // canvas
+        //     .font(Constants.NODE_MATHFUNC_SUBTITLE_FONT)
+        //     .textAlign('center')
+        //     .fillStyle(Constants.NODE_MATHFUNC_TITLE_COLOR)
+        //     .fillText(this.node.subTitles[0].text, this.size.x * 0.5, this.size.y * 0.5 + 22);
     }
 
     private measureText(font: string, text: string): TextMetrics {

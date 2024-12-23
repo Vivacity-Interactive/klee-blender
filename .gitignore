@@ -119,3 +119,6 @@ dist
 
 # Blender
 *.blend1
+
+# Scratch
+_scratch

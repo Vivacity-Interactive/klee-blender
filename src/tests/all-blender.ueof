@@ -1,0 +1,164 @@
+Begin Object Class=NodeGroupInput Name="Group Input"
+   NodeGuid=2B66C349B60
+   NodeType="GROUP_INPUT"
+   NodePosX=-591
+   NodePosY=32
+   CustomProperties Pin (PinId=2B66A6E3DA0,Direction="EGPD_Output",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Delete Geometry" 2B66A6E15A0,"Delete Geometry.001" 2B6475BEEA0,"Reroute" 2B6475C29A0,),)
+   CustomProperties Pin (PinId=2B66A6E3B20,Direction="EGPD_Output",PinName="Radius",PinType.PinCategory="VALUE",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketFloat,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Curve Circle" 2B66A6E0420,"UV Sphere" 2B6475BF620,),)
+   CustomProperties Pin (PinId=2B66A6E38A0,Direction="EGPD_Output",PinName="Resolution",PinType.PinCategory="INT",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketInt,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Curve Circle" 2B66A6E0E20,"UV Sphere" 2B6475BFB20,"Math" 2B6475BC420,),)
+   CustomProperties Pin (PinId=2B66A6E3620,Direction="EGPD_Output",PinName="Shade Smooth",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Set Shade Smooth" 2B6475BC920,),)
+   CustomProperties Pin (PinId=2B66A6E33A0,Direction="EGPD_Output",PinName="Format",PinType.PinCategory="MENU",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketMenu,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Menu Switch" 2B6475C38A0,),)
+   CustomProperties Pin (PinId=2B66A6E3120,Direction="EGPD_Output",PinName="",PinType.PinCategory="CUSTOM",PinType.PinSubCategory="",PinType.PinSubCategoryObject=NodeSocketVirtual,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+End Object
+Begin Object Class=NodeGroupOutput Name="Group Output"
+   NodeGuid=2B66C34A0A0
+   NodeType="GROUP_OUTPUT"
+   NodePosX=1067
+   NodePosY=49
+   CustomProperties Pin (PinId=2B66A6E2EA0,Direction="EGPD_Input",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E2C20,Direction="EGPD_Input",PinName="Normal",PinType.PinCategory="VECTOR",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketVector,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66C207B08,Direction="EGPD_Input",PinName="Preview",PinType.PinCategory="RGBA",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketColor,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E29A0,Direction="EGPD_Input",PinName="",PinType.PinCategory="CUSTOM",PinType.PinSubCategory="",PinType.PinSubCategoryObject=NodeSocketVirtual,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+End Object
+Begin Object Class=GeometryNodeCurveToMesh Name="Curve to Mesh"
+   NodeGuid=2B66C349EE0
+   NodeType="CURVE_TO_MESH"
+   NodePosX=79
+   NodePosY=128
+   CustomProperties Pin (PinId=2B66A6E2720,Direction="EGPD_Input",PinName="Curve",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E24A0,Direction="EGPD_Input",PinName="Profile Curve",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E2220,Direction="EGPD_Input",PinName="Fill Caps",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E1FA0,Direction="EGPD_Output",PinName="Mesh",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Join Geometry" 2B6475BD320,),)
+End Object
+Begin Object Class=GeometryNodeMeshToCurve Name="Mesh to Curve"
+   NodeGuid=2B66C34BCA0
+   NodeType="MESH_TO_CURVE"
+   NodePosX=-114
+   NodePosY=122
+   CustomProperties Pin (PinId=2B66A6E1D20,Direction="EGPD_Input",PinName="Mesh",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E1AA0,Direction="EGPD_Input",PinName="Selection",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E1820,Direction="EGPD_Output",PinName="Curve",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Curve to Mesh" 2B66A6E2720,),)
+End Object
+Begin Object Class=GeometryNodeDeleteGeometry Name="Delete Geometry"
+   NodeGuid=2B66C34BAE0
+   NodeType="DELETE_GEOMETRY"
+   NodePosX=-319
+   NodePosY=124
+   CustomProperties Pin (PinId=2B66A6E15A0,Direction="EGPD_Input",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E1320,Direction="EGPD_Input",PinName="Selection",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E10A0,Direction="EGPD_Output",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Mesh to Curve" 2B66A6E1D20,),)
+End Object
+Begin Object Class=GeometryNodeCurvePrimitiveCircle Name="Curve Circle"
+   NodeGuid=2B66C34B920
+   NodeType="CURVE_PRIMITIVE_CIRCLE"
+   NodePosX=-116
+   NodePosY=-15
+   CustomProperties Pin (PinId=2B66A6E0E20,Direction="EGPD_Input",PinName="Resolution",PinType.PinCategory="INT",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketInt,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E0BA0,Direction="EGPD_Input",PinName="Point 1",PinType.PinCategory="VECTOR",PinType.PinSubCategory="Translation",PinType.PinSubCategoryObject=NodeSocketVectorTranslation,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E0920,Direction="EGPD_Input",PinName="Point 2",PinType.PinCategory="VECTOR",PinType.PinSubCategory="Translation",PinType.PinSubCategoryObject=NodeSocketVectorTranslation,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E06A0,Direction="EGPD_Input",PinName="Point 3",PinType.PinCategory="VECTOR",PinType.PinSubCategory="Translation",PinType.PinSubCategoryObject=NodeSocketVectorTranslation,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E0420,Direction="EGPD_Input",PinName="Radius",PinType.PinCategory="VALUE",PinType.PinSubCategory="Distance",PinType.PinSubCategoryObject=NodeSocketFloatDistance,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B66A6E01A0,Direction="EGPD_Output",PinName="Curve",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Curve to Mesh" 2B66A6E24A0,),)
+   CustomProperties Pin (PinId=2B6475BFDA0,Direction="EGPD_Output",PinName="Center",PinType.PinCategory="VECTOR",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketVector,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+End Object
+Begin Object Class=GeometryNodeMeshUVSphere Name="UV Sphere"
+   NodeGuid=2B66C34B760
+   NodeType="MESH_PRIMITIVE_UV_SPHERE"
+   NodePosX=-114
+   NodePosY=-274
+   CustomProperties Pin (PinId=2B6475BFB20,Direction="EGPD_Input",PinName="Segments",PinType.PinCategory="INT",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketInt,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BF8A0,Direction="EGPD_Input",PinName="Rings",PinType.PinCategory="INT",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketInt,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BF620,Direction="EGPD_Input",PinName="Radius",PinType.PinCategory="VALUE",PinType.PinSubCategory="Distance",PinType.PinSubCategoryObject=NodeSocketFloatDistance,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BF3A0,Direction="EGPD_Output",PinName="Mesh",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Instance on Points" 2B6475BE220,),)
+   CustomProperties Pin (PinId=2B6475BF120,Direction="EGPD_Output",PinName="UV Map",PinType.PinCategory="VECTOR",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketVector,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+End Object
+Begin Object Class=GeometryNodeDeleteGeometry Name="Delete Geometry.001"
+   NodeGuid=2B66C34B5A0
+   NodeType="DELETE_GEOMETRY"
+   NodePosX=-317
+   NodePosY=-79
+   CustomProperties Pin (PinId=2B6475BEEA0,Direction="EGPD_Input",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BEC20,Direction="EGPD_Input",PinName="Selection",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BE9A0,Direction="EGPD_Output",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Instance on Points" 2B6475BE720,),)
+End Object
+Begin Object Class=GeometryNodeInstanceOnPoints Name="Instance on Points"
+   NodeGuid=2B66C34B3E0
+   NodeType="INSTANCE_ON_POINTS"
+   NodePosX=79
+   NodePosY=-88
+   CustomProperties Pin (PinId=2B6475BE720,Direction="EGPD_Input",PinName="Points",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BE4A0,Direction="EGPD_Input",PinName="Selection",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BE220,Direction="EGPD_Input",PinName="Instance",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BDFA0,Direction="EGPD_Input",PinName="Pick Instance",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BDD20,Direction="EGPD_Input",PinName="Instance Index",PinType.PinCategory="INT",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketInt,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BDAA0,Direction="EGPD_Input",PinName="Rotation",PinType.PinCategory="ROTATION",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketRotation,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BD820,Direction="EGPD_Input",PinName="Scale",PinType.PinCategory="VECTOR",PinType.PinSubCategory="XYZ",PinType.PinSubCategoryObject=NodeSocketVectorXYZ,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BD5A0,Direction="EGPD_Output",PinName="Instances",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Join Geometry" 2B6475BD320,),)
+End Object
+Begin Object Class=GeometryNodeJoinGeometry Name="Join Geometry"
+   NodeGuid=2B66C34B220
+   NodeType="JOIN_GEOMETRY"
+   NodePosX=263
+   NodePosY=31
+   CustomProperties Pin (PinId=2B6475BD320,Direction="EGPD_Input",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BD0A0,Direction="EGPD_Output",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Set Shade Smooth" 2B6475BCE20,),)
+End Object
+Begin Object Class=GeometryNodeSetShadeSmooth Name="Set Shade Smooth"
+   NodeGuid=2B66C34B060
+   NodeType="SET_SHADE_SMOOTH"
+   NodePosX=491
+   NodePosY=79
+   CustomProperties Pin (PinId=2B6475BCE20,Direction="EGPD_Input",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BCBA0,Direction="EGPD_Input",PinName="Selection",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BC920,Direction="EGPD_Input",PinName="Shade Smooth",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BC6A0,Direction="EGPD_Output",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Menu Switch" 2B6475C33A0,"Realize Instances" 2B6475C1FA0,),)
+End Object
+Begin Object Class=ShaderNodeMath Name="Math"
+   NodeGuid=2B66C34AEA0
+   NodeType="MATH"
+   NodePosX=-320
+   NodePosY=-267
+   CustomProperties Pin (PinId=2B6475BC420,Direction="EGPD_Input",PinName="Value",PinType.PinCategory="VALUE",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketFloat,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475BC1A0,Direction="EGPD_Input",PinName="Value",PinType.PinCategory="VALUE",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketFloat,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C3DA0,Direction="EGPD_Input",PinName="Value",PinType.PinCategory="VALUE",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketFloat,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C3B20,Direction="EGPD_Output",PinName="Value",PinType.PinCategory="VALUE",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketFloat,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("UV Sphere" 2B6475BF8A0,),)
+End Object
+Begin Object Class=GeometryNodeMenuSwitch Name="Menu Switch"
+   NodeGuid=2B66C34ACE0
+   NodeType="MENU_SWITCH"
+   NodePosX=862
+   NodePosY=121
+   CustomProperties Pin (PinId=2B6475C38A0,Direction="EGPD_Input",PinName="Menu",PinType.PinCategory="MENU",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketMenu,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C3620,Direction="EGPD_Input",PinName="Skip",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C33A0,Direction="EGPD_Input",PinName="Wireframe",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C3120,Direction="EGPD_Input",PinName="Realized",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C2EA0,Direction="EGPD_Input",PinName="",PinType.PinCategory="CUSTOM",PinType.PinSubCategory="",PinType.PinSubCategoryObject=NodeSocketVirtual,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C2C20,Direction="EGPD_Output",PinName="Output",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Group Output" 2B66A6E2EA0,),)
+End Object
+Begin Object Class=NodeReroute Name="Reroute"
+   NodeGuid=2B66C34AB20
+   NodeType="REROUTE"
+   NodePosX=-375
+   NodePosY=208
+   CustomProperties Pin (PinId=2B6475C29A0,Direction="EGPD_Input",PinName="Input",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C2720,Direction="EGPD_Output",PinName="Output",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Reroute.001" 2B6475C24A0,),)
+End Object
+Begin Object Class=NodeReroute Name="Reroute.001"
+   NodeGuid=2B66C34A960
+   NodeType="REROUTE"
+   NodePosX=769
+   NodePosY=204
+   CustomProperties Pin (PinId=2B6475C24A0,Direction="EGPD_Input",PinName="Input",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C2220,Direction="EGPD_Output",PinName="Output",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Menu Switch" 2B6475C3620,),)
+End Object
+Begin Object Class=GeometryNodeRealizeInstances Name="Realize Instances"
+   NodeGuid=2B66C34A7A0
+   NodeType="REALIZE_INSTANCES"
+   NodePosX=672
+   NodePosY=-39
+   CustomProperties Pin (PinId=2B6475C1FA0,Direction="EGPD_Input",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C1D20,Direction="EGPD_Input",PinName="Selection",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C1AA0,Direction="EGPD_Input",PinName="Realize All",PinType.PinCategory="BOOLEAN",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketBool,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C1820,Direction="EGPD_Input",PinName="Depth",PinType.PinCategory="INT",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketInt,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=(),)
+   CustomProperties Pin (PinId=2B6475C15A0,Direction="EGPD_Output",PinName="Geometry",PinType.PinCategory="GEOMETRY",PinType.PinSubCategory="None",PinType.PinSubCategoryObject=NodeSocketGeometry,bHidden=False,bNotConnectable=False,bForceNoneField=False,bLayerSelection=False,bHideInModifier=False,LinkedTo=("Menu Switch" 2B6475C3120,),)
+End Object
