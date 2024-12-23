@@ -11,6 +11,24 @@ import bpy, json, mathutils, pickle
 
 def _to_uid(i):
     return f'{i:x}'.upper()
+
+def _to_vec3x(c):
+    return "#{:02x}{:02x}{:02x}".format(int(c.r * 255), int(c.g * 255), int(c.b * 255))
+
+def _to_vec4x(v):
+    return "#{:02x}{:02x}{:02x}{:02x}".format(int(v.x * 255), int(v.y * 255), int(v.z * 255), int(v.w * 255))
+
+def _to_vec3f(c):
+    return "{:f}, {:f}, {:f}".format(*c)
+
+def _to_vec4f(c):
+    return "{:f}, {:f}, {:f}, {:f}".format(*c)
+
+def _to_vec3i(c):
+    return "{:d}, {:d}, {:d}".format(*(int(x) for x in (c * 255.0)))
+
+def _to_vec4i(c):
+    return "{:d}, {:d}, {:d}, {:d}".format(*(int(x) for x in (c * 255.0)))
         
 class _Settings:
     def __init__(self):
@@ -75,12 +93,13 @@ class UEOEF:
         fm_end = ")"
         fm_property = ","
         
-        def __init__(self, type="", subtype="", name="", enum=""):
+        def __init__(self, type="", subtype="", name="", enum="", subenum=""):
             self.id = UEOEF.DEFAULT_NO_ID
             self.type = type
             self.subtype = subtype
             self.name = name
             self.enum = enum
+            self.subenum = subenum
             self.direction = 0
             self.description = ""
             #self.attribute_domain = ""
@@ -126,9 +145,9 @@ class UEOEF:
  
             self.properties.append(UEOEF.Property("bHidden", False))
             self.properties.append(UEOEF.Property("bNotConnectable", False))
-            self.properties.append(UEOEF.Property("bForceNoneField", False))
-            self.properties.append(UEOEF.Property("bLayerSelection", False))
-            self.properties.append(UEOEF.Property("bHideInModifier", False))
+            #self.properties.append(UEOEF.Property("bForceNoneField", False))
+            #self.properties.append(UEOEF.Property("bLayerSelection", False))
+            #self.properties.append(UEOEF.Property("bHideInModifier", False))
             
             self.properties.append(UEOEF.Property("Direction", "EGPD_Input" if self.direction == 0 else "EGPD_Output", 1))
             self.properties.append(UEOEF.Property("LinkedTo", self.links.serialize()))
@@ -139,12 +158,16 @@ class UEOEF:
         fm_property = "\n\t"
         fm_attribute = " "
         
-        def __init__(self, type="", name="", enum=""):
+        def __init__(self, type="", name="", enum="", title=""):
             self.id = UEOEF.DEFAULT_NO_ID
             self.type = type
             self.enum = enum
+            self.title = title
             self.name = name
+            #self.icon = None
             self.position = mathutils.Vector((0.0, 0.0, 0.0))
+            self.width = 0;
+            self.height = 0;
             self.attributes = []
             self.properties = []
             self.pins = []
@@ -165,11 +188,14 @@ class UEOEF:
             self.attributes.append(UEOEF.Property("Class", self.type))
             self.attributes.append(UEOEF.Property("Name", self.name, 1))
             
+            self.properties.append(UEOEF.Property("NodeTitle", self.title, 1))
+            self.properties.append(UEOEF.Property("NodeColor", _to_vec3i(self.color), 1))
             self.properties.append(UEOEF.Property("NodeGuid", _to_uid(self.id)))
             self.properties.append(UEOEF.Property("NodeType", self.enum, 1))
             self.properties.append(UEOEF.Property("NodePosX", int(self.position.x)))
-            self.properties.append(UEOEF.Property("NodePosY", int(self.position.y)))
-            #Do something with reference
+            self.properties.append(UEOEF.Property("NodePosY", -int(self.position.y)))
+            self.properties.append(UEOEF.Property("NodeWidth", int(self.width)))
+            self.properties.append(UEOEF.Property("NodeHeight", int(self.height)))
             
     def __init__(self):
         self.objects = []
@@ -212,9 +238,13 @@ class VActCopyExportNodeGroups:
     
     def from_node_group_nodes(self, context, scope, lot, settings):
         for node in context:
-            _node = UEOEF.Object(type(node).__name__, node.name, node.bl_static_type)
+            _node = UEOEF.Object(type(node).__name__, node.name, node.bl_static_type, node.bl_label)
             _node.position = node.location
             _node.id = node.as_pointer()
+            _dim = node.dimensions;
+            _node.height = node.dimensions.y;
+            _node.width = node.dimensions.x;
+            _node.color = node.color;
             #lot[_node.id] = _node;
             self.from_node_group_ios(node.inputs, _node, 0, lot, settings)
             self.from_node_group_ios(node.outputs, _node, 1, lot, settings)
