@@ -1,8 +1,8 @@
 export enum PinDefaultInput {
-    VALUE,
-    INDEX,
-    ID_OR_INDEX,
-    INSTANCE_TRANSFORM,
-    NORMAL,
-    POSITION
+    VALUE = "VALUE",
+    INDEX = "INDEX",
+    ID_OR_INDEX = "ID_OR_INDEX",
+    INSTANCE_TRANSFORM = "INSTANCE_TRANSFORM",
+    NORMAL = "NORMAL",
+    POSITION = "POSITION"
 }
