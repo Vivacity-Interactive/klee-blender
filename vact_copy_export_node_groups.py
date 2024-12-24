@@ -58,7 +58,8 @@ def _to_str2(val, desc, enums=None):
     _val = None
     _tag = 0
     
-    if desc.type == 'BOOLEAN': _val, _tag = _arr_or_val(val, desc, 0)
+    if val == None: pass
+    elif desc.type == 'BOOLEAN': _val, _tag = _arr_or_val(val, desc, 0)
     elif desc.type == 'INT':  _val, _tag = _arr_or_val(val, desc, 1)
     elif desc.type == 'FLOAT': _val, _tag = _arr_or_val(val, desc, 1)
     elif desc.type == 'STRING': _val, _tag = val, 1
@@ -137,10 +138,11 @@ class UEOEF:
             self.links = UEOEF.Tuple()
             self.properties = []
             
+            # include data for property where possible
+            
             self.id = pin.as_pointer()
             self.color = pin.draw_color_simple()
             self.value = getattr(pin, 'default_value', None)
-            
             for k, t in pin.rna_type.properties.items():
                 self._properties.append((k,t,getattr(pin, k, None)))
             
@@ -153,7 +155,7 @@ class UEOEF:
             return text
             
         def _default(self):
-            self.properties.append(UEOEF.Property("id", _to_uid(self.id)))
+            self.properties.append(UEOEF.Property("Id", _to_uid(self.id)))
             self.properties.append(UEOEF.Property("color", *_to_str(self.color)))
             self.properties.append(UEOEF.Property("value", *_to_str(self.value)))
             
@@ -178,8 +180,13 @@ class UEOEF:
             self.pins = []
             self.id = node.as_pointer()
             
+            # find way to include color_tag enum type
+            
+            # seperate spesific optional parameter properties into options
+            
             self.name = node.name
             self.type = node.bl_idname
+            self.id_data = node.id_data
             
             for k, t in node.rna_type.properties.items():
                 if k in ['inputs', 'outputs', 'internal_links' ]: continue
@@ -202,7 +209,8 @@ class UEOEF:
             self.attributes.append(UEOEF.Property("Class", self.type))
             self.attributes.append(UEOEF.Property("Name", self.name, 1))
             
-            self.properties.append(UEOEF.Property("id", _to_uid(self.id), 0))
+            self.properties.append(UEOEF.Property("Id", _to_uid(self.id), 0))
+            self.properties.append(UEOEF.Property("id_data", str(self.id_data), 1))
             
             for k, t, v in self._properties:
                 if k == 'bl_idname': self.properties.append(UEOEF.Property(k, v, 0))
@@ -254,8 +262,15 @@ class VActCopyExportNodeGroups:
             _node = UEOEF.Object(node)
             #print([print(k,getattr(node, k, None),v) for k,v in node.rna_type.properties.items()])
             #lot[_node.id] = _node;
+            
             self.from_node_group_ios(node.inputs, _node, 0, lot, settings)
             self.from_node_group_ios(node.outputs, _node, 1, lot, settings)
+            
+            for link in node.internal_links:
+                _pin = lot[link.from_socket.as_pointer()]
+                _link = UEOEF.Link(link.to_node.name, link.to_socket.as_pointer());
+                _node.internals.properties.append(_link)
+
             scope.objects.append(_node)
             #print(_node.serialize())
     
