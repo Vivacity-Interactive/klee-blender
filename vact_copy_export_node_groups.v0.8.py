@@ -19,54 +19,29 @@ def _to_vec4x(v):
     return "#{:02x}{:02x}{:02x}{:02x}".format(*(int(x * 255) for x in v))
 
 def _to_vec3f(c):
-    return "{:f},{:f},{:f}".format(*c)
+    return "{:f}, {:f}, {:f}".format(*c)
 
 def _to_vec4f(v):
-    return "{:f},{:f},{:f},{:f}".format(*v)
+    return "{:f}, {:f}, {:f}, {:f}".format(*v)
 
 def _to_vec3i(c):
-    return "{:d},{:d},{:d}".format(*(int(x * 255.0) for x in c))
+    return "{:d}, {:d}, {:d}".format(*(int(x * 255.0) for x in c))
 
 def _to_vec4i(v):
-    return "{:d},{:d},{:d},{:d}".format(*(int(x * 255.0) for x in v))
+    return "{:d}, {:d}, {:d}, {:d}".format(*(int(x * 255.0) for x in v))
 
 def _to_str(val):
     _val = None
     _tag = int(not isinstance(val, bool))
-    if isinstance(val, mathutils.Vector): _val = ','.join([str(x) for x in val])
-    elif isinstance(val, mathutils.Quaternion): _val = ','.join([str(x) for x in val])
-    elif isinstance(val, mathutils.Euler): _val = ','.join([str(x) for x in val]+[val.order])
-    elif isinstance(val, mathutils.Color): _val = ','.join([str(x) for x in val])
+    if isinstance(val, mathutils.Vector): _val = ', '.join([str(x) for x in val])
+    elif isinstance(val, mathutils.Quaternion): _val = ', '.join([str(x) for x in val])
+    elif isinstance(val, mathutils.Euler): _val = ', '.join([str(x) for x in val]+[val.order])
+    elif isinstance(val, mathutils.Color): _val = ', '.join([str(x) for x in val])
     elif isinstance(val, str): _val = val
     #elif isinstance(val, bool): _val = val
-    elif hasattr(val, '__iter__'): _val = ','.join([str(x) for x in val])
+    elif hasattr(val, '__iter__'): _val = ', '.join([str(x) for x in val])
     elif val is None: _tag = 0
     else: _val = str(val)
-    return _val, _tag
-
-def _arr_or_val(val, desc, tag):
-    return (','.join([str(x) for x in val]), 1) if desc.is_array else (str(val), tag)
-
-def _enum_to_str(val, desc):
-    return val + str(tuple([x.identifier for x in desc.enum_items]))
-
-def _enum_to_str2(val, desc, enums=None):
-    if enums: enums.append(tuple([x.identifier for x in desc.enum_items]))
-    return val
-
-def _to_str2(val, desc, enums=None):
-    _val = None
-    _tag = 0
-    
-    if desc.type == 'BOOLEAN': _val, _tag = _arr_or_val(val, desc, 0)
-    elif desc.type == 'INT':  _val, _tag = _arr_or_val(val, desc, 1)
-    elif desc.type == 'FLOAT': _val, _tag = _arr_or_val(val, desc, 1)
-    elif desc.type == 'STRING': _val, _tag = val, 1
-    elif desc.type == 'ENUM': _val, _tag = str(val), 1 #_enum_to_str(val, desc), 0
-    elif desc.type == 'POINTER': _val, _tag = str(val), 1 #needs reference fix
-    elif desc.type == 'COLLECTION': _val, _tag = str(val), 1 #needs tuple fix 
-    else: _val, _tag = str(val), 1
-    
     return _val, _tag
         
 class _Settings:
@@ -132,17 +107,28 @@ class UEOEF:
         fm_end = ")"
         fm_property = ","
         
-        def __init__(self, pin, enum_lot=0):
-            self._properties = []
+        def __init__(self, type="", subtype="", name="", enum="", data_type=""):
+            self.id = UEOEF.DEFAULT_NO_ID
+            self.data_type = data_type
+            self.type = type
+            self.subtype = subtype
+            self.name = name
+            self.enum = enum
+            self.direction = 0
+            self.description = ""
+            self.icon = ""
+            self.color = mathutils.Vector((0.0, 0.0, 0.0))
+            self.value = None
+            self.hidden = False
+            self.hide_value = False
+            self.enabled = True
+            self.linked = False
+            self.multi = False
+            self.expanded = False
+            self.unavailable = False
+            
             self.links = UEOEF.Tuple()
             self.properties = []
-            
-            self.id = pin.as_pointer()
-            self.color = pin.draw_color_simple()
-            self.value = getattr(pin, 'default_value', None)
-            
-            for k, t in pin.rna_type.properties.items():
-                self._properties.append((k,t,getattr(pin, k, None)))
             
         def serialize(self):
             self._default()
@@ -153,15 +139,30 @@ class UEOEF:
             return text
             
         def _default(self):
-            self.properties.append(UEOEF.Property("id", _to_uid(self.id)))
-            self.properties.append(UEOEF.Property("color", *_to_str(self.color)))
-            self.properties.append(UEOEF.Property("value", *_to_str(self.value)))
+            self.properties.append(UEOEF.Property("PinId", _to_uid(self.id)))
+            self.properties.append(UEOEF.Property("PinName", self.name, 1))
             
-            for k, t, v in self._properties:
-                if k == 'bl_idname': self.properties.append(UEOEF.Property(k, v, 0))
-                else: self.properties.append(UEOEF.Property(k, *_to_str2(v, t)))
+            self.properties.append(UEOEF.Property("PinIcon", self.icon, 1))
+            self.properties.append(UEOEF.Property("PinColor", _to_vec3i(self.color), 1))
             
-            self.properties.append(UEOEF.Property("links", self.links.serialize()))
+            self.properties.append(UEOEF.Property("PinToolTip", self.description, 1))
+            self.properties.append(UEOEF.Property("DefaultValue", *_to_str(self.value)))
+            
+            self.properties.append(UEOEF.Property("PinType", self.data_type, 1))
+            self.properties.append(UEOEF.Property("PinCategory", self.enum, 1))
+            self.properties.append(UEOEF.Property("PinSubCategory", self.subtype, 1))
+            self.properties.append(UEOEF.Property("PinSubCategoryObject", self.type))
+ 
+            self.properties.append(UEOEF.Property("bHidden", self.hidden))
+            self.properties.append(UEOEF.Property("bHideValue", self.hide_value))
+            self.properties.append(UEOEF.Property("bEnabled", self.enabled))
+            self.properties.append(UEOEF.Property("bLinked", self.linked))
+            self.properties.append(UEOEF.Property("bMultiInput", self.multi))
+            self.properties.append(UEOEF.Property("bUnavailable", self.unavailable))
+            self.properties.append(UEOEF.Property("bExpanded", self.expanded))
+            
+            self.properties.append(UEOEF.Property("Direction", "EGPD_Input" if self.direction == 0 else "EGPD_Output", 1))
+            self.properties.append(UEOEF.Property("LinkedTo", self.links.serialize()))
     
     class Object:
         fm_begin = "\nBegin Object"
@@ -169,22 +170,25 @@ class UEOEF:
         fm_property = "\n\t"
         fm_attribute = " "
         
-        def __init__(self, node):
-            self._properties = []
+        def __init__(self, type="", name="", title=""):
+            self.id = UEOEF.DEFAULT_NO_ID
+            self.type = type
+            self.title = title
+            self.name = name
+            self.description = ""
+            self.icon = ""
+            self.position = mathutils.Vector((0.0, 0.0, 0.0))
+            self.color = mathutils.Vector((0.0, 0.0, 0.0))
+            self.width = 0
+            self.height = 0
+            self.hide = False
+            self.mute = False
+            self.show_options = False
             self.internals = UEOEF.Tuple()
             self.options = []
             self.attributes = []
             self.properties = []
             self.pins = []
-            self.id = node.as_pointer()
-            
-            self.name = node.name
-            self.type = node.bl_idname
-            
-            for k, t in node.rna_type.properties.items():
-                if k in ['inputs', 'outputs', 'internal_links' ]: continue
-                self._properties.append((k,t,getattr(node, k, None)))
-            
             
         def serialize(self):
             self._default()
@@ -202,13 +206,19 @@ class UEOEF:
             self.attributes.append(UEOEF.Property("Class", self.type))
             self.attributes.append(UEOEF.Property("Name", self.name, 1))
             
-            self.properties.append(UEOEF.Property("id", _to_uid(self.id), 0))
-            
-            for k, t, v in self._properties:
-                if k == 'bl_idname': self.properties.append(UEOEF.Property(k, v, 0))
-                else: self.properties.append(UEOEF.Property(k, *_to_str2(v, t)))
-            
-            self.properties.append(UEOEF.Property("internal_links", self.internals.serialize()))
+            self.properties.append(UEOEF.Property("Description", self.description, 1))
+            self.properties.append(UEOEF.Property("NodeIcon", self.icon, 1))
+            self.properties.append(UEOEF.Property("NodeTitle", self.title, 1))
+            #self.properties.append(UEOEF.Property("NodeColor", _to_vec3i(self.color), 1))
+            self.properties.append(UEOEF.Property("NodeGuid", _to_uid(self.id)))
+            self.properties.append(UEOEF.Property("NodePosX", int(self.position.x)))
+            self.properties.append(UEOEF.Property("NodePosY", -int(self.position.y)))
+            self.properties.append(UEOEF.Property("NodeWidth", int(self.width)))
+            self.properties.append(UEOEF.Property("NodeHeight", int(self.height)))
+            self.properties.append(UEOEF.Property("bOptions", self.show_options))
+            self.properties.append(UEOEF.Property("bHidden", self.hide))
+            self.properties.append(UEOEF.Property("bMuted", self.mute))
+            self.properties.append(UEOEF.Property("InternalLinks", self.internals.serialize()))
             
     def __init__(self):
         self.objects = []
@@ -251,8 +261,21 @@ class VActCopyExportNodeGroups:
     
     def from_node_group_nodes(self, context, scope, lot, settings):
         for node in context:
-            _node = UEOEF.Object(node)
-            #print([print(k,getattr(node, k, None),v) for k,v in node.rna_type.properties.items()])
+            _node = UEOEF.Object(
+                node.bl_idname, #type(node).__name__, 
+                node.name,
+                node.bl_label)
+            _node.position = node.location
+            _node.id = node.as_pointer()
+            _dim = node.dimensions;
+            _node.height = node.dimensions.y
+            _node.width = node.dimensions.x
+            _node.description = node.bl_description
+            #_node.color = node.color
+            _node.icon = node.bl_icon
+            _node.hide = node.hide
+            _node.mute = node.mute
+            _node.show_options = node.show_options
             #lot[_node.id] = _node;
             self.from_node_group_ios(node.inputs, _node, 0, lot, settings)
             self.from_node_group_ios(node.outputs, _node, 1, lot, settings)
@@ -268,8 +291,25 @@ class VActCopyExportNodeGroups:
     
     def from_node_group_ios(self, context, scope, dir, lot, settings):
         for socket in context:
-            _pin = UEOEF.Pin(socket)
-            #print([print(k,getattr(socket, k, None),v) for k,v in socket.rna_type.properties.items()])
+            _pin = UEOEF.Pin(
+                socket.bl_idname,#type(socket).__name__, 
+                socket.bl_subtype_label, 
+                socket.name,
+                socket.bl_label,
+                socket.type)
+            _pin.direction = dir
+            _pin.id = socket.as_pointer()
+            _pin.description = socket.description
+            _pin.icon = socket.display_shape
+            _pin.color = socket.draw_color_simple()
+            _pin.hidden = socket.hide
+            _pin.hide_value = socket.hide_value
+            _pin.enabled = socket.enabled
+            _pin.linked = socket.is_linked
+            _pin.multi = socket.is_multi_input
+            _pin.unavailable = socket.is_unavailable
+            _pin.expanded = socket.show_expanded
+            _pin.value = getattr(socket, 'default_value', None)
             lot[_pin.id] = _pin
             scope.pins.append(_pin)
             #print(_pin.serialize())
