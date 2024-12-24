@@ -155,7 +155,7 @@ class UEOEF:
             return text
             
         def _default(self):
-            self.properties.append(UEOEF.Property("Id", _to_uid(self.id)))
+            self.properties.append(UEOEF.Property("id", _to_uid(self.id)))
             self.properties.append(UEOEF.Property("color", *_to_str(self.color)))
             self.properties.append(UEOEF.Property("value", *_to_str(self.value)))
             
@@ -189,7 +189,7 @@ class UEOEF:
             self.id_data = node.id_data
             
             for k, t in node.rna_type.properties.items():
-                if k in ['inputs', 'outputs', 'internal_links' ]: continue
+                if k in ['inputs', 'outputs', 'internal_links', 'bl_idname', 'name' ]: continue
                 self._properties.append((k,t,getattr(node, k, None)))
             
             
@@ -209,7 +209,7 @@ class UEOEF:
             self.attributes.append(UEOEF.Property("Class", self.type))
             self.attributes.append(UEOEF.Property("Name", self.name, 1))
             
-            self.properties.append(UEOEF.Property("Id", _to_uid(self.id), 0))
+            self.properties.append(UEOEF.Property("id", _to_uid(self.id), 0))
             self.properties.append(UEOEF.Property("id_data", str(self.id_data), 1))
             
             for k, t, v in self._properties:
