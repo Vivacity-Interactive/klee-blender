@@ -2,15 +2,11 @@ import { NodeCategory } from "../../data/nodes/node-category";
 import { PinCategory } from "../../data/pin/pin-category";
 import { PinProperty } from "../../data/pin/pin-property";
 
-
-
 export class ColorUtils {
     public static getPinColor(pin: PinProperty): string {
         return "#FFF";
     }
 }
-
-
 
 export const LOT_NODE_COLOR: Partial<Record<NodeCategory, string>> = {
     [NodeCategory.CONVERTER_NODE]: "#12adff", 
@@ -35,24 +31,3 @@ export const LOT_NODE_COLOR: Partial<Record<NodeCategory, string>> = {
     [NodeCategory.REPEAT_ZONE]: "#76512f33", 
     [NodeCategory.FOREACH_GEOMETRY_ELEMENT_ZONE]: "#33527f33", 
 };
-
-// export const LOD_PIN_COLOR: Partial<Record<PinCategory, string>> = {
-//     [PinCategory.VALUE]: $2,
-//     [PinCategory.INT]: $2,
-//     [PinCategory.BOOLEAN]: $2,
-//     [PinCategory.VECTOR]: $2,
-//     [PinCategory.ROTATION]: $2,
-//     [PinCategory.MATRIX]: $2,
-//     [PinCategory.STRING]: $2,
-//     [PinCategory.RGBA]: $2,
-//     [PinCategory.SHADER]: $2,
-//     [PinCategory.OBJECT]: $2,
-//     [PinCategory.GEOMETRY]: $2,
-//     [PinCategory.COLLECTION]: $2,
-//     [PinCategory.TEXTURE]: $2,
-//     [PinCategory.MATERIAL]: $2,
-//     [PinCategory.MENU]: $2,
-//     [PinCategory.IMAGE]: $2,
-//     [PinCategory.VIRTUAL]: $2,
-//     [PinCategory.CUSTOM]: $2
-// }
