@@ -19,7 +19,7 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.(txt|ueof)$/i,
+                test: /\.(txt|ueof|blof)$/i,
                 loader: 'raw-loader',
              },
         ],

@@ -1,10 +1,7 @@
 import { Canvas2D } from "./canvas";
 import { Controller } from "./controller";
-import { UEOFBlenderPopulate } from "./parser/ueof-blender-populate";
-import { UEOFParser } from "./parser/ueof-parser";
-//import { BlueprintParser } from "./parser/blueprint-parser";
+import { BLOEFPopulate } from "./parser/ueof-blender-populate";
 import { Scene } from "./scene";
-import { _ParseCursor } from "./utils/parse-utils";
 
 export class Application {
 
@@ -12,7 +9,7 @@ export class Application {
     private _canvas: Canvas2D;
 
     private _controller: Controller;
-    private _populator: UEOFBlenderPopulate;
+    private _populator: BLOEFPopulate;
     private _element: HTMLCanvasElement;
 
     private static firefox: boolean;
@@ -33,14 +30,13 @@ export class Application {
 
         this.initializeHtmlAttributes();
 
-        this._populator = new UEOFBlenderPopulate(new UEOFParser());
-        this.loadBlueprintIntoScene(element.innerHTML);
+        this.loadNodeGroupIntoScene(element.innerHTML);
 
         this._controller = new Controller(element, this);
         this._controller.registerAction({
             ctrl: true,
             keycode: 'KeyC',
-            callback: this.copyBlueprintSelectionToClipboard.bind(this)
+            callback: this.copyNodeGroupSelectionToClipboard.bind(this)
         });
         this._controller.registerAction({
             ctrl: false,
@@ -70,7 +66,7 @@ export class Application {
         return this.firefox;
     }
 
-    public getBlueprint(): string {
+    public getNodeGroup(): string {
         let textLines = [];
         this._scene.nodes.forEach(n => textLines = [].concat(textLines, n.sourceText));
         return textLines.join('\n');
@@ -91,7 +87,7 @@ export class Application {
         this._scene.refresh();
     }
 
-    private copyBlueprintSelectionToClipboard() {
+    private copyNodeGroupSelectionToClipboard() {
         console.log("Copy selection");
 
         let textLines = [];
@@ -111,7 +107,7 @@ export class Application {
 
         navigator.clipboard.readText().then((text) => {
             if(!text) return;
-            this.loadBlueprintIntoScene(text);
+            this.loadNodeGroupIntoScene(text);
         });
 
         return true;
@@ -121,19 +117,17 @@ export class Application {
         if (!this.allowPaste) return;
         console.log("Paste from clipboard");
         let text = ev.clipboardData.getData("text/plain");
-        this.loadBlueprintIntoScene(text);
+        this.loadNodeGroupIntoScene(text);
     }
 
-    public loadBlueprintIntoScene(text) {
+    public loadNodeGroupIntoScene(text) {
         this._scene.unload();
-        let cursor = new _ParseCursor(text);
-        const bValid = this._populator.parser.parse(cursor);
-        if (bValid) {
-            this._populator.populate();
-            this._scene.load(this._populator.controls);
-            this.refresh();
-            this.recenterCamera();
-        }
+        this._populator = new BLOEFPopulate(JSON.parse(text));
+        this._populator.populate();
+        this._scene.load(this._populator.controls);
+        this.refresh();
+        this.recenterCamera();
+        
     }
 
     recenterCamera() {

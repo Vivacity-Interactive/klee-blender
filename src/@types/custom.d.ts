@@ -3,7 +3,7 @@ declare module "*.json" {
     export default value;
 }
 
-declare module '*.ueof' {
+declare module '*.blof' {
     const value: string;
     export default value;
 }

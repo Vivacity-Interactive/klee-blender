@@ -45,3 +45,7 @@ export function parseString(raw: string, escape: string = "\\"): string {
 export function parseStringSimple(raw: string): string {
     return raw.substring(1, raw.length - 1);
 }
+
+export function decodeHtmlText(htmlText: string): string {
+    return htmlText.replace("lt;", "<").replace("gt;", ">");;
+}

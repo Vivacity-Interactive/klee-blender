@@ -12,8 +12,8 @@ export class KleeBlender {
         }
     }
 
-    public display(blueprintText: string): void {
-        this.app.loadBlueprintIntoScene(blueprintText);
+    public display(nodeGroupText: string): void {
+        this.app.loadNodeGroupIntoScene(nodeGroupText);
     }
 
     public static getInstance(canvas: HTMLCanvasElement) {
@@ -25,7 +25,7 @@ export class KleeBlender {
     }
 
     public get value(): string {
-        return this.app.getBlueprint();
+        return this.app.getNodeGroup();
     }
 }
 
@@ -37,10 +37,6 @@ export function get(canvas: HTMLCanvasElement) {
     return KleeBlender.getInstance(canvas);
 }
 
-
-
-
-
 function initialize() {
     document.querySelectorAll('canvas.klee-blender').forEach((canvas: HTMLCanvasElement) => {
         new KleeBlender(canvas);
@@ -51,13 +47,11 @@ window.addEventListener("load", initialize);
 
 /// #if UNIT_TEST
 import { UnitTest } from "./tests/unit-test";
-import { UnitTestTokenUtils } from "./tests/unit-test-token-utils";
-import { UnitTestUEOFParser } from "./tests/unit-test-ueof-parser";
+import { UnitTestBLOF } from "./tests/unit-test-blof";
 
 window.addEventListener("load", () => {
     let units: Array<UnitTest> = [
-        new UnitTestTokenUtils(),
-        new UnitTestUEOFParser(),
+        new UnitTestBLOF(),
     ];
     
     for (const unit of units) { unit.execute(); }

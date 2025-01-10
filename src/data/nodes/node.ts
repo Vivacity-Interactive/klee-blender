@@ -1,6 +1,6 @@
 import { Vector2 } from "../../math/vector2";
 import { CustomProperty } from "../custom-property";
-import { NodeCategory, NodeSubCategory } from "./node-category";
+import { NodeCategory } from "./node-category";
 import { IconCategory } from "../icon-category";
 
 export enum NodeState {
@@ -16,8 +16,9 @@ export enum NodeState {
 }
 
 export class Node {
+    _raw: any;
     state: NodeState;
-    class: NodeSubCategory;
+    class: string;
     category: NodeCategory;
     icon: IconCategory;
     name: string;

@@ -1,4 +1,4 @@
-import bpy, json, mathutils, pickle
+import bpy, json, mathutils
 
 def _to_id(val):
     return str(val)
@@ -30,26 +30,22 @@ def _to_val(val, desc, enum_lot=None):
     
     return _val
         
-class _Settings:
-    def __init__(self):
-        self.name = "GN_Wireframe"
-        
-class BLOEF:
+class BLOF:
     DEFAULT_NO_ID = "00000000000"
     DEFAULT_INDENT = None
 
     class Encoder(json.JSONEncoder):
         def default(self, obj):
-            if isinstance(obj, BLOEF.Group):
+            if isinstance(obj, BLOF.Group):
                 obj._default()
                 return obj.properties
-            elif isinstance(obj, BLOEF.Node):
+            elif isinstance(obj, BLOF.Node):
                 obj._default()
                 return obj.properties
-            elif isinstance(obj, BLOEF.Collection):
+            elif isinstance(obj, BLOF.Collection):
                 obj._default()
                 return obj.items
-            elif isinstance(obj, BLOEF.Object):
+            elif isinstance(obj, BLOF.Object):
                 obj._default()
                 return obj.properties
                 
@@ -61,7 +57,7 @@ class BLOEF:
 
         def serialize(self):
             self._default()
-            return json.dumps(self.properties, indent=BLOEF.DEFAULT_INDENT)
+            return json.dumps(self.properties, indent=BLOF.DEFAULT_INDENT)
             
         def _default(self):
             pass
@@ -70,14 +66,14 @@ class BLOEF:
         _EXCLUDE = ['interface','nodes', 'links']
         def __init__(self, context, enum_lot=None):
             self.id = _to_id(context)
-            self.properties = {k:_to_val(getattr(context, k, None), v) for k,v in context.rna_type.properties.items() if k not in BLOEF.Group._EXCLUDE}
-            self.nodes = BLOEF.Collection()
-            self.links = BLOEF.Collection()
-            self.interface = BLOEF.Collection()
+            self.properties = {k:_to_val(getattr(context, k, None), v) for k,v in context.rna_type.properties.items() if k not in BLOF.Group._EXCLUDE}
+            self.nodes = BLOF.Collection()
+            self.links = BLOF.Collection()
+            self.interface = BLOF.Collection()
             
         def serialize(self):
             self._default()
-            return json.dumps(self.properties, indent=BLOEF.DEFAULT_INDENT, cls=BLOEF.Encoder)
+            return json.dumps(self.properties, indent=BLOF.DEFAULT_INDENT, cls=BLOF.Encoder)
             
         def _default(self):
             self.properties['_id'] = self.id
@@ -89,14 +85,14 @@ class BLOEF:
         _EXCLUDE = ['inputs', 'outputs', 'internal_links']
         def __init__(self, context, enum_lot=None):
             self.id = _to_id(context)
-            self.properties = {k:_to_val(getattr(context, k, None), v) for k,v in context.rna_type.properties.items() if k not in BLOEF.Node._EXCLUDE}
-            self.inputs = BLOEF.Collection()
-            self.outputs = BLOEF.Collection()
-            self.internal_links = BLOEF.Collection()
+            self.properties = {k:_to_val(getattr(context, k, None), v) for k,v in context.rna_type.properties.items() if k not in BLOF.Node._EXCLUDE}
+            self.inputs = BLOF.Collection()
+            self.outputs = BLOF.Collection()
+            self.internal_links = BLOF.Collection()
     
         def serialize(self):
             self._default()
-            return json.dumps(self.properties, indent=BLOEF.DEFAULT_INDENT, cls=BLOEF.Encoder)
+            return json.dumps(self.properties, indent=BLOF.DEFAULT_INDENT, cls=BLOF.Encoder)
         
         def _default(self):
             self.properties['_id'] = self.id
@@ -108,54 +104,60 @@ class BLOEF:
         _EXCLUDE = []
         def __init__(self, context, enum_lot=None):
             self.id = _to_id(context)
-            self.properties = {k:_to_val(getattr(context, k, None), v) for k,v in context.rna_type.properties.items() if k not in BLOEF.Object._EXCLUDE}
+            self.properties = {k:_to_val(getattr(context, k, None), v) for k,v in context.rna_type.properties.items() if k not in BLOF.Object._EXCLUDE}
     
         def serialize(self):
             self._default()
-            return json.dumps(self.properties, indent=BLOEF.DEFAULT_INDENT, cls=BLOEF.Encoder)
+            return json.dumps(self.properties, indent=BLOF.DEFAULT_INDENT, cls=BLOF.Encoder)
         
         def _default(self):
             self.properties['_id'] = self.id
             
     def __init__(self, enum_lot=None):
         self.root = {}
-        self.groups = []
         #self.enums = {}
     
     def _default(self):
-        self.root["groups"] = self.groups
-        #self.root["enums"] = self.enums
+        #self.root["_enums"] = self.enums
+        pass
     
     def serialize(self):
         self._default()
-        return json.dumps(self.root, indent=BLOEF.DEFAULT_INDENT, cls=BLOEF.Encoder)
-    
+        return json.dumps(self.root, indent=BLOF.DEFAULT_INDENT, cls=BLOF.Encoder)
+
+class _Settings:
+    def __init__(self):
+        self.name = "GN_Wireframe"
+        self.html_save = False
         
 class VActCopyExportNodeGroups:
     def do_execute(self, context, settings):
         group = bpy.data.node_groups[settings.name]
         lot = {}
-        scope = BLOEF()
-        self.from_node_groups([group], scope, lot, settings)
+        scope = BLOF()
+        self.from_node_groups(group, scope, lot, settings)
         text = scope.serialize()
+        
+        if settings.html_save:
+            text = text.replace("<","&lt;").replace(">","&gt;")
+
         bpy.context.window_manager.clipboard = text
-        print(text)
+        #print(text)
         
     def from_node_groups(self, context, scope, lot, settings):
-        for group in context:
-            _group = BLOEF.Group(group)
-            self.from_node_group_nodes(group.nodes, _group.nodes, lot, settings)
-            self.from_node_group_links(group.links, _group.links, lot, settings)
-            self.from_node_group_interface(group.interface, _group.interface, lot, settings)
-            lot[_group.id] = _group
-            scope.groups.append(_group)
+        _group = BLOF.Group(context)
+        self.from_node_group_nodes(context.nodes, _group.nodes, lot, settings)
+        self.from_node_group_links(context.links, _group.links, lot, settings)
+        self.from_node_group_interface(context.interface, _group.interface, lot, settings)
+        scope.root = _group
+        #lot[_group.id] = _group
     
     def from_node_group_interface(self, context, scope, lot, settings):
         self.from_node_group_sockets(context.items_tree, scope, lot, settings)
     
     def from_node_group_nodes(self, context, scope, lot, settings):
         for node in context:
-            _node = BLOEF.Node(node)
+            _node = BLOF.Node(node)
             self.from_node_group_sockets(node.inputs, _node.inputs, lot, settings)
             self.from_node_group_sockets(node.outputs, _node.outputs, lot, settings)
             self.from_node_group_links(node.internal_links, _node.internal_links, lot, settings)
@@ -166,12 +168,10 @@ class VActCopyExportNodeGroups:
         for link in context:
             _link = {k:_to_val(getattr(link, k, None), v) for k,v in link.rna_type.properties.items()}
             scope.items.append(_link)
-            return
     
     def from_node_group_sockets(self, context, scope, lot, settings):
-        print (context)
         for socket in context:
-            _socket = BLOEF.Object(socket)
+            _socket = BLOF.Object(socket)
             #lot[_socket.id] = _socket
             scope.items.append(_socket)
 

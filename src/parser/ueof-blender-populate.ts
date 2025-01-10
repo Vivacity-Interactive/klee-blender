@@ -1,109 +1,90 @@
 import { HeadedNodeControl } from "../controls/nodes/headed-node-control";
 import { NodeControl } from "../controls/nodes/node-control";
-import { PinControl } from "../controls/pin-control";
-import { Node } from "../data/nodes/node";
-import { NodeSubCategory } from "../data/nodes/node-category";
-import { PinCategory } from "../data/pin/pin-category";
+import { Node, NodeState } from "../data/nodes/node";
+import { PinCategory, PinSubCategory } from "../data/pin/pin-category";
 import { PinDirection } from "../data/pin/pin-direction";
 import { PinProperty } from "../data/pin/pin-property";
-import { parseString, parseStringSimple } from "../utils/text-utils";
-import { UEOFParser, EUEOFToken, UEOFValueParser, UEOFTupleParser, UEOFCustomParser, UEOFObjectParser, UEOFPropertyParser, UEOFLinkParser } from "./ueof-parser";
+import { decodeHtmlText } from "../utils/text-utils";
 
-function populateLinkedTo(parser: UEOFValueParser, pin: PinProperty, link?: UEOFLinkParser) {
-    let _tuple: UEOFTupleParser = null;
-    const bValid = parser.raw.token == EUEOFToken.TUPLE 
-        && (_tuple = parser.raw as UEOFTupleParser)
-        && _tuple.properties.length > 2;
-
-    console.warn(parser.raw.token, EUEOFToken[parser.raw.token]);
-    
-}
-
-type _UEOFNodeValueLOT = { [ket: string] : (parser: UEOFValueParser, node: Node, link?: UEOFLinkParser) => void };
-type _UEOFPinValueLOT = { [ket: string] : (parser: UEOFValueParser, pin: PinProperty, link?: UEOFLinkParser) => void };
-
-export const LOT_UEOF_BLENDER = {
-    [EUEOFToken.OBJECT]: {
-        "Object": {
-            [EUEOFToken.ATTRIBUTE]: {
-                "Class": (parser: UEOFValueParser, node: Node) => { node.class = NodeSubCategory[parser.format()]; },
-                "Name": (parser: UEOFValueParser, node: Node) => { node.name = parseString(parser.format()); },
-            },
-            [EUEOFToken.PROPERTY]: {
-                "NodeGuid": (parser: UEOFValueParser, node: Node) => { node.guid = parser.format(); },
-                "NodeTitle": (parser: UEOFValueParser, node: Node) => { node.title = parseString(parser.format()); },
-                // "NodeType": (parser: UEOFValueParser, node: Node) => { },
-                // "NodeIcon": (parser: UEOFValueParser, node: Node) => { },
-                // "NodeColor": (parser: UEOFValueParser, node: Node) => { node.headerColor = parser.format(); console.log(node.headerColor) },
-                "NodeWidth": (parser: UEOFValueParser, node: Node) => { node.width = parseInt(parser.format()); },
-                "NodeHeight": (parser: UEOFValueParser, node: Node) => { node.height = parseInt(parser.format()); },
-                "NodePosX": (parser: UEOFValueParser, node: Node) => { node.pos.x = parseInt(parser.format()); },
-                "NodePosY": (parser: UEOFValueParser, node: Node) => { node.pos.y = parseInt(parser.format()); },
-            },
-            [EUEOFToken.CUSTOM]: {
-                "Pin": {
-                    "PinId": (parser: UEOFValueParser, pin: PinProperty) => { pin.id = parser.format(); },
-                    "PinName": (parser: UEOFValueParser, pin: PinProperty) => { pin.name = parser.format(); },
-                    "Direction": (parser: UEOFValueParser, pin: PinProperty) => { pin.direction = PinDirection[parser.format()]; },
-                    // "PinColor": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "PinCategory": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "PinSubCategory": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "PinCategoryObject": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "PinSubCategoryObject": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "bHidden": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "DefaultValue": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "bNotConnectable": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "bForceNoneField": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "bLayerSelection": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    // "bHideInModifier": (parser: UEOFValueParser, pin: PinProperty) => {},
-                    "LinkedTo": populateLinkedTo,
-                }
-            }
-        }
-    }
-}
-
-export class UEOFBlenderPopulate {
-    protected _parser: UEOFParser;
+export class BLOEFPopulate {
+    protected _scope: any;
     protected _controls: Array<NodeControl> = [];
 
     public get controls(): Array<NodeControl> { return this._controls; }
-    public get parser(): UEOFParser { return this._parser; }
+    public get scope(): any { return this._scope; }
 
-    constructor (parser: UEOFParser) {
-        this._parser = parser;
+    constructor (scope: any = {}) {
+        this._scope = scope;
     }
 
-    public populateObject(parser: UEOFObjectParser, node: Node, lot: {}): void {
-        const _lot_attr:_UEOFNodeValueLOT = lot[EUEOFToken.ATTRIBUTE]
-        for (const item of parser.attributes) {
-            _lot_attr[item.name.format()]?.(item.value, node);
+    public populateObject(scope: any, node: Node, lot: {}): void {
+        node._raw = scope;
+        node.guid = scope._id; //decodeHtmlText(scope._id)
+        node.name = scope.name;
+        node.title = scope.bl_label;
+        node.class = scope.bl_idname;
+        node.width = scope.dimensions[0];
+        //node.height = scope.dimensions[1];
+        node.pos.x = scope.location[0]
+        node.pos.y = -scope.location[1]
+
+        if (scope.use_custom_color) { node.backgroundColor = scope.color; }
+
+        if (scope.mute) { node.state |= NodeState.MUTED; }
+        if (scope.show_options) { node.state |= NodeState.OPTIONS; }
+        if (scope.hide) { node.state |= NodeState.COLLAPSED; }
+
+        for (const pin of scope.inputs) {
+            let _pin = new PinProperty(node.name);
+            this.populatePin(pin, _pin, lot);
+            node.customProperties.push(_pin);
         }
 
-        const _lot_prop:_UEOFNodeValueLOT = lot[EUEOFToken.PROPERTY]
-        for (const item of parser.properties) {
-            _lot_prop[item.attribute.name.format()]?.(item.attribute.value, node, item.link);
+        for (const pin of scope.outputs) {
+            let _pin = new PinProperty(node.name);
+            this.populatePin(pin, _pin, lot);
+            node.customProperties.push(_pin);
         }
-
-        // const _lot_cust = lot[EUEOFToken.CUSTOM]
-        // for (const item of parser.customs) {
-        //     const _lot_pin = _lot_cust[item.name.format()];
-        //     let _pin: PinProperty = new PinProperty(node.name);
-        //     this.populatePin(item, _pin, _lot_pin);
-        //     node.customProperties.push(_pin);
-        // }
+        //node.assert()
     }
 
-    public populatePin(parser: UEOFCustomParser, pin: PinProperty, lot: _UEOFPinValueLOT): void {
+    public populatePin(scope: any, pin: PinProperty, lot: {}): void {
+        pin.id = scope._id; //decodeHtmlText(scope._id)
+        pin.name = scope.identifier
+        pin.friendlyName = scope.name
         
+        pin.direction = +scope.is_output as PinDirection;
+        pin.hidden = scope.hide || scope.is_unavailable;
+        pin.enabled = scope.enabled;
+        pin.defaultValue = scope.default_value;
+        
+        //pin.?? = scope.hide
+        //pin.?? = scope.hide_value
+        //pin.?? = scope.is_unavailable
+        //pin.?? = scope.show_expanded
+        //pin.?? = scope.is_multi_input
+
+        pin.subCategory = scope.bl_subtype_label as PinSubCategory
+        pin.category = scope.bl_label as PinCategory
+        pin.valueType = scope.bl_idname
+
+        if (pin.name == "__extend__") { pin.hideName = true; }
+
+        //pin.?? = scope.display_shape
+        //pin.?? = scope.type
+
+        pin.toolTip = scope.description;
     }
 
-    public populate(lot: {} = LOT_UEOF_BLENDER): void {
-        const _lot_obj = lot[EUEOFToken.OBJECT];
-        for (const item of this.parser.objects) {
-            const _lot = _lot_obj[item.name.format()];
+    // public populateProperties(parser: UEOFCustomParser, pin: PinProperty, lot: null): void {
+        
+    // }
+
+    public populate(lot: {} = null): void {
+        let _lot = lot
+        for (const node of this.scope.nodes) {
             let _node: Node = new Node();
-            this.populateObject(item, _node, _lot);
+            this.populateObject(node, _node, _lot);
             let _control = new HeadedNodeControl(_node);
             this._controls.push(_control);
         }

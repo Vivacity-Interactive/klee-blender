@@ -5,6 +5,18 @@ import { PinDefaultInput } from "./pin-default-input";
 import { PinDirection } from "./pin-direction";
 import { PinLink } from "./pin-link";
 
+// export enum PinState {
+//     NONE = 0,
+//     UNUSED = 1 << 0,
+//     COLLAPSED = 1 << 1,
+//     OPTIONS = 1 << 2,
+//     MUTED = 1 << 3,
+//     SELECTED = 1 << 4,
+//     LATENT = 1 << 5,
+//     DEPRECATED = 1 << 6,
+//     DEFAULT = UNUSED
+// }
+
 export class PinProperty extends CustomProperty {
 
     id: string;

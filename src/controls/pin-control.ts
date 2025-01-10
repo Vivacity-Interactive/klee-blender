@@ -39,7 +39,7 @@ export class PinControl extends UserControl {
 
         this._isInput = this._pinProperty.direction !== PinDirection.EGPD_Output;
         this._color = ColorUtils.getPinColor(this._pinProperty);
-        if (this._pinProperty.valueType)
+        //if (this._pinProperty.valueType)
             //this._secondaryColor = ColorUtils.getPinColorByCategory(this._pinProperty.valueType as PinCategory);
 
         
