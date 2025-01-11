@@ -154,7 +154,6 @@ export class PinControl extends UserControl {
             this.bIcon = !!data;
             const _this = this;
             const _transform = canvas.getContext().getTransform();
-            const _pos = this.getPinAbsolutePosition();
             this.icon ??= new SVGIcon(data,(icon, ratio) => {
                 canvas.save();
                 _this.icon = icon; _this.iconRatio = ratio;

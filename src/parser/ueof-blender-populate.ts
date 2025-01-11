@@ -29,6 +29,7 @@ export class BLOEFPopulate {
         node.guid =  //decodeHtmlText(scope._id)
         node.name = scope.name;
         node.title = scope.bl_label;
+        node.label = scope.bl_label;
         node.class = scope.bl_idname;
         node.width = scope.dimensions[0];
         //node.height = scope.dimensions[1];

@@ -123,15 +123,10 @@ export class Scene {
         this._controls = new Array<Control>();
     }
 
-    // load(dataGraph: GrahControl) {
-    //     data
-    // }
-
     load(dataGraph: Graph) {
         this._graph = dataGraph;
         this.createBackground();
         this.createControlNodes(this._graph.nodes);
-        // Creates connection lines between pins
 
         this.createConnectionLines(this._graph.links);
 
