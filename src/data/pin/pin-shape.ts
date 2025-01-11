@@ -1,6 +1,6 @@
 import { IconCategory } from "../icon-category";
 
-export enum PinIcon {
+export enum PinShape {
     CIRCLE = IconCategory.KEY_RING,
     SQUARE = IconCategory.KEY_EMPTY3,
     DIAMOND = IconCategory.KEYFRAME,

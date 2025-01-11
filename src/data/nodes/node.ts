@@ -5,18 +5,21 @@ import { IconCategory } from "../icon-category";
 
 export enum NodeState {
     NONE = 0,
-    UNUSED = 1 << 0,
-    COLLAPSED = 1 << 1,
-    OPTIONS = 1 << 2,
-    MUTED = 1 << 3,
-    SELECTED = 1 << 4,
+    MUTED = 1 << 0,
+    HIDDEN = 1 << 1,
+    ENABLED = 1 << 2,
+    OPTIONS = 1 << 3,
+    ADVANCED = 1 << 4,
     LATENT = 1 << 5,
     DEPRECATED = 1 << 6,
-    DEFAULT = UNUSED
+    SELECTED = 1 << 7,
+    COLLAPSED = 1 << 8,
+    DEFAULT = ENABLED
 }
 
 export class Node {
     _raw: any;
+    id: string;
     state: NodeState;
     class: string;
     category: NodeCategory;

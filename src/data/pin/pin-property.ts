@@ -1,21 +1,28 @@
 import { CustomProperty } from "../custom-property";
 import { PinAttributeDomain } from "./pin-attribute-domain";
-import { PinCategory, PinSubCategory } from "./pin-category";
+import { PinCategory, PinSubCategory, PinType } from "./pin-category";
 import { PinDefaultInput } from "./pin-default-input";
 import { PinDirection } from "./pin-direction";
+import { PinShape } from "./pin-shape";
 import { PinLink } from "./pin-link";
 
-// export enum PinState {
-//     NONE = 0,
-//     UNUSED = 1 << 0,
-//     COLLAPSED = 1 << 1,
-//     OPTIONS = 1 << 2,
-//     MUTED = 1 << 3,
-//     SELECTED = 1 << 4,
-//     LATENT = 1 << 5,
-//     DEPRECATED = 1 << 6,
-//     DEFAULT = UNUSED
-// }
+export enum PinState {
+    NONE = 0,
+    MUTED = 1 << 0,
+    HIDDEN = 1 << 1,
+    ENABLED = 1 << 2,
+    OPTIONS = 1 << 3,
+    ADVANCED = 1 << 4,
+    LATENT = 1 << 5,
+    DEPRECATED = 1 << 6,
+    SELECTED = 1 << 7,
+    NAMELESS = 1 << 8,
+    VALUELESS = 1 << 9,
+    UNAVAILABLE = 1 << 10,
+    MULTI = 1 << 11,
+    GIZOM = 1 << 12,
+    DEFAULT = ENABLED
+}
 
 export class PinProperty extends CustomProperty {
 
@@ -24,6 +31,10 @@ export class PinProperty extends CustomProperty {
     friendlyName: string;
     category: PinCategory;
     subCategory: PinSubCategory;
+    type: PinType;
+    shape: PinShape;
+
+    state: PinState;
 
     nodeName: string;
     toolTip: string;
@@ -34,15 +45,16 @@ export class PinProperty extends CustomProperty {
 
     linkedTo: PinLink[];
     persistentGUID: string;
-    hidden: boolean;
-    enabled: boolean;
-
+    
     valueType?: string;
-
+    
     defaultValue: any;
     defaultValueControlClass: any;
+    
     optionView: boolean;
     hideName: boolean;
+    hidden: boolean;
+    enabled: boolean;
 
     defaultAttributeName: string;
     defaultInput: PinDefaultInput;
@@ -71,6 +83,6 @@ export class PinProperty extends CustomProperty {
     }
 
     public getUniqueName() {
-        return this.nodeName + " " + this.id;
+        return this.id;
     }
 }
