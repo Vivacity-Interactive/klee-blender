@@ -22,6 +22,7 @@ export class Node {
     id: string;
     state: NodeState;
     class: string;
+    label: string;
     category: NodeCategory;
     icon: IconCategory;
     name: string;

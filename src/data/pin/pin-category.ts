@@ -15,7 +15,8 @@ export enum PinType {
     MATERIAL,
     MENU,
     IMAGE,
-    CUSTOM
+    CUSTOM,
+    _UNKNOWN
 };
 
 export enum PinCategory {

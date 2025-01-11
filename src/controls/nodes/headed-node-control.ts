@@ -52,7 +52,7 @@ export class HeadedNodeControl extends NodeControl implements DrawableControl {
         let pinControl = new PinControl(this.position, property);
         this.pins.push(pinControl);
 
-        if (property.direction == PinDirection.EGPD_Output) {
+        if (property.direction == PinDirection.Output) {
             // if (property.showInHead) {
             //     pinControl.fillParentVertical = true;
             //     this.header.addDelegate(pinControl);

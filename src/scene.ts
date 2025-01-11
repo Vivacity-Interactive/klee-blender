@@ -10,19 +10,27 @@ import { PinDirection } from "./data/pin/pin-direction";
 import { NodePartialConnectionControl } from "./controls/partial-node-connection-control";
 import { PinControl } from "./controls/pin-control";
 import { UserControl } from "./controls/user-control";
+import { Node } from "./data/nodes/node";
 import { Container } from "./controls/container";
 import { InteractableControl, isInteractableControl } from "./controls/interfaces/interactable";
 import { InteractableUserControl } from "./controls/interactable-user-control";
 import { Application } from "./application";
+import { Graph } from "./data/graph";
+import { HeadedNodeControl } from "./controls/nodes/headed-node-control";
+import { PinLink } from "./data/pin/pin-link";
+import { PinState } from "./data/pin/pin-property";
 
 export class Scene {
 
     private _canvas: Canvas2D;
     private _camera: Camera;
 
+    private _graph: Graph;
+
     private _controls: Array<Control>;
     private _nodes: Array<NodeControl>;
     private _pins: Array<PinControl>;
+    private _links: Array<NodeConnectionControl|NodePartialConnectionControl>;
     private _interactables: Array<InteractableUserControl>;
 
     private app;
@@ -34,6 +42,7 @@ export class Scene {
         this._nodes = new Array<NodeControl>();
         this._controls = new Array<Control>();
         this._pins = new Array<PinControl>();
+        this._canvas['__CAMERA__'] = this._camera;
     }
 
     // TODO: Move this out
@@ -47,6 +56,10 @@ export class Scene {
 
     get nodes() {
         return this._nodes || [];
+    }
+
+    get links() {
+        return this._links || [];
     }
 
     get interactables() {
@@ -110,12 +123,17 @@ export class Scene {
         this._controls = new Array<Control>();
     }
 
-    load(dataNodes: NodeControl[]) {
+    // load(dataGraph: GrahControl) {
+    //     data
+    // }
+
+    load(dataGraph: Graph) {
+        this._graph = dataGraph;
         this.createBackground();
-        this.createControlNodes(dataNodes);
+        this.createControlNodes(this._graph.nodes);
         // Creates connection lines between pins
 
-        this.createConnectionLines();
+        this.createConnectionLines(this._graph.links);
 
         this.initializeControls();
     }
@@ -125,8 +143,9 @@ export class Scene {
         this._controls.push(background);
     }
 
-    private createControlNodes(controls: NodeControl[]) {
-        for (const control of controls) {
+    private createControlNodes(nodes: Node[]) {
+        for (const node of nodes) {
+            let control = new HeadedNodeControl(node)
             this._nodes.push(control);
             this._controls.push(control);
 
@@ -147,53 +166,24 @@ export class Scene {
         }
     }
 
-    private createConnectionLines() {
-        const connectedPins: string[] = [];
-        const pins = this._pins;
+    private createConnectionLines(links: PinLink[]) {
+        for (const link of links) {
+            let _from = this._pins.find(p => {
+                const bLinked = p.pinProperty.id == link.fromPinID;
+                if (bLinked) { p.pinProperty.state |= PinState.LINKED; }
+                return bLinked;
+            });
+            let _to = this._pins.find(p => {
+                const bLinked = p.pinProperty.id == link.toPinID;
+                if (bLinked) { p.pinProperty.state |= PinState.LINKED; }
+                return bLinked;
+            });
+            let control = (_to && _from) 
+                ? new NodeConnectionControl(_from, _to)
+                : new NodePartialConnectionControl(_from || _to);
 
-        for (let i = pins.length - 1; i >= 0; --i) {
-            let pin = pins[i];
-
-            if (!pin.pinProperty.isLinked) {
-                pins.splice(i, 1);
-                continue;
-            }
-
-            if (pin.pinProperty.direction != PinDirection.EGPD_Output)
-                continue;
-
-            let wasConnected = false;
-            for (let n = 0; n < pin.pinProperty.linkedTo.length; ++n) {
-                let link = pin.pinProperty.linkedTo[n];
-                let otherPin = pins.find(p => p.pinProperty.nodeName === link.nodeName && p.pinProperty.id === link.pinID);
-
-                if (!otherPin)
-                    continue;
-
-                this._controls.push(new NodeConnectionControl(pin, otherPin));
-
-                connectedPins.push(pin.pinProperty.getUniqueName());
-                connectedPins.push(otherPin.pinProperty.getUniqueName());
-
-                wasConnected = true;
-            }
-
-            if (wasConnected)
-                pins.splice(i, 1);
-        }
-
-        // Go through pins which are connected to a missing node
-        for (let i = pins.length - 1; i >= 0; --i) {
-            let pin = pins[i];
-
-            if (connectedPins.indexOf(pin.pinProperty.getUniqueName()) >= 0)
-                continue;
-
-            if (pin.pinProperty.isLinked) {
-                let partialConnection = new NodePartialConnectionControl(pin);
-
-                this._controls.push(partialConnection);
-            }
+            this.links.push(control);    
+            this._controls.push(control);
         }
     }
 

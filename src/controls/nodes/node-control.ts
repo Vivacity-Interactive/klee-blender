@@ -120,7 +120,7 @@ export abstract class NodeControl extends Container {
     }
 
     protected onPinCreated(pin: PinControl) {
-        if (pin.pinProperty.direction === PinDirection.EGPD_Output) {
+        if (pin.pinProperty.direction === PinDirection.Output) {
             this.outputPinPanel.add(pin);
         } else {
             this.inputPinPanel.add(pin);

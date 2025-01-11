@@ -1,5 +1,4 @@
-import { HeadedNodeControl } from "../controls/nodes/headed-node-control";
-import { NodeControl } from "../controls/nodes/node-control";
+import { Graph } from "../data/graph";
 import { Node, NodeState } from "../data/nodes/node";
 import { PinCategory, PinSubCategory, PinType } from "../data/pin/pin-category";
 import { PinDirection } from "../data/pin/pin-direction";
@@ -8,17 +7,23 @@ import { PinProperty, PinState } from "../data/pin/pin-property";
 import { PinShape } from "../data/pin/pin-shape";
 
 export class BLOEFPopulate {
-    protected _scope: any;
-    protected _controls: Array<NodeControl> = [];
+    protected _graph: Graph;
 
-    public get controls(): Array<NodeControl> { return this._controls; }
-    public get scope(): any { return this._scope; }
+    public get graph(): any { return this._graph; }
+    public get scope(): any { return this._graph._raw; }
+    public get nodes(): Array<Node> { return this._graph.nodes; }
+    public get links(): Array<PinLink> { return this._graph.links; }
+    public get lot(): {} { return this._graph._lot; }
+    public get enums(): {} { return this._graph._enums; }
 
-    constructor (scope: any = {}) {
-        this._scope = scope;
+    constructor (scope: any = {}, graph: Graph = null, lot: any = {}) {
+        this._graph = graph ?? new Graph();
+        this._graph._lot = lot;
+        this._graph._raw = scope;
+        this._graph._enums = scope._enums;
     }
 
-    public populateObject(scope: any, node: Node, lot: {}): void {
+    public populateObject(scope: any, node: Node): void {
         node._raw = scope;
         node.id = scope._id;
         node.guid =  //decodeHtmlText(scope._id)
@@ -36,22 +41,24 @@ export class BLOEFPopulate {
         if (scope.show_options) { node.state |= NodeState.OPTIONS; }
         if (scope.hide) { node.state |= NodeState.COLLAPSED; }
 
+        if (scope.operation) { node.title = this.enums['operation'][scope.operation]; }
+
         for (const pin of scope.inputs) {
             let _pin = new PinProperty(node.name);
-            this.populatePin(pin, _pin, lot);
+            this.populatePin(pin, _pin);
             node.customProperties.push(_pin);
         }
 
         for (const pin of scope.outputs) {
             let _pin = new PinProperty(node.name);
-            this.populatePin(pin, _pin, lot);
+            this.populatePin(pin, _pin);
             node.customProperties.push(_pin);
         }
-        lot[node.id] = node;
+        //this.lot[node.id] = node;
         //node.assert()
     }
 
-    public populatePin(scope: any, pin: PinProperty, lot: {}): void {
+    public populatePin(scope: any, pin: PinProperty): void {
         pin.id = scope._id; //decodeHtmlText(scope._id)
         pin.name = scope.identifier
         pin.friendlyName = scope.name
@@ -77,46 +84,34 @@ export class BLOEFPopulate {
         if (scope.is_multi_input) { pin.state |= PinState.MULTI; }
         if (scope.pin_gizmo) { pin.state |= PinState.GIZOM; }
         if (pin.name == "__extend__") { pin.state |= PinState.NAMELESS; pin.hideName = true; }
-
-        pin.linkedTo = [];
-
-        lot[pin.id] = pin;
+        //this.lot[pin.id] = pin;
         //pin.assert()
     }
 
-    public populateLink(scope: any, link: PinLink, lot: {}): void {
-        let node = lot[scope.to_node];
-        if (node) { link.nodeName = node.name; }
-        
-        link.pinID = scope.to_socket;
-        //link.nodeID = scope.to_node;
+    public populateLink(scope: any, link: PinLink): void {        
+        link.toPinID = scope.to_socket;
+        link.toNodeID = scope.to_node;
+        link.fromPinID = scope.from_socket;
+        link.fromNodeID = scope.from_node;
         link.sortID = scope.multi_input_sort_id;
 
         if (scope.is_valid) { link.state |= PinLinkState.VALID; }
         if (scope.is_muted) { link.state |= PinLinkState.MUTED; }
         if (scope.is_hidden) { link.state |= PinLinkState.HIDDEN; }
-
-        let pin = lot[scope.from_socket];
-        if (pin) { pin.linkedTo.push(link); }
         //link.assert()
     }
 
-    // public populateProperties(parser: UEOFCustomParser, pin: PinProperty, lot: null): void {
-        
-    // }
-
-    public populate(lot: {} = {}): void {
-        let _lot = lot
+    public populate(): void {
         for (const node of this.scope.nodes) {
             let _node: Node = new Node();
-            this.populateObject(node, _node, _lot);
-            let _control = new HeadedNodeControl(_node);
-            this._controls.push(_control);
+            this.populateObject(node, _node);
+            this.nodes.push(_node);
         }
 
         for (const link of this.scope.links) {
             let _link: PinLink = new PinLink()
-            this.populateLink(link, _link, lot);
+            this.populateLink(link, _link);
+            this.links.push(_link);
         }
     }
 }

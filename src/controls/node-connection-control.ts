@@ -1,5 +1,5 @@
 import { Canvas2D } from "../canvas";
-import { PinCategory } from "../data/pin/pin-category";
+import { PinCategory, PinType } from "../data/pin/pin-category";
 import { Vector2 } from "../math/vector2";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
@@ -17,6 +17,7 @@ export class NodeConnectionControl extends UserControl {
 
     private curveValue: number;
     private color: string;
+    private color2: string;
     private lineWidth: number;
 
     constructor(pinStart: PinControl, pinEnd: PinControl) {
@@ -32,6 +33,7 @@ export class NodeConnectionControl extends UserControl {
         let distance = Math.sqrt((difference.x * difference.x) + (difference.y * difference.y)) - 12;
         this.curveValue = distance * 0.4;
         this.color = ColorUtils.getPinColor(this.pinStart.pinProperty);
+        this.color2 =ColorUtils.getPinColor(this.pinEnd.pinProperty);
 
         this.lineWidth = 1.5;
     }
@@ -42,11 +44,15 @@ export class NodeConnectionControl extends UserControl {
         let difference = this.pinEndPosition.subtract(this.pinStartPosition);
         let distance = Math.sqrt((difference.x * difference.x) + (difference.y * difference.y)) - 12;
         this.curveValue = distance * 0.4;
+        
+        let gradient = canvas.getContext().createLinearGradient(this.pinStartPosition.x, this.pinStartPosition.y, this.pinEndPosition.x, this.pinEndPosition.y);
+        gradient.addColorStop(0, this.color);
+        gradient.addColorStop(1, this.color2);
 
         canvas.lineWidth(this.lineWidth)
         .beginPath()
         .moveTo(this.pinStartPosition.x, this.pinStartPosition.y)
-        .strokeStyle(this.color)
+        .strokeStyle(gradient)
         .lineTo(this.pinStartPosition.x + 6, this.pinStartPosition.y)
         .bezierCurveTo(
             this.pinStartPosition.x + this.curveValue + 6,

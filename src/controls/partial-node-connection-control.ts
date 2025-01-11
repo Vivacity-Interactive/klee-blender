@@ -1,5 +1,5 @@
 import { Canvas2D } from "../canvas";
-import { PinCategory } from "../data/pin/pin-category";
+import { PinCategory, PinType } from "../data/pin/pin-category";
 import { PinDirection } from "../data/pin/pin-direction";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
@@ -22,7 +22,7 @@ export class NodePartialConnectionControl extends Control implements DrawableCon
         this._pin = pin;
 
         this._color = ColorUtils.getPinColor(this._pin.pinProperty);
-        this._isDirectionOutput = this._pin.pinProperty.direction == PinDirection.EGPD_Output;
+        this._isDirectionOutput = this._pin.pinProperty.direction == PinDirection.Output;
         //this._lineWidth = (this._pin.pinProperty.category === PinCategory.exec) ? 2.5 : 1.5;
         this._lineWidth = 1.5;
     }

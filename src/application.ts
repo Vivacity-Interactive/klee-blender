@@ -124,7 +124,7 @@ export class Application {
         this._scene.unload();
         this._populator = new BLOEFPopulate(JSON.parse(text));
         this._populator.populate();
-        this._scene.load(this._populator.controls);
+        this._scene.load(this._populator.graph);
         this.refresh();
         this.recenterCamera();
         

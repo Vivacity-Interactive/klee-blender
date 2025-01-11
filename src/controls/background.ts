@@ -7,7 +7,7 @@ import { DrawableControl } from "./interfaces/drawable";
 // TODO: Don't implement as background control. Move to camera
 export class Background extends Control implements DrawableControl {
 
-    private static readonly BACKGROUND_SVG = 'data:image/svg+xml,' + escape('<svg width="96px" height="96px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;"><rect x="0" y="0" width="96.375" height="96" style="fill:#282828;stroke:#282828;stroke-width:0.75px;"/></svg>');
+    private static readonly BACKGROUND_SVG = 'data:image/svg+xml,' + escape('<svg width="96px" height="96px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;"><rect x="0" y="0" width="96.375" height="96" style="fill:#1A1A1AFF;stroke:#1A1A1AFF;stroke-width:0.75px;"/></svg>');
 
     loaded: boolean;
     ready: boolean;

@@ -2,7 +2,7 @@
 export class Constants {
     public static readonly NODE_FONT = "400 11px sans-serif";
     public static readonly NODE_HEADER_FONT = "400 11px sans-serif";
-    public static readonly NODE_BACKGROUND_COLOR = "#3D3D3D";
+    public static readonly NODE_BACKGROUND_COLOR = "#303030FF";
     public static readonly NODE_TEXT_COLOR = "#E6E6E6";
     public static readonly NODE_SUBTITLE_COLOR = "#CCCCCC";
 

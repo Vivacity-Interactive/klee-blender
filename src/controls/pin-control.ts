@@ -1,13 +1,16 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
-import { PinCategory } from "../data/pin/pin-category";
+import { PinCategory, PinType } from "../data/pin/pin-category";
 import { PinDirection } from "../data/pin/pin-direction";
 import { PinProperty } from "../data/pin/pin-property";
+import { PinShape } from "../data/pin/pin-shape";
 import { Vector2 } from "../math/vector2";
 import { NodeConnectionControl } from "./node-connection-control";
 import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
 import { ColorUtils } from "./utils/color-utils";
+import { IconData, LOT_ICONS } from "./utils/icon-library";
+import { SVGIcon } from "./utils/icon-utils";
 
 
 export class PinControl extends UserControl {
@@ -27,7 +30,11 @@ export class PinControl extends UserControl {
     private _secondaryColor: string;
     private hidden: boolean;
 
-    private icon?: Path2D;
+    private icon?: HTMLImageElement;
+    private iconRatio: number;
+    private bIcon: boolean;
+    private bDrawReady: boolean;
+    
     private secondaryIcon?: Path2D;
 
     private connections: Array<NodeConnectionControl> = [];
@@ -36,20 +43,18 @@ export class PinControl extends UserControl {
         super(0, 0);
         this._pinProperty = pin;
         this.hidden = false;
+        this.bIcon = true;
 
-        this._isInput = this._pinProperty.direction !== PinDirection.EGPD_Output;
-        this._color = ColorUtils.getPinColor(this._pinProperty);
+        this._isInput = this._pinProperty.direction !== PinDirection.Output;
+        this._color = ColorUtils.getPinColor(this.pinProperty);
         //if (this._pinProperty.valueType)
             //this._secondaryColor = ColorUtils.getPinColorByCategory(this._pinProperty.valueType as PinCategory);
-
         
         this.width = 0;
         this.height = 27;
 
         this.visible = !pin.hidden;
         this.category = pin.category;
-
-        this.initPinIcons();
     }
 
     override initialize() {
@@ -64,11 +69,6 @@ export class PinControl extends UserControl {
         this.postInit();
     }
     
-
-    private initPinIcons() {
-        //this.icon = this._pinProperty.attributeDomain
-    }
-
     get pinProperty(): PinProperty {
         return this._pinProperty;
     }
@@ -118,7 +118,7 @@ export class PinControl extends UserControl {
         let pinCategory = this.pinProperty.category;
         canvas.fillStyle(this._color).strokeStyle(this._color);
 
-        let paddingX = (this.pinProperty.direction === PinDirection.EGPD_Output) ? -this.padding.right : this.padding.left;
+        let paddingX = (this.pinProperty.direction === PinDirection.Output) ? -this.padding.right : this.padding.left;
         canvas.translate(paddingX, Math.floor(this.height * 0.5));
 
         switch (pinCategory) {
@@ -129,108 +129,44 @@ export class PinControl extends UserControl {
         canvas.restore();
     }
 
-    drawPinIcon(canvas: Canvas2D, icon: Path2D) {
+    drawPinIcon(canvas: Canvas2D, icon: HTMLImageElement) {
         const pinX = Math.floor(this.getPinX());
+        const _scale = Math.floor(this.height * 0.45);
+        canvas
+            .fillStyle(this._color)
+            .drawImage(icon, pinX - _scale * 0.5, -_scale * 0.5, _scale, this.iconRatio * _scale);
 
-        canvas.fillStyle(this._color)
-        .translate(pinX - 7.5, -7.5)
-        .fill(this.icon, 'evenodd');
-
-        if (this.secondaryIcon !== undefined) {
-            canvas.fillStyle(this._secondaryColor)
-            .fill(this.secondaryIcon, 'evenodd');
-        }
+        // if (this.secondaryIcon !== undefined) {
+        //     canvas.fillStyle(this._secondaryColor)
+        //     .fill(this.secondaryIcon, 'evenodd');
+        // }
     }
 
     private drawPin(canvas: Canvas2D) {
         let textX = this.setupTextDrawing(canvas);
         const pinX = this.getPinX();
 
-        canvas.fillText(this._pinProperty.formattedName, textX, 4);
+        canvas.fillText(this._pinProperty.formattedName, textX, 4);    
         
-
-        if (this.icon === undefined) {
-            canvas.fillStyle(this._color)
-            .fillCircle(pinX + 6, 0, 2.3);
-
-            if (this._pinProperty.isLinked) {
-                canvas.fillCircle(pinX, 0, 6)
-            } else {
-                canvas.strokeStyle(this._color)
-                .lineWidth(2)
-                .strokeCircle(pinX, 0, 4.8)
-
-                this.drawDefaultValueBox(canvas);
-            }
-
-            canvas.strokeStyle("#000")
-            .lineWidth(.5)
-            .strokeCircle(pinX, 0, 6);
-        } else {
-            if (this.icon)
-                this.drawPinIcon(canvas, this.icon)            
+        const bLoadIcon = this.bIcon && !this.icon;
+        if (bLoadIcon) {
+            const data = LOT_ICONS[PinShape[this._pinProperty.shape]];
+            this.bIcon = !!data;
+            const _this = this;
+            const _transform = canvas.getContext().getTransform();
+            const _pos = this.getPinAbsolutePosition();
+            this.icon ??= new SVGIcon(data,(icon, ratio) => {
+                canvas.save();
+                _this.icon = icon; _this.iconRatio = ratio;
+                canvas.getContext().setTransform(_transform)
+                const _camera = canvas['__CAMERA__']
+                canvas.translate(_camera.position.x, _camera.position.y);
+                _this.drawPinIcon(canvas, icon)
+                canvas.restore();
+                
+            }, this._color);
         }
-    }
-
-    private drawExecutionPin(canvas: Canvas2D) {
-        canvas.save();
-
-        let textX = this.setupTextDrawing(canvas);
-        canvas.fillText(this._pinProperty.formattedName, textX, 4);
-        
-        if (this._pinProperty.formattedName) {
-            const textX = this.setupTextDrawing(canvas);
-            canvas.fillText(this._pinProperty.formattedName, textX, 4);
-        }
-
-        canvas.translate(this.getPinX(), -7);
-
-        canvas.strokeStyle('#fff')
-        .fillStyle('#fff')
-        .lineWidth(1.1)
-        .beginPath()
-        .moveTo(-3, 0)
-        .lineTo(1, 0)
-        .lineTo(8, 6)
-        .lineTo(8, 8)
-        .lineTo(1, 14)
-        .lineTo(-3, 14)
-        .lineTo(-4, 13)
-        .lineTo(-4, 1)
-        .lineTo(-3, 0)
-        .closePath();
-
-        if (this.pinProperty.isLinked)
-            canvas.fill();
-        else
-            canvas.stroke();
-
-        canvas.restore();
-    }
-
-    private drawDelegatePin(canvas: Canvas2D) {
-        canvas.save()
-
-        let textX = this.setupTextDrawing(canvas);
-        let pinX = this.getPinX();
-
-        // if(!this.pinProperty.showInHead) {
-        //     pinX -= 4;
-        // }
-
-        // Draw pin text
-        canvas.fillText(this._pinProperty.formattedName, textX, 4);
-
-        // Set pin icon style
-        canvas.fillStyle(this._color).strokeStyle(this._color).lineWidth(2);
-
-        if (this.pinProperty.isLinked) {
-            canvas.roundedRectangle(pinX, -5, 11, 11, 3).fill();
-        } else {
-            canvas.roundedRectangle(pinX, -5, 10, 10, 3).stroke();
-        }
-
-        canvas.restore();
+        if (this.icon) { this.drawPinIcon(canvas, this.icon); }
     }
 
     private drawDefaultValueBox(canvas: Canvas2D) {
@@ -270,7 +206,7 @@ export class PinControl extends UserControl {
         let position = this.getAbsolutPosition();
         position.y += this.height * 0.5;
 
-        if (this.pinProperty.direction === PinDirection.EGPD_Output) {
+        if (this.pinProperty.direction === PinDirection.Output) {
             position.x += (this.width || this.size.x) - PinControl.PINS_PADDING_HORIZONTAL;
             // if (this.pinProperty.category === PinCategory.delegate)
             //     position.x += 8;

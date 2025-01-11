@@ -21,12 +21,13 @@ export enum PinState {
     UNAVAILABLE = 1 << 10,
     MULTI = 1 << 11,
     GIZOM = 1 << 12,
+    LINKED = 1 << 13,
     DEFAULT = ENABLED
 }
 
 export class PinProperty extends CustomProperty {
 
-    id: string;
+    id: string|number;
     name: string;
     friendlyName: string;
     category: PinCategory;
@@ -43,7 +44,7 @@ export class PinProperty extends CustomProperty {
     
     attributeDomain: PinAttributeDomain;
 
-    linkedTo: PinLink[];
+    //linkedTo: PinLink[];
     persistentGUID: string;
     
     valueType?: string;
@@ -62,11 +63,11 @@ export class PinProperty extends CustomProperty {
     constructor(nodeName: string) {
         super();
         this.nodeName = nodeName;
-        this.direction = PinDirection.EGPD_Input;
+        this.direction = PinDirection.Input;
     }
 
     get isLinked(): boolean {
-        return (this.linkedTo && this.linkedTo.length > 0);
+        return (this.state & PinState.LINKED) == PinState.LINKED;  //(this.linkedTo && this.linkedTo.length > 0);
     }
 
     public get formattedName(): string {
@@ -79,7 +80,7 @@ export class PinProperty extends CustomProperty {
     }
 
     public get shouldDrawDefaultValueBox(): boolean {
-        return (!this.isLinked && this.direction !== PinDirection.EGPD_Output && this.defaultValue != undefined);
+        return (!this.isLinked && this.direction !== PinDirection.Output && this.defaultValue != undefined);
     }
 
     public getUniqueName() {

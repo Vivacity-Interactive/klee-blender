@@ -7,6 +7,13 @@ type SVGLoaderEvent = { data: string, callback: SVGLoaderCallback };
 
 type SVGIconCallback = (icon: HTMLImageElement, ration: number) => void;
 
+export enum IconState {
+    None = 0,
+    Ready = 1 << 0,
+    Loading = 1 << 1,
+    Unknown = 1 << 2
+}
+
 export class SVGLoader {
     private static _instance = new SVGLoader();
     
