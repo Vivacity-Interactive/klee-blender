@@ -1,5 +1,6 @@
 import { Canvas2D } from "../canvas";
 import { PinCategory, PinType } from "../data/pin/pin-category";
+import { PinShape } from "../data/pin/pin-shape";
 import { Vector2 } from "../math/vector2";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
@@ -19,6 +20,7 @@ export class NodeConnectionControl extends UserControl {
     private color: string;
     private color2: string;
     private lineWidth: number;
+    private lineDash: number[] = [];
 
     constructor(pinStart: PinControl, pinEnd: PinControl) {
         super(0, 0, -1);
@@ -35,7 +37,19 @@ export class NodeConnectionControl extends UserControl {
         this.color = ColorUtils.getPinColor(this.pinStart.pinProperty);
         this.color2 =ColorUtils.getPinColor(this.pinEnd.pinProperty);
 
+        this._resolveDash();
+
         this.lineWidth = 1.5;
+    }
+
+    private _resolveDash() {
+        const bDash = false
+            || this.pinEnd.pinProperty.shape === PinShape.DIAMOND
+            || this.pinEnd.pinProperty.shape === PinShape.DIAMOND_DOT
+            || this.pinStart.pinProperty.shape === PinShape.DIAMOND
+            || this.pinStart.pinProperty.shape === PinShape.DIAMOND_DOT;
+        
+        if (bDash) { this.lineDash = [3,2]; }
     }
 
     onDraw(canvas: Canvas2D): void {
@@ -63,6 +77,7 @@ export class NodeConnectionControl extends UserControl {
             this.pinEndPosition.y
         )
         .lineTo(this.pinEndPosition.x, this.pinEndPosition.y)
+        .setLineDash(this.lineDash)
         .stroke();
     }
 }

@@ -150,7 +150,7 @@ export class PinControl extends UserControl {
         
         const bLoadIcon = this.bIcon && !this.icon;
         if (bLoadIcon) {
-            const data = LOT_ICONS[PinShape[this._pinProperty.shape]];
+            const data = LOT_ICONS[this._pinProperty.shape];
             this.bIcon = !!data;
             const _this = this;
             const _transform = canvas.getContext().getTransform();

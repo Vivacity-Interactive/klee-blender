@@ -69,12 +69,12 @@ export class BLOEFPopulate {
         pin.enabled = scope.enabled;
         pin.defaultValue = scope.default_value;
 
-        pin.subCategory = scope.bl_subtype_label as PinSubCategory;
-        pin.category = scope.bl_label as PinCategory;
+        pin.subCategory = PinSubCategory[scope.bl_subtype_label as keyof PinSubCategory];
+        pin.category = PinCategory[scope.bl_label as keyof PinCategory];
         pin.valueType = scope.bl_idname;
         
-        pin.shape = scope.display_shape as PinShape;
-        pin.type = scope.type as PinType;
+        pin.shape = PinShape[scope.display_shape as keyof PinShape];
+        pin.type = PinType[scope.type as keyof PinType];
         pin.toolTip = scope.description;
         
         if (scope.enable) { pin.state |= PinState.ENABLED; pin.enabled = true; }

@@ -10,11 +10,11 @@ enum ResolveCustomCategory {
 
 export class ColorUtils {
     public static getPinColor(pin: PinProperty): string {
-        return LOT_PIN_COLOR[PinType[pin.type]] ?? LOT_PIN_COLOR[NodeCategory._UNKNOWN];
+        return LOT_PIN_COLOR[pin.type] ?? LOT_PIN_COLOR[NodeCategory._UNKNOWN];
     }
 
     public static getNodeColor(node: Node): string {
-        return LOT_NODE_COLOR[NodeCategory[node.category]];
+        return LOT_NODE_COLOR[node.category];
     }
 
     public static resolveNodeColor(node: Node): string {

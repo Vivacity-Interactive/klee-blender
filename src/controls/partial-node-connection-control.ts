@@ -1,6 +1,7 @@
 import { Canvas2D } from "../canvas";
 import { PinCategory, PinType } from "../data/pin/pin-category";
 import { PinDirection } from "../data/pin/pin-direction";
+import { PinShape } from "../data/pin/pin-shape";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
 import { PinControl } from "./pin-control";
@@ -15,6 +16,7 @@ export class NodePartialConnectionControl extends Control implements DrawableCon
     
     private _color: string;
     private _lineWidth: number;
+    private _lineDash: number[] = [30, 4, 2.5, 4, 2.5, 4, 2.5];
 
     constructor(pin: PinControl) {
         super(pin.getAbsolutPosition().x, pin.getAbsolutPosition().y, -1);
@@ -25,7 +27,17 @@ export class NodePartialConnectionControl extends Control implements DrawableCon
         this._isDirectionOutput = this._pin.pinProperty.direction == PinDirection.Output;
         //this._lineWidth = (this._pin.pinProperty.category === PinCategory.exec) ? 2.5 : 1.5;
         this._lineWidth = 1.5;
+
+        this._resolveDash()
     }
+
+    private _resolveDash() {
+            const bDash = false
+                || this._pin.pinProperty.shape === PinShape.DIAMOND
+                || this._pin.pinProperty.shape === PinShape.DIAMOND_DOT
+            
+            if (bDash) { this._lineDash = [3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3,2, 4, 2.5, 4, 2.5, 4, 2.5] }
+        }
 
     draw(canvas: Canvas2D): void {
         canvas.save();
@@ -33,7 +45,7 @@ export class NodePartialConnectionControl extends Control implements DrawableCon
 
         canvas.lineWidth(this._lineWidth)
         .beginPath()
-        .setLineDash([30, 4, 2.5, 4, 2.5, 4, 2.5]);
+        .setLineDash(this._lineDash);
 
         if (this._isDirectionOutput) {
             canvas.moveTo(6, 0)
