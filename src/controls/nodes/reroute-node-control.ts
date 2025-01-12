@@ -24,7 +24,6 @@ export class RerouteNodeControl extends NodeControl implements DrawableControl {
         this.createPins();
     }
 
-
     protected override onPinCreated(pin: PinControl) {
         pin.ignoreLayout = true;
         this.mainPanel.add(pin);
@@ -36,9 +35,10 @@ export class RerouteNodeControl extends NodeControl implements DrawableControl {
     }
 
     onDraw(canvas: Canvas2D) {
-        // lookup icon, needs fix queue for draw onready
-        canvas.translate(8, 8)
-            .fillStyle(this.color)
-            .fillCircle(0, 0, 6)
+        const icon = this.pins[0].icon;
+        if (icon) {
+            const _scale = this.pins[0].iconScale;
+            canvas.drawImage(icon, 0, 2, _scale, icon.ratio * _scale);
+        }
     }
 }

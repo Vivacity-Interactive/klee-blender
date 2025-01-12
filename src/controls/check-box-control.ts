@@ -34,12 +34,12 @@ export class CheckBoxControl extends UserControl {
         if(this.isTrue) {
             const data = LOT_ICONS[IconCategory.CHECKBOX_HLT];
             
-            const check = new SVGIcon(data,(icon, ratio) => {
+            const check = new SVGIcon(data,(icon) => {
                 const _scale = Constants.DEFAULT_BOX_HEIGHT;
                 
                 canvas
                     .fillStyle(Constants.NODE_TEXT_COLOR)
-                    .drawImage(icon, 0, 0, _scale, ratio * _scale);
+                    .drawImage(icon, 0, 0, _scale, icon.ratio * _scale);
 
             }, '#4772b3ff');
             

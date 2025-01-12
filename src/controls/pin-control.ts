@@ -30,10 +30,8 @@ export class PinControl extends UserControl {
     private _secondaryColor: string;
     private hidden: boolean;
 
-    private icon?: HTMLImageElement;
-    private iconRatio: number;
-    private bIcon: boolean;
-    private bDrawReady: boolean;
+    private _icon: SVGIcon;
+    private _iconScale: number;
     
     private secondaryIcon?: Path2D;
 
@@ -43,7 +41,6 @@ export class PinControl extends UserControl {
         super(0, 0);
         this._pinProperty = pin;
         this.hidden = false;
-        this.bIcon = true;
 
         this._isInput = this._pinProperty.direction !== PinDirection.Output;
         this._color = ColorUtils.getPinColor(this.pinProperty);
@@ -55,6 +52,12 @@ export class PinControl extends UserControl {
 
         this.visible = !pin.hidden;
         this.category = pin.category;
+
+        const data = LOT_ICONS[this._pinProperty.shape];
+        if (data) { 
+            this._icon = new SVGIcon(data, null, this._color);
+            this._iconScale = Math.floor(this.height * 0.45);
+        }
     }
 
     override initialize() {
@@ -69,6 +72,10 @@ export class PinControl extends UserControl {
         this.postInit();
     }
     
+    get icon(): SVGIcon { return this._icon; }
+
+    get iconScale(): number { return this._iconScale; }
+
     get pinProperty(): PinProperty {
         return this._pinProperty;
     }
@@ -129,12 +136,12 @@ export class PinControl extends UserControl {
         canvas.restore();
     }
 
-    drawPinIcon(canvas: Canvas2D, icon: HTMLImageElement) {
+    drawPinIcon(canvas: Canvas2D, icon: SVGIcon) {
         const pinX = Math.floor(this.getPinX());
-        const _scale = Math.floor(this.height * 0.45);
+        const _scale = this._iconScale;
         canvas
             .fillStyle(this._color)
-            .drawImage(icon, pinX - _scale * 0.5, -_scale * 0.5, _scale, this.iconRatio * _scale);
+            .drawImage(icon, pinX - _scale * 0.5, -_scale * 0.5, _scale, icon.ratio * _scale);
 
         // if (this.secondaryIcon !== undefined) {
         //     canvas.fillStyle(this._secondaryColor)
@@ -144,27 +151,9 @@ export class PinControl extends UserControl {
 
     private drawPin(canvas: Canvas2D) {
         let textX = this.setupTextDrawing(canvas);
-        const pinX = this.getPinX();
 
         canvas.fillText(this._pinProperty.formattedName, textX, 4);    
         
-        const bLoadIcon = this.bIcon && !this.icon;
-        if (bLoadIcon) {
-            const data = LOT_ICONS[this._pinProperty.shape];
-            this.bIcon = !!data;
-            const _this = this;
-            const _transform = canvas.getContext().getTransform();
-            this.icon ??= new SVGIcon(data,(icon, ratio) => {
-                canvas.save();
-                _this.icon = icon; _this.iconRatio = ratio;
-                canvas.getContext().setTransform(_transform)
-                const _camera = canvas['__CAMERA__']
-                canvas.translate(_camera.position.x, _camera.position.y);
-                _this.drawPinIcon(canvas, icon)
-                canvas.restore();
-                
-            }, this._color);
-        }
         if (this.icon) { this.drawPinIcon(canvas, this.icon); }
     }
 
