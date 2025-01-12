@@ -19,6 +19,7 @@ import { Graph } from "./data/graph";
 import { HeadedNodeControl } from "./controls/nodes/headed-node-control";
 import { PinLink } from "./data/pin/pin-link";
 import { PinState } from "./data/pin/pin-property";
+import { NodeUtils } from "./controls/utils/node-utils";
 
 export class Scene {
 
@@ -140,7 +141,8 @@ export class Scene {
 
     private createControlNodes(nodes: Node[]) {
         for (const node of nodes) {
-            let control = new HeadedNodeControl(node)
+            const _cls = NodeUtils.getNodeControl(node.class) ?? HeadedNodeControl;
+            let control = new _cls(node);
             this._nodes.push(control);
             this._controls.push(control);
 

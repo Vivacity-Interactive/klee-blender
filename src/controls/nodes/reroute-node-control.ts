@@ -19,7 +19,6 @@ export class RerouteNodeControl extends NodeControl implements DrawableControl {
         this._stroke.lineWidth = 0.5;
         this.drawChildren = false;
         this.color = ColorUtils.getPinColor(node.customProperties[0] as PinProperty);
-
         this.mainPanel.width = 0;
 
         this.createPins();
@@ -30,17 +29,16 @@ export class RerouteNodeControl extends NodeControl implements DrawableControl {
         pin.ignoreLayout = true;
         this.mainPanel.add(pin);
         pin.position.y = 8;
-        pin.width = 20;
+        pin.position.x = 8;
+        pin.width = 0;
         pin.height = 0;
         pin.visible = false;
     }
 
     onDraw(canvas: Canvas2D) {
+        // lookup icon, needs fix queue for draw onready
         canvas.translate(8, 8)
             .fillStyle(this.color)
-            .fillCircle(6, 0, 2.3)
             .fillCircle(0, 0, 6)
-
-        this.drawStroke(canvas);
     }
 }
