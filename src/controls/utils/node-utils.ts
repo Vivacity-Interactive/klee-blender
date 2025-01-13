@@ -11,7 +11,6 @@ export class NodeUtils {
     public static getNodeControl(key:string): NodeControlConstrutor {
         const _key = CustomNodeClass[key as keyof CustomNodeClass];
         const _class = LOT_NODE_CONTROL[_key] ?? null;
-
         return _class;
     }
 

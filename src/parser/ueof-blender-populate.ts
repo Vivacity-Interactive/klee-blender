@@ -35,14 +35,17 @@ export class BLOEFPopulate {
         node.pos.x = scope.location[0]
         node.pos.y = -scope.location[1]
 
-        if (scope.use_custom_color) { node.backgroundColor = scope.color; }
+        const bLabel = !scope.label && scope.label.length !== 0;
+        if (bLabel) { node.title = scope.label; }
 
+        if (scope.use_custom_color) { node.backgroundColor = scope.color; }
         if (scope.mute) { node.state |= NodeState.MUTED; }
         if (scope.show_options) { node.state |= NodeState.OPTIONS; }
         if (scope.hide) { node.state |= NodeState.COLLAPSED; }
 
         //if (scope.operation) { node.title = this.enums['operation'][scope.operation]; }
-        if (scope.operation) { node.title = this.enums[scope.operation[1]][scope.operation[0]]; }
+        const bOperator = !bLabel && scope.operation;
+        if (bOperator) { node.title = this.enums[scope.operation[1]][scope.operation[0]]; }
 
         for (const pin of scope.inputs) {
             let _pin = new PinProperty(node.name);
@@ -62,7 +65,10 @@ export class BLOEFPopulate {
     public populatePin(scope: any, pin: PinProperty): void {
         pin.id = scope._id; //decodeHtmlText(scope._id)
         pin.name = scope.identifier
-        pin.friendlyName = scope.name
+        pin.friendlyName = scope.name;
+        
+        const bLabel = !scope.label && scope.label.length !== 0;
+        if (bLabel) { pin.friendlyName = scope.label; }
         
         pin.direction = +scope.is_output as PinDirection;
         pin.hidden = scope.hide || scope.is_unavailable;
@@ -86,6 +92,7 @@ export class BLOEFPopulate {
         if (scope.show_expanded) { pin.state |= PinState.OPTIONS; }
         if (scope.is_multi_input) { pin.state |= PinState.MULTI; }
         if (scope.pin_gizmo) { pin.state |= PinState.GIZOM; }
+        
         if (pin.name == "__extend__") { 
             pin.state |= PinState.NAMELESS; pin.hideName = true;
             pin.shape = PinShape.CIRCLE_DOT;

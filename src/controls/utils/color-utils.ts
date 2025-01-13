@@ -2,7 +2,6 @@ import { NodeCategory } from "../../data/nodes/node-category";
 import { PinType } from "../../data/pin/pin-category";
 import { PinProperty } from "../../data/pin/pin-property";
 import { Node } from "../../data/nodes/node";
-import { Constants } from "../../constants";
 
 
 export enum CustomColorCategory {
@@ -64,7 +63,7 @@ export const LOT_COLOR_CUSTOM:  { [key in CustomColorCategory]: string } = {
    [CustomColorCategory.NodeSocketVirtual]: "#a1a1a1"
 };
 
-export const LOT_NODE_RESOLVE_COLOR:  { [key in (NodeCategory)]: RegExp } = {
+export const LOT_NODE_RESOLVE_COLOR:  Partial<{ [key in (NodeCategory)]: RegExp }> = {
     [NodeCategory.CONVERTER_NODE]: /Math|Function/i,
     [NodeCategory.COLOR_NODE]: /RGB|Color|HSV/i,
     [NodeCategory.GROUP_NODE]: /CustromGroup/i,
@@ -85,8 +84,7 @@ export const LOT_NODE_RESOLVE_COLOR:  { [key in (NodeCategory)]: RegExp } = {
     [NodeCategory.ATTRIBUTE_NODE]: /Attribute|Field/i,
     [NodeCategory.SIMULATION_ZONE]: null,
     [NodeCategory.REPEAT_ZONE]: null,
-    [NodeCategory.FOREACH_GEOMETRY_ELEMENT_ZONE]: null,
-    [NodeCategory._UNKNOWN]: null,
+    [NodeCategory.FOREACH_GEOMETRY_ELEMENT_ZONE]: null
 };
 
 export const LOT_NODE_COLOR:  { [key in NodeCategory]: string } = {

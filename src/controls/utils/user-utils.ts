@@ -10,7 +10,6 @@ export class UserUtils {
     public static getUserControl(key:string): UserControlConstrutor {
         const _key = CustomUserClass[key as keyof CustomUserClass];
         const _class = LOT_USER_CONTROL[_key] ?? null;
-
         return _class;
     }
 
