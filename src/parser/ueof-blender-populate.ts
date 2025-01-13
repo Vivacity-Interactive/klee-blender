@@ -5,6 +5,7 @@ import { PinDirection } from "../data/pin/pin-direction";
 import { PinLink, PinLinkState } from "../data/pin/pin-link";
 import { PinProperty, PinState } from "../data/pin/pin-property";
 import { PinShape } from "../data/pin/pin-shape";
+import { LOT_VALUE } from "../utils/value-utils";
 
 export class BLOEFPopulate {
     protected _graph: Graph;
@@ -73,8 +74,7 @@ export class BLOEFPopulate {
         pin.direction = +scope.is_output as PinDirection;
         pin.hidden = scope.hide || scope.is_unavailable;
         pin.enabled = scope.enabled;
-        pin.defaultValue = scope.default_value;
-
+        
         pin.subCategory = PinSubCategory[scope.bl_subtype_label as keyof PinSubCategory];
         pin.category = PinCategory[scope.bl_label as keyof PinCategory];
         pin.valueType = scope.bl_idname;
@@ -85,10 +85,13 @@ export class BLOEFPopulate {
         pin.type = PinType[scope.type[0] as keyof PinType];
         pin.toolTip = scope.description;
         
+        pin.defaultValue = LOT_VALUE[pin.type](scope.default_value);
+        
         if (scope.enable) { pin.state |= PinState.ENABLED; pin.enabled = true; }
         if (scope.hide) { pin.state |= PinState.HIDDEN; pin.hidden = true }
         if (scope.hide_value) { pin.state |= PinState.VALUELESS; }
         if (scope.is_unavailable) { pin.state |= PinState.UNAVAILABLE; }
+        if (scope.is_linked) { pin.state |= PinState.LINKED; }
         if (scope.show_expanded) { pin.state |= PinState.OPTIONS; }
         if (scope.is_multi_input) { pin.state |= PinState.MULTI; }
         if (scope.pin_gizmo) { pin.state |= PinState.GIZOM; }
@@ -101,7 +104,9 @@ export class BLOEFPopulate {
         //pin.assert()
     }
 
-    public populateLink(scope: any, link: PinLink): void {        
+    public populateLink(scope: any, link: PinLink): void {
+        link._raw = scope;    
+        link.id = scope._id;
         link.toPinID = scope.to_socket;
         link.toNodeID = scope.to_node;
         link.fromPinID = scope.from_socket;

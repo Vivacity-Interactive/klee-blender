@@ -2,7 +2,7 @@ import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
 import { PinCategory, PinType } from "../data/pin/pin-category";
 import { PinDirection } from "../data/pin/pin-direction";
-import { PinProperty } from "../data/pin/pin-property";
+import { PinProperty, PinState } from "../data/pin/pin-property";
 import { PinShape } from "../data/pin/pin-shape";
 import { Vector2 } from "../math/vector2";
 import { NodeConnectionControl } from "./node-connection-control";
@@ -11,6 +11,7 @@ import { UserControl } from "./user-control";
 import { ColorUtils } from "./utils/color-utils";
 import { IconData, LOT_ICONS } from "./utils/icon-library";
 import { _DDxIcon, SVGIcon } from "./utils/icon-utils";
+import { LOT_USER_CONTROL, UserUtils } from "./utils/user-utils";
 
 
 export class PinControl extends UserControl {
@@ -92,8 +93,9 @@ export class PinControl extends UserControl {
     }
 
     public postInit(): void {
-        if (this.pinProperty.shouldDrawDefaultValueBox && this._pinProperty.defaultValueControlClass) {
-            this.defaultValueBox = new this._pinProperty.defaultValueControlClass(this._pinProperty.defaultValue);
+        const box = this.pinProperty.isValued && LOT_USER_CONTROL[this.pinProperty.type];
+        if (box) {
+            this.defaultValueBox = new box(this.pinProperty.defaultValue);
             this.defaultValueBox.initControl(this.app);
             this.defaultValueBox.position.x = this.formattedNameWidth(this._pinProperty) + PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
             this.defaultValueBox.padding.right = PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
@@ -150,6 +152,10 @@ export class PinControl extends UserControl {
         let textX = this.setupTextDrawing(canvas);
 
         canvas.fillText(this._pinProperty.formattedName, textX, 4);    
+
+        if (this.defaultValueBox) {
+            this.drawDefaultValueBox(canvas);
+        }
         
         if (this.icon) { this.drawPinIcon(canvas, this.icon); }
     }

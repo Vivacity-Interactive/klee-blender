@@ -1,6 +1,7 @@
 import { Canvas2D } from "../canvas";
 import { PinCategory, PinType } from "../data/pin/pin-category";
 import { PinDirection } from "../data/pin/pin-direction";
+import { PinLink } from "../data/pin/pin-link";
 import { PinShape } from "../data/pin/pin-shape";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
@@ -10,6 +11,8 @@ import { ColorUtils } from "./utils/color-utils";
 export class NodePartialConnectionControl extends Control implements DrawableControl {
 
     private static readonly LINE_LENGTH = 80;
+
+    public link: PinLink;
 
     private _pin: PinControl;
     private _isDirectionOutput: boolean;
@@ -36,7 +39,7 @@ export class NodePartialConnectionControl extends Control implements DrawableCon
                 || this._pin.pinProperty.shape === PinShape.DIAMOND
                 || this._pin.pinProperty.shape === PinShape.DIAMOND_DOT
             
-            if (bDash) { this._lineDash = [3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3,2, 4, 2.5, 4, 2.5, 4, 2.5] }
+            if (bDash) { this._lineDash = [2,3, 2,3, 2,3, 2,3, 10, 4, 2.5, 4, 2.5, 4, 2.5, 30] }
         }
 
     draw(canvas: Canvas2D): void {

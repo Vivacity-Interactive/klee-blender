@@ -1,5 +1,6 @@
 import { Canvas2D } from "../canvas";
 import { PinCategory, PinType } from "../data/pin/pin-category";
+import { PinLink } from "../data/pin/pin-link";
 import { PinShape } from "../data/pin/pin-shape";
 import { Vector2 } from "../math/vector2";
 import { Control } from "./control";
@@ -9,6 +10,8 @@ import { UserControl } from "./user-control";
 import { ColorUtils } from "./utils/color-utils";
 
 export class NodeConnectionControl extends UserControl {
+
+    public link: PinLink;
 
     private pinStart: PinControl;
     private pinEnd: PinControl;
@@ -41,6 +44,10 @@ export class NodeConnectionControl extends UserControl {
 
         this.lineWidth = 1.5;
     }
+
+    get start() { return this.pinStart; }
+    
+    get end() { return this.pinEnd; }
 
     private _resolveDash() {
         const bDash = false

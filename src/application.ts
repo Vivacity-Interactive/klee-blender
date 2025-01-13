@@ -90,14 +90,31 @@ export class Application {
         this._scene.refresh();
     }
 
+    private assureGraphScopeClosure(scope) {
+
+    }
+
     private copyNodeGroupSelectionToClipboard() {
         console.log("Copy selection");
 
         let scope = { _enums: {}, nodes: [], links: [] };
-        this._scene.nodes.filter(n => n.selected).forEach(n => scope.nodes.push(n.node._raw));
+        // TODO needs improvement (not efficent at all)
+        let _links = new Set<any>();
+        const _this = this;
+        this._scene.nodes.forEach(n => {
+            if (n.selected) {
+                scope.nodes.push(n.node._raw);
+                this._scene.links.filter(l => {
+                    const bLink = l.link.fromNodeID == n.node.id || l.link.toNodeID == n.node.id;
+                    if (bLink) { _links.add(l.link._raw); }
+                    return bLink;
+                })
+            }
+        });
+        // skip formalities lazy assign enums (needs meta data to track enume association)
+        scope._enums = this.scene.graph._enums;
+        scope.links = Array.from(_links);
         navigator.clipboard.writeText(JSON.stringify(scope));
-        
-        console.warn("TODO Copy Missing Links");
         return true;
     }
 

@@ -7,6 +7,8 @@ export enum PinLinkState {
 }
 
 export class PinLink {
+    _raw: any;
+    id: string | number;
     state: PinLinkState;
     fromNodeID: string|number;
     fromPinID: string|number;

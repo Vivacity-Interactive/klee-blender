@@ -70,6 +70,14 @@ export class PinProperty extends CustomProperty {
         return (this.state & PinState.LINKED) == PinState.LINKED;  //(this.linkedTo && this.linkedTo.length > 0);
     }
 
+    get isValued(): boolean {
+        return true
+            && (this.state & PinState.UNAVAILABLE) !== PinState.UNAVAILABLE
+            && (this.state & PinState.LINKED) !== PinState.LINKED
+            && (this.state & PinState.VALUELESS) !== PinState.VALUELESS
+            && (this.direction & PinDirection.Output) !== PinDirection.Output;
+    }
+
     public get formattedName(): string {
         if (this.hideName) { return ''; }
         if (this.friendlyName) {

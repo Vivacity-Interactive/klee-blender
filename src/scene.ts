@@ -42,6 +42,7 @@ export class Scene {
         this._camera = new Camera(this._canvas);
         this._nodes = new Array<NodeControl>();
         this._controls = new Array<Control>();
+        this._links = new Array<NodeConnectionControl|NodePartialConnectionControl>();
         this._pins = new Array<PinControl>();
         this._canvas['__CAMERA__'] = this._camera;
     }
@@ -65,6 +66,10 @@ export class Scene {
 
     get interactables() {
         return this._interactables || [];
+    }
+
+    get graph() {
+        return this._graph;
     }
 
     collectInteractables() {
@@ -179,7 +184,9 @@ export class Scene {
                 ? new NodeConnectionControl(_from, _to)
                 : new NodePartialConnectionControl(_from || _to);
 
-            this.links.push(control);    
+            control.link = link;
+
+            this._links.push(control);    
             this._controls.push(control);
         }
     }

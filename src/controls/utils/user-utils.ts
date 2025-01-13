@@ -1,9 +1,17 @@
+import { PinType } from "../../data/pin/pin-category";
+import { CheckBoxControl } from "../check-box-control";
+import { ColorBoxControl } from "../color-box-control";
+import { StructBoxControl } from "../struct-box-control";
+import { TextBoxControl } from "../text-box-control";
 import { UserControl } from "../user-control";
 
 type UserControlConstrutor = new (...parms: any) => UserControl
 
 export enum CustomUserClass {
-
+    // Enum Control
+    // Color Ramp Control
+    // RGB Curve Control
+    // Color Picker Control
 }
 
 export class UserUtils {
@@ -29,10 +37,27 @@ export class UserUtils {
     }
 }
 
-export const LOT_USER_CONTROL: { [key in CustomUserClass]: UserControlConstrutor } = {
-
+export const LOT_USER_CONTROL: { [key in CustomUserClass | PinType]: UserControlConstrutor } = {
+    [PinType.VALUE]: TextBoxControl,//NumberBoxControl
+    [PinType.INT]: TextBoxControl,//NumberBoxControl
+    [PinType.BOOLEAN]: CheckBoxControl,
+    [PinType.VECTOR]: TextBoxControl,//StructBoxControl,
+    [PinType.ROTATION]: TextBoxControl,//StructBoxControl,
+    [PinType.MATRIX]: null,//StructBoxControl,
+    [PinType.STRING]: TextBoxControl,
+    [PinType.RGBA]: ColorBoxControl,
+    [PinType.SHADER]: null,
+    [PinType.OBJECT]: TextBoxControl,//ReferenceBoxControl
+    [PinType.GEOMETRY]: null,
+    [PinType.COLLECTION]: TextBoxControl,//ReferenceBoxControl
+    [PinType.TEXTURE]: null,
+    [PinType.MATERIAL]: TextBoxControl,//ReferenceBoxControl
+    [PinType.MENU]: TextBoxControl,//ComboBoxControl
+    [PinType.IMAGE]: TextBoxControl,//AssetBoxControl
+    [PinType.CUSTOM]: null,
+    [PinType._UNKNOWN]: null
 }
 
-export const LOT_USER_RESOLVE_CONTROL:  Partial<{ [key in CustomUserClass]: RegExp }> = {
+export const LOT_USER_RESOLVE_CONTROL:  Partial<{ [key in CustomUserClass | PinType]: RegExp }> = {
 
 };

@@ -147,11 +147,17 @@ class BLOF:
 class _Settings:
     def __init__(self):
         self.name = "GN_Wireframe"
+        #self.name = "Material"
+        #self.name = "World"
+        #self.name = "Scene"
         self.html_save = False
         
 class VActCopyExportNodeGroups:
     def do_execute(self, context, settings):
         group = bpy.data.node_groups[settings.name]
+        #group = bpy.data.materials[settings.name].node_tree
+        #group = bpy.data.scenes[settings.name].node_tree
+        #group = bpy.data.worlds[settings.name].node_tree
         lot = {}
         scope = BLOF({})
         self.from_node_groups(group, scope, lot, scope.enums, settings)
