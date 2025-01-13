@@ -84,7 +84,10 @@ export class BLOEFPopulate {
         if (scope.show_expanded) { pin.state |= PinState.OPTIONS; }
         if (scope.is_multi_input) { pin.state |= PinState.MULTI; }
         if (scope.pin_gizmo) { pin.state |= PinState.GIZOM; }
-        if (pin.name == "__extend__") { pin.state |= PinState.NAMELESS; pin.hideName = true; }
+        if (pin.name == "__extend__") { 
+            pin.state |= PinState.NAMELESS; pin.hideName = true;
+            pin.shape = PinShape.CIRCLE_DOT;
+        }
         //this.lot[pin.id] = pin;
         //pin.assert()
     }

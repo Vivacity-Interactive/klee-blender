@@ -2,10 +2,11 @@ import { NodeCategory } from "../../data/nodes/node-category";
 import { PinType } from "../../data/pin/pin-category";
 import { PinProperty } from "../../data/pin/pin-property";
 import { Node } from "../../data/nodes/node";
+import { Constants } from "../../constants";
 
 
-enum ResolveCustomCategory {
-
+export enum CustomColorCategory {
+    NodeSocketVirtual
 }
 
 export class ColorUtils {
@@ -14,7 +15,12 @@ export class ColorUtils {
     }
 
     public static getNodeColor(node: Node): string {
-        return LOT_NODE_COLOR[node.category];
+        return LOT_NODE_COLOR[node.category] ?? LOT_NODE_COLOR[NodeCategory._UNKNOWN];
+    }
+
+    public static getCustomColor(key: string): string {
+        const _key = CustomColorCategory[key as keyof CustomColorCategory];
+        return _key != null ? LOT_COLOR_CUSTOM[_key] : null;
     }
 
     public static resolveNodeColor(node: Node): string {
@@ -54,11 +60,11 @@ export const LOT_PIN_COLOR: Partial<{ [key in PinType]: string }> = {
     [PinType._UNKNOWN]:  "#515151"
 }
 
-export const LOT_NODE_RESOLVE_COLOR_CUSTOM:  { [key in ResolveCustomCategory]: RegExp } = {
-   
+export const LOT_COLOR_CUSTOM:  { [key in CustomColorCategory]: string } = {
+   [CustomColorCategory.NodeSocketVirtual]: "#a1a1a1"
 };
 
-export const LOT_NODE_RESOLVE_COLOR:  { [key in (NodeCategory | ResolveCustomCategory)]: RegExp } = {
+export const LOT_NODE_RESOLVE_COLOR:  { [key in (NodeCategory)]: RegExp } = {
     [NodeCategory.CONVERTER_NODE]: /Math|Function/i,
     [NodeCategory.COLOR_NODE]: /RGB|Color|HSV/i,
     [NodeCategory.GROUP_NODE]: /CustromGroup/i,

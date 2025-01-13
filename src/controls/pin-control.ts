@@ -10,7 +10,7 @@ import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
 import { ColorUtils } from "./utils/color-utils";
 import { IconData, LOT_ICONS } from "./utils/icon-library";
-import { SVGIcon } from "./utils/icon-utils";
+import { _DDxIcon, SVGIcon } from "./utils/icon-utils";
 
 
 export class PinControl extends UserControl {
@@ -27,13 +27,10 @@ export class PinControl extends UserControl {
 
     private _isInput: boolean;
     private _color: string;
-    private _secondaryColor: string;
     private hidden: boolean;
 
     private _icon: SVGIcon;
     private _iconScale: number;
-    
-    private secondaryIcon?: Path2D;
 
     private connections: Array<NodeConnectionControl> = [];
 
@@ -43,9 +40,8 @@ export class PinControl extends UserControl {
         this.hidden = false;
 
         this._isInput = this._pinProperty.direction !== PinDirection.Output;
-        this._color = ColorUtils.getPinColor(this.pinProperty);
-        //if (this._pinProperty.valueType)
-            //this._secondaryColor = ColorUtils.getPinColorByCategory(this._pinProperty.valueType as PinCategory);
+        this._color = ColorUtils.getCustomColor(this.pinProperty.valueType) 
+            ?? ColorUtils.getPinColor(this.pinProperty);
         
         this.width = 0;
         this.height = 27;
@@ -139,14 +135,15 @@ export class PinControl extends UserControl {
     drawPinIcon(canvas: Canvas2D, icon: SVGIcon) {
         const pinX = Math.floor(this.getPinX());
         const _scale = this._iconScale;
-        canvas
-            .fillStyle(this._color)
-            .drawImage(icon, pinX - _scale * 0.5, -_scale * 0.5, _scale, icon.ratio * _scale);
 
-        // if (this.secondaryIcon !== undefined) {
-        //     canvas.fillStyle(this._secondaryColor)
-        //     .fill(this.secondaryIcon, 'evenodd');
-        // }
+        const _this = this;
+        const _f = (icon: SVGIcon) => {
+            canvas
+                .fillStyle(_this._color)
+                .drawImage(icon, pinX - _scale * 0.5, -_scale * 0.5, _scale, icon.ratio * _scale);
+        }
+
+        this.icon.queueId(this.pinProperty.id, _f, canvas);
     }
 
     private drawPin(canvas: Canvas2D) {

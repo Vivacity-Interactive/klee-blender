@@ -5,11 +5,10 @@ import { Node } from "../../data/nodes/node";
 import { PinProperty } from "../../data/pin/pin-property";
 import { PinControl } from "../pin-control";
 import { ColorUtils } from "../utils/color-utils";
+import { SVGIcon } from "../utils/icon-utils";
 
 
 export class RerouteNodeControl extends NodeControl implements DrawableControl {
-
-    private color: string;
 
     constructor(node: Node) {
         super(node);
@@ -18,7 +17,6 @@ export class RerouteNodeControl extends NodeControl implements DrawableControl {
 
         this._stroke.lineWidth = 0.5;
         this.drawChildren = false;
-        this.color = ColorUtils.getPinColor(node.customProperties[0] as PinProperty);
         this.mainPanel.width = 0;
 
         this.createPins();
@@ -36,9 +34,14 @@ export class RerouteNodeControl extends NodeControl implements DrawableControl {
 
     onDraw(canvas: Canvas2D) {
         const icon = this.pins[0].icon;
-        if (icon) {
-            const _scale = this.pins[0].iconScale;
+
+        const _this = this;
+        const _fx = (icon: SVGIcon) => {
+            const _scale = _this.pins[0].iconScale;
+            // Todo find where 2 comes from
             canvas.drawImage(icon, 0, 2, _scale, icon.ratio * _scale);
         }
+        
+        if (icon) { icon.queueId(this.node.id, _fx, canvas); }
     }
 }
