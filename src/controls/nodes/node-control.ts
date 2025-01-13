@@ -101,7 +101,7 @@ export abstract class NodeControl extends Container {
         return "";//this._node.sourceText;
     }
 
-    protected get node(): Node {
+    public get node(): Node {
         return this._node;
     }
 

@@ -35,11 +35,13 @@ export class Application {
         this._controller = new Controller(element, this);
         this._controller.registerAction({
             ctrl: true,
+            shift: false,
             keycode: 'KeyC',
             callback: this.copyNodeGroupSelectionToClipboard.bind(this)
         });
         this._controller.registerAction({
             ctrl: false,
+            shift: false,
             keycode: 'Home',
             callback: this.recenterCamera.bind(this),
         })
@@ -47,6 +49,7 @@ export class Application {
         this._controller.registerAction({
             ctrl: true,
             keycode: 'KeyV',
+            shift: false,
             callback: this.pasteClipboardContentToCanvas.bind(this)
         });
         this._element.onpaste = (ev) => this.onPaste(ev);
@@ -90,10 +93,11 @@ export class Application {
     private copyNodeGroupSelectionToClipboard() {
         console.log("Copy selection");
 
-        let textLines = [];
-        this._scene.nodes.filter(n => n.selected).forEach(n => textLines = [].concat(textLines, n.sourceText));
-        navigator.clipboard.writeText(textLines.join('\n'));
-
+        let scope = { _enums: {}, nodes: [], links: [] };
+        this._scene.nodes.filter(n => n.selected).forEach(n => scope.nodes.push(n.node._raw));
+        navigator.clipboard.writeText(JSON.stringify(scope));
+        
+        console.warn("TODO Copy Missing Links");
         return true;
     }
 

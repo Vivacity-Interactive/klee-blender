@@ -9,8 +9,9 @@ import { InteractableUserControl } from "./controls/interactable-user-control";
 import { Scene } from "./scene";
 
 export interface KeyAction {
-    keycode: string
-    ctrl: boolean;
+    keycode: string;
+    shift: boolean;
+    ctrl: boolean; //ctrl?;
     callback: (ev: KeyboardEvent) => boolean
 }
 
@@ -59,8 +60,37 @@ export class Controller {
 
         this.registerAction({
             ctrl: true,
+            shift: false,
             keycode: 'KeyA',
             callback: this.selectAllNodes.bind(this),
+        });
+
+        this.registerAction({
+            ctrl: false,
+            shift: false,
+            keycode: 'Tab',
+            callback: this.groupEnterLeave.bind(this),
+        });
+
+        this.registerAction({
+            ctrl: false,
+            shift: false,
+            keycode: 'KeyH',
+            callback: this.collapseSelectedNodes.bind(this),
+        });
+
+        this.registerAction({
+            ctrl: true,
+            shift: false,
+            keycode: 'KeyH',
+            callback: this.hideUnusedSelectedNodes.bind(this),
+        });
+
+        this.registerAction({
+            ctrl: true,
+            shift: true,
+            keycode: 'KeyH',
+            callback: this.hideOptionsSelectedNodes.bind(this),
         });
     }
 
@@ -70,7 +100,8 @@ export class Controller {
 
     onKeydown(ev : KeyboardEvent) {
         for (const action of this._actions.filter(a => a.keycode === ev.code)) {
-            if(action.ctrl !== ev.ctrlKey) continue;
+            const bSkip = action.ctrl !== ev.ctrlKey || action.shift !== ev.shiftKey;
+            if(bSkip) continue;
 
             if (action.callback(ev)) {
                 ev.preventDefault();
@@ -262,6 +293,33 @@ export class Controller {
         const mouseAbsolutePos = new Vector2(this._mouseDownData.position.x - cameraPos.x, this._mouseDownData.position.y - cameraPos.y);
 
         return mouseAbsolutePos;
+    }
+
+    groupEnterLeave () {
+        // TODO if no GroupNode selected exit and move up in tree (new Scene)
+        // TODO if a GroupNode selected enter node and move down in tree (new Scene)
+        console.warn("TODO Enter-Leave Group Node Not Yet Implemented")
+        return true;
+    }
+
+    collapseSelectedNodes () {
+        // TODO hide all selected nodes unless all are already collapsed then uncollapse all selected
+        // node.state == (node.state & NodeState.COLLAPSED) == NodeState.COLLAPSED
+        // node.state ^= NodeState.COLLAPSED
+        console.warn("TODO Collapse Nodes Not Yet Implemented")
+        return true;
+    }
+
+    hideUnusedSelectedNodes () {
+        // TODO unhide all unused pins selected nodes unless all unused are already hidden then unhide all unused pins of selected
+        console.warn("TODO Hide Unused Pins Not Yet Implemented")
+        return true;
+    }
+
+    hideOptionsSelectedNodes () {
+        // TODO unhide all options selected nodes unless all options are already hidden then unhide all options of selected
+        console.warn("TODO Hide Options Pins Not Yet Implemented")
+        return true;
     }
 
     selectAllNodes() {

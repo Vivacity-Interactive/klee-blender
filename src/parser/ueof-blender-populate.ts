@@ -93,7 +93,7 @@ export class BLOEFPopulate {
         if (scope.is_multi_input) { pin.state |= PinState.MULTI; }
         if (scope.pin_gizmo) { pin.state |= PinState.GIZOM; }
         
-        if (pin.name == "__extend__") { 
+        if (pin.valueType == "NodeSocketVirtual") { 
             pin.state |= PinState.NAMELESS; pin.hideName = true;
             pin.shape = PinShape.CIRCLE_DOT;
         }
