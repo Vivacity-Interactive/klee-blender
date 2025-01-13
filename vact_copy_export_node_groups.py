@@ -1,17 +1,33 @@
 import bpy, json, mathutils
 
+#def _rna_x(val):
+#    return {k:_to_val(getattr(val, k, None), v, None) for k,v in val.rna_type.properties.items()}
+#
+#def _print_x(val):
+#    print(json.dumps(_rna_x(val),indent=2))
+
 def _to_id(val):
-    return str(val)
-    #return f'{val.as_pointer():x}'.upper()
+    #return str(val)
+    #return hex(val.as_pointer());
+    return f'0x{val.as_pointer():012X}'
+    #return val.as_pointer()
+
+def _to_id2(val):
+    #return str(val)
+    #return hex(val.as_pointer());
+    return f'0x{val.as_pointer():012X}'
     #return val.as_pointer()
 
 def _arr_or_val(val, desc):
     return [x for x in val] if desc.is_array else val
 
 def _enum_resolve(val, desc, enum_lot):
-    b_add = not enum_lot is None and desc.identifier not in enum_lot
-    if b_add: enum_lot[desc.identifier] = { x.identifier: x.name  for x in desc.enum_items }
-    return val
+    _id = _to_id2(desc)
+    
+    b_add = not enum_lot is None and desc.identifier not in BLOF.ENUM_EXCLUDE and not _id in enum_lot
+    if b_add: enum_lot[_id] = { x.identifier: x.name  for x in desc.enum_items }
+    
+    return [val,_id]
  
 def _to_val(val, desc, enum_lot=None):
     _val = None
@@ -20,13 +36,14 @@ def _to_val(val, desc, enum_lot=None):
     if val == None: pass
     elif isinstance(val, mathutils.Quaternion): _val = [val.x, val.y, val.z, val.w]
     elif isinstance(val, mathutils.Euler): _val = [val.x, val.y, val.z, str(val.order)]
+    elif isinstance(val, set): _val = _to_id(desc) #{ k: str(v) for k, v in val }
     elif b_desc and desc.type == 'BOOLEAN': _val = _arr_or_val(val, desc)
     elif b_desc and desc.type == 'INT':  _val = _arr_or_val(val, desc)
     elif b_desc and desc.type == 'FLOAT': _val = _arr_or_val(val, desc)
     elif b_desc and desc.type == 'STRING': _val = val
     elif b_desc and desc.type == 'ENUM': _val = _enum_resolve(val, desc, enum_lot)
     elif b_desc and desc.type == 'POINTER': _val = _to_id(val)
-    elif b_desc and desc.type == 'COLLECTION': _val = str(val) #[_to_val(x, val.fixed_type, k - 1) for x in val] 
+    elif b_desc and desc.type == 'COLLECTION': _val = _to_id(desc) #[ str(v) for v in val ] #[_to_val(x, val.fixed_type, k - 1) for x in val] 
     else: _val = str(val)
     
     return _val
@@ -34,6 +51,7 @@ def _to_val(val, desc, enum_lot=None):
 class BLOF:
     DEFAULT_NO_ID = "00000000000"
     DEFAULT_INDENT = None
+    ENUM_EXCLUDE = ['type','id_type','bl_icon','subtype','socket_type','bl_static_type']
 
     class Encoder(json.JSONEncoder):
         def default(self, obj):
@@ -130,13 +148,12 @@ class _Settings:
     def __init__(self):
         self.name = "GN_Wireframe"
         self.html_save = False
-        self.enums = { 'bl_icon': {} }
         
 class VActCopyExportNodeGroups:
     def do_execute(self, context, settings):
         group = bpy.data.node_groups[settings.name]
         lot = {}
-        scope = BLOF(settings.enums)
+        scope = BLOF({})
         self.from_node_groups(group, scope, lot, scope.enums, settings)
         text = scope.serialize()
         

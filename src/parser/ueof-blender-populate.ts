@@ -26,7 +26,6 @@ export class BLOEFPopulate {
     public populateObject(scope: any, node: Node): void {
         node._raw = scope;
         node.id = scope._id;
-        node.guid =  //decodeHtmlText(scope._id)
         node.name = scope.name;
         node.title = scope.bl_label;
         node.label = scope.bl_label;
@@ -42,7 +41,8 @@ export class BLOEFPopulate {
         if (scope.show_options) { node.state |= NodeState.OPTIONS; }
         if (scope.hide) { node.state |= NodeState.COLLAPSED; }
 
-        if (scope.operation) { node.title = this.enums['operation'][scope.operation]; }
+        //if (scope.operation) { node.title = this.enums['operation'][scope.operation]; }
+        if (scope.operation) { node.title = this.enums[scope.operation[1]][scope.operation[0]]; }
 
         for (const pin of scope.inputs) {
             let _pin = new PinProperty(node.name);
@@ -73,8 +73,10 @@ export class BLOEFPopulate {
         pin.category = PinCategory[scope.bl_label as keyof PinCategory];
         pin.valueType = scope.bl_idname;
         
-        pin.shape = PinShape[scope.display_shape as keyof PinShape];
-        pin.type = PinType[scope.type as keyof PinType];
+        //pin.shape = PinShape[scope.display_shape[0] as keyof PinShape];
+        //pin.type = PinType[scope.type[0] as keyof PinType];
+        pin.shape = PinShape[scope.display_shape[0] as keyof PinShape];
+        pin.type = PinType[scope.type[0] as keyof PinType];
         pin.toolTip = scope.description;
         
         if (scope.enable) { pin.state |= PinState.ENABLED; pin.enabled = true; }
