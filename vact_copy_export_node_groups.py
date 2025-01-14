@@ -1,10 +1,20 @@
 import bpy, json, mathutils
 
-#def _rna_x(val):
-#    return {k:_to_val(getattr(val, k, None), v, None) for k,v in val.rna_type.properties.items()}
-#
-#def _print_x(val):
-#    print(json.dumps(_rna_x(val),indent=2))
+# def _rna_x(val):
+#     return {k:_to_val(getattr(val, k, None), v, None) for k,v in val.rna_type.properties.items()}
+
+# def _rna_y(val):
+#     return {k:str(v) for k,v in val.properties.items()}
+
+# def _print_x(val):
+#     print(json.dumps(_rna_x(val),indent=2))
+    
+# def _print_y(val):
+#     print(json.dumps(_rna_y(val),indent=2))
+    
+# def _print_diff(rna_a, rna_b):
+#     _set = set(rna_b.properties.keys());
+#     print(json.dumps({ k: str(v)  for k,v in rna_a.properties.items() if k not in _set },indent=2))
 
 def _to_id(val):
     #return str(val)
@@ -25,7 +35,9 @@ def _enum_resolve(val, desc, enum_lot):
     _id = _to_id2(desc)
     
     b_add = not enum_lot is None and desc.identifier not in BLOF.ENUM_EXCLUDE and not _id in enum_lot
-    if b_add: enum_lot[_id] = { x.identifier: x.name  for x in desc.enum_items }
+    if b_add:
+        _enums = { x.identifier: x.name  for x in desc.enum_items }
+        if _enums: enum_lot[_id] = _enums
     
     return [val,_id]
  
@@ -102,12 +114,21 @@ class BLOF:
     
     class Node:
         _EXCLUDE = ['inputs', 'outputs', 'internal_links']
-        def __init__(self, context, enum_lot=None):
+        def __init__(self, context, enum_lot=None, opt_lot=None):
             self.id = _to_id(context)
             self.properties = {k:_to_val(getattr(context, k, None), v, enum_lot) for k,v in context.rna_type.properties.items() if k not in BLOF.Node._EXCLUDE}
             self.inputs = BLOF.Collection()
             self.outputs = BLOF.Collection()
             self.internal_links = BLOF.Collection()
+            
+            _id = _to_id2(context.rna_type)
+            b_add = not opt_lot is None and id not in opt_lot
+            if b_add:
+                _base = set(context.rna_type.base.properties.keys())
+                _keys = context.rna_type.properties.keys()
+                _options = [ k for k in _keys if k not in _base ];
+                if _options: opt_lot[_id] = _options
+            #_print_diff(context.rna_type, context.rna_type.base)
     
         def serialize(self):
             self._default()
@@ -132,12 +153,14 @@ class BLOF:
         def _default(self):
             self.properties['_id'] = self.id
             
-    def __init__(self, enum_lot=None):
+    def __init__(self, enum_lot=None, opt_lot=None):
         self.root = {}
         self.enums = enum_lot
+        self.options = opt_lot
     
     def _default(self):
         self.root.properties['_enums'] = self.enums
+        self.root.properties['_options'] = self.options
         pass
     
     def serialize(self):
@@ -159,9 +182,10 @@ class VActCopyExportNodeGroups:
         #group = bpy.data.scenes[settings.name].node_tree
         #group = bpy.data.worlds[settings.name].node_tree
         lot = {}
-        scope = BLOF({})
-        self.from_node_groups(group, scope, lot, scope.enums, settings)
+        scope = BLOF({},{})
+        self.from_node_groups(group, scope, lot, scope.enums, scope.options, settings)
         text = scope.serialize()
+        #print(json.dumps({ 'enums':scope.enums, 'options':scope.options },indent=2))
         
         if settings.html_save:
             text = text.replace("<","&lt;").replace(">","&gt;")
@@ -169,9 +193,9 @@ class VActCopyExportNodeGroups:
         bpy.context.window_manager.clipboard = text
         #print(text)
         
-    def from_node_groups(self, context, scope, lot, enums, settings):
+    def from_node_groups(self, context, scope, lot, enums, options, settings):
         _group = BLOF.Group(context, enums)
-        self.from_node_group_nodes(context.nodes, _group.nodes, lot, enums, settings)
+        self.from_node_group_nodes(context.nodes, _group.nodes, lot, enums, options, settings)
         self.from_node_group_links(context.links, _group.links, lot, enums, settings)
         self.from_node_group_interface(context.interface, _group.interface, lot, enums, settings)
         scope.root = _group
@@ -180,9 +204,9 @@ class VActCopyExportNodeGroups:
     def from_node_group_interface(self, context, scope, lot, enums, settings):
         self.from_node_group_sockets(context.items_tree, scope, lot, enums, settings)
     
-    def from_node_group_nodes(self, context, scope, lot, enums, settings):
+    def from_node_group_nodes(self, context, scope, lot, enums, options, settings):
         for node in context:
-            _node = BLOF.Node(node, enums)
+            _node = BLOF.Node(node, enums, options)
             self.from_node_group_sockets(node.inputs, _node.inputs, lot, enums, settings)
             self.from_node_group_sockets(node.outputs, _node.outputs, lot, enums, settings)
             self.from_node_group_links(node.internal_links, _node.internal_links, lot, enums, settings)

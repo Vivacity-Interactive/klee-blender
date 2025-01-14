@@ -185,7 +185,8 @@ export class Controller {
                 const delta = currentMousePosition.subtract(this._mousePositionOfPreviousMove);
                 this._mousePositionOfPreviousMove = currentMousePosition;
 
-                this.app.scene.camera.moveRelative(delta);
+                //this.app.scene.camera.moveRelative(delta);
+                this.app.scene.camera.moveRelativeUseZoom(delta);
                 this.app.scene.refresh();
                 return false;
             }

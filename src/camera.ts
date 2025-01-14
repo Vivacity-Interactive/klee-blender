@@ -37,6 +37,11 @@ export class Camera {
         this._position = this._position.add(value);
     }
 
+    moveRelativeUseZoom(value: Vector2) {
+        const scale = this._zoom ? 1/this._zoom : 0;
+        this._position = this._position.add(value.multiply(scale));
+    }
+
     centerAbsolutePosition(value: Vector2) {
 
         this._position = new Vector2(
