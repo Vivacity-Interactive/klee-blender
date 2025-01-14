@@ -1,8 +1,8 @@
 import { Canvas2D } from "../canvas";
-import { PinCategory, PinType } from "../data/pin/pin-category";
-import { PinDirection } from "../data/pin/pin-direction";
+import { PinCategory, PinType } from "../data/pin/pin-enums";
+import { PinDirection } from "../data/pin/pin-enums";
 import { PinLink } from "../data/pin/pin-link";
-import { PinShape } from "../data/pin/pin-shape";
+import { PinShape } from "../data/pin/pin-enums";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
 import { PinControl } from "./pin-control";

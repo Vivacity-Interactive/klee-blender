@@ -1,6 +1,7 @@
 import { Application } from "../application";
 import { Camera } from "../camera";
 import { Canvas2D } from "../canvas";
+import { Vector2 } from "../math/vector2";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
 
@@ -33,9 +34,14 @@ export class Background extends Control implements DrawableControl {
 
     draw(canvas: Canvas2D) {
         if (!this.ready) return;
-
+        // TODO needs fix, improper background placement
+        const _fix_a00 = 1000000;
         canvas.fillStyle(this.pattern)
-            .fillRect(-this.camera.position.x, -this.camera.position.y, canvas.width, canvas.height);
+            .fillRect(
+                -_fix_a00/2 - this.camera.position.x, 
+                -_fix_a00/2 - this.camera.position.y, 
+                canvas.width+_fix_a00, 
+                canvas.height +_fix_a00);
     }
 
     private onLoaded(ev : Event) {

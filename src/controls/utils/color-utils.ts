@@ -1,5 +1,5 @@
-import { NodeCategory } from "../../data/nodes/node-category";
-import { PinType } from "../../data/pin/pin-category";
+import { NodeCategory } from "../../data/nodes/node-enums";
+import { PinType } from "../../data/pin/pin-enums";
 import { PinProperty } from "../../data/pin/pin-property";
 import { Node } from "../../data/nodes/node";
 

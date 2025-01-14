@@ -1,10 +1,13 @@
 import { Graph } from "../data/graph";
-import { Node, NodeState } from "../data/nodes/node";
-import { PinCategory, PinSubCategory, PinType } from "../data/pin/pin-category";
-import { PinDirection } from "../data/pin/pin-direction";
-import { PinLink, PinLinkState } from "../data/pin/pin-link";
-import { PinProperty, PinState } from "../data/pin/pin-property";
-import { PinShape } from "../data/pin/pin-shape";
+import { Node } from "../data/nodes/node";
+import { NodeState } from "../data/nodes/node-enums";
+import { PinCategory, PinSubCategory, PinType } from "../data/pin/pin-enums";
+import { PinDirection } from "../data/pin/pin-enums";
+import { PinLink } from "../data/pin/pin-link";
+import { PinLinkState } from "../data/pin/pin-link-enums";
+import { PinProperty } from "../data/pin/pin-property";
+import { PinState } from "../data/pin/pin-enums";
+import { PinShape } from "../data/pin/pin-enums";
 import { LOT_VALUE } from "../utils/value-utils";
 
 export class BLOEFPopulate {

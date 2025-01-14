@@ -1,14 +1,8 @@
-export enum PinLinkState {
-    NONE = 0,
-    VALID = 1 << 0,
-    MUTED = 1 << 1,
-    HIDDEN = 1 << 2,
-    DEFAULT = VALID
-}
+import { PinLinkState } from "./pin-link-enums";
 
 export class PinLink {
     _raw: any;
-    id: string | number;
+    id: string|number;
     state: PinLinkState;
     fromNodeID: string|number;
     fromPinID: string|number;

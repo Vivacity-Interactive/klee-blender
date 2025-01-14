@@ -1,5 +1,5 @@
 import { Color } from "../data/color";
-import { PinType } from "../data/pin/pin-category";
+import { PinType } from "../data/pin/pin-enums";
 
 type ValueConstrutor = (raw: any) => any
 

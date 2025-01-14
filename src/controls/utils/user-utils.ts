@@ -1,4 +1,4 @@
-import { PinType } from "../../data/pin/pin-category";
+import { PinType } from "../../data/pin/pin-enums";
 import { CheckBoxControl } from "../check-box-control";
 import { ColorBoxControl } from "../color-box-control";
 import { StructBoxControl } from "../struct-box-control";

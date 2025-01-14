@@ -1,11 +1,12 @@
 import { Canvas2D } from "../../canvas";
 import { Vector2 } from "../../math/vector2";
-import { Node, NodeState } from "../../data/nodes/node";
+import { Node } from "../../data/nodes/node";
+import { NodeState } from "../../data/nodes/node-enums";
 import { PinControl } from "../pin-control";
 import { HorizontalAlignment, VerticalPanel } from "../vertical-panel";
 import { HorizontalPanel } from "../horizontal-panel";
 import { PinProperty } from "../../data/pin/pin-property";
-import { PinDirection } from "../../data/pin/pin-direction";
+import { PinDirection } from "../../data/pin/pin-enums";
 import { Container } from "../container";
 import { ErrorBar } from "../error-bar";
 import { NodeInfoIcon } from "../node-info-icon";

@@ -154,6 +154,7 @@ export class Application {
     recenterCamera() {
         // Move camera to the center of all nodes
         this._scene.camera.centerAbsolutePosition(this._scene.calculateCenterPoint());
+        this._scene.camera.zoomAbsolute(1.0)
         this.refresh();
         return true;
     }

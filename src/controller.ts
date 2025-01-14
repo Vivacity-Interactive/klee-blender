@@ -57,6 +57,7 @@ export class Controller {
         element.onmouseleave = (ev) => this.onMouseLeave(ev);
         element.onkeydown = (ev) => this.onKeydown(ev);
         element.oncontextmenu = (ev) => this.onContextMenu(ev);
+        element.onwheel = (ev) => this.onWheel(ev);
 
         this.registerAction({
             ctrl: true,
@@ -251,6 +252,17 @@ export class Controller {
     onContextMenu(ev: MouseEvent) {
         ev.preventDefault();
         ev.stopPropagation();
+        return false;
+    }
+
+    onWheel(ev: WheelEvent) {
+        const delta = ev.deltaY * 0.004;
+        const bDelta = !!ev.deltaY;
+        if (bDelta) {
+            //console.log(delta, this.app.scene.camera.zoom)
+            this.app.scene.camera.zoomRelative(delta);
+            this.app.scene.refresh();
+        }
         return false;
     }
 

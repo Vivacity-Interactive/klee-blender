@@ -10,8 +10,8 @@ import { HorizontalPanel } from "../horizontal-panel";
 import { VerticalPanel } from "../vertical-panel";
 import { PinProperty } from "../../data/pin/pin-property";
 import { PinControl } from "../pin-control";
-import { PinDirection } from "../../data/pin/pin-direction";
-import { PinCategory } from "../../data/pin/pin-category";
+import { PinDirection } from "../../data/pin/pin-enums";
+import { PinCategory } from "../../data/pin/pin-enums";
 import { WarningBar } from "../warning-bar";
 import { prettifyText } from "../../utils/text-utils";
 

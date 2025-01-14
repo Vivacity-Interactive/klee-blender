@@ -6,7 +6,7 @@ import { DrawableControl, isDrawableControl } from "./controls/interfaces/drawab
 import { NodeConnectionControl } from "./controls/node-connection-control";
 import { NodeControl } from "./controls/nodes/node-control";
 import { Vector2 } from "./math/vector2";
-import { PinDirection } from "./data/pin/pin-direction";
+import { PinDirection } from "./data/pin/pin-enums";
 import { NodePartialConnectionControl } from "./controls/partial-node-connection-control";
 import { PinControl } from "./controls/pin-control";
 import { UserControl } from "./controls/user-control";
@@ -18,7 +18,7 @@ import { Application } from "./application";
 import { Graph } from "./data/graph";
 import { HeadedNodeControl } from "./controls/nodes/headed-node-control";
 import { PinLink } from "./data/pin/pin-link";
-import { PinState } from "./data/pin/pin-property";
+import { PinState } from "./data/pin/pin-enums";
 import { NodeUtils } from "./controls/utils/node-utils";
 
 export class Scene {

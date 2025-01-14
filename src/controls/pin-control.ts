@@ -1,9 +1,10 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
-import { PinCategory, PinType } from "../data/pin/pin-category";
-import { PinDirection } from "../data/pin/pin-direction";
-import { PinProperty, PinState } from "../data/pin/pin-property";
-import { PinShape } from "../data/pin/pin-shape";
+import { PinCategory, PinType } from "../data/pin/pin-enums";
+import { PinDirection } from "../data/pin/pin-enums";
+import { PinProperty } from "../data/pin/pin-property";
+import { PinState } from "../data/pin/pin-enums";
+import { PinShape } from "../data/pin/pin-enums";
 import { Vector2 } from "../math/vector2";
 import { NodeConnectionControl } from "./node-connection-control";
 import { NodeControl } from "./nodes/node-control";

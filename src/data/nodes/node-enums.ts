@@ -1,3 +1,17 @@
+export enum NodeState {
+    NONE = 0,
+    MUTED = 1 << 0,
+    HIDDEN = 1 << 1,
+    ENABLED = 1 << 2,
+    OPTIONS = 1 << 3,
+    ADVANCED = 1 << 4,
+    LATENT = 1 << 5,
+    DEPRECATED = 1 << 6,
+    SELECTED = 1 << 7,
+    COLLAPSED = 1 << 8,
+    DEFAULT = ENABLED
+}
+
 export enum NodeCategory {
     CONVERTER_NODE,
     COLOR_NODE,

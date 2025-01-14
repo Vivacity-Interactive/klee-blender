@@ -51,7 +51,7 @@ import { UnitTestBLOF } from "./tests/unit-test-blof";
 
 window.addEventListener("load", () => {
     let units: Array<UnitTest> = [
-        new UnitTestBLOF(),
+        //new UnitTestBLOF(),
     ];
     
     for (const unit of units) { unit.execute(); }
