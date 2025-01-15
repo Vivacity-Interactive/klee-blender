@@ -6,6 +6,7 @@ import { IconCategory } from "../icon-category";
 export class Node {
     _raw: any;
     id: string|number;
+    cid: string|number;
     state: NodeState;
     class: string;
     label: string;

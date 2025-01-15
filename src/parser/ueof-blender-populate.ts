@@ -19,17 +19,20 @@ export class BLOEFPopulate {
     public get links(): Array<PinLink> { return this._graph.links; }
     public get lot(): {} { return this._graph._lot; }
     public get enums(): {} { return this._graph._enums; }
+    public get options(): {} { return this._graph._options; }
 
     constructor (scope: any = {}, graph: Graph = null, lot: any = {}) {
         this._graph = graph ?? new Graph();
         this._graph._lot = lot;
         this._graph._raw = scope;
         this._graph._enums = scope._enums;
+        this._graph._options = scope._options;
     }
 
     public populateObject(scope: any, node: Node): void {
         node._raw = scope;
         node.id = scope._id;
+        node.cid = scope.rna_type;
         node.name = scope.name;
         node.title = scope.bl_label;
         node.label = scope.bl_label;

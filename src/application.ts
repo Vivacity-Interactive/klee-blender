@@ -97,10 +97,11 @@ export class Application {
     private copyNodeGroupSelectionToClipboard() {
         console.log("Copy selection");
 
-        let scope = { _enums: {}, nodes: [], links: [] };
+        let scope = { _enums: {}, _options: {}, nodes: [], links: [] };
         // TODO needs improvement (not efficent at all)
         let _links = new Set<any>();
         const _this = this;
+        const _graph = this.scene.graph;
         this._scene.nodes.forEach(n => {
             if (n.selected) {
                 scope.nodes.push(n.node._raw);
@@ -109,10 +110,12 @@ export class Application {
                     if (bLink) { _links.add(l.link._raw); }
                     return bLink;
                 })
+                const options = _graph._options[n.node.cid]
+                if (options) { scope._options[n.node.cid] = options; }
             }
         });
         // skip formalities lazy assign enums (needs meta data to track enume association)
-        scope._enums = this.scene.graph._enums;
+        scope._enums = _graph._enums;
         scope.links = Array.from(_links);
         navigator.clipboard.writeText(JSON.stringify(scope));
         return true;

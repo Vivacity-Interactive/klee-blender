@@ -1,31 +1,31 @@
 import bpy, json, mathutils
 
-# def _rna_x(val):
-#     return {k:_to_val(getattr(val, k, None), v, None) for k,v in val.rna_type.properties.items()}
+#def _rna_x(val):
+#    return {k:_to_val(getattr(val, k, None), v, None) for k,v in val.rna_type.properties.items()}
 
-# def _rna_y(val):
+#def _rna_y(val):
 #     return {k:str(v) for k,v in val.properties.items()}
 
-# def _print_x(val):
-#     print(json.dumps(_rna_x(val),indent=2))
+#def _print_x(val):
+#    print(json.dumps(_rna_x(val),indent=2))
     
-# def _print_y(val):
-#     print(json.dumps(_rna_y(val),indent=2))
+#def _print_y(val):
+#    print(json.dumps(_rna_y(val),indent=2))
     
-# def _print_diff(rna_a, rna_b):
-#     _set = set(rna_b.properties.keys());
-#     print(json.dumps({ k: str(v)  for k,v in rna_a.properties.items() if k not in _set },indent=2))
+#def _print_diff(rna_a, rna_b):
+#    _set = set(rna_b.properties.keys());
+#    print(json.dumps({ k: str(v)  for k,v in rna_a.properties.items() if k not in _set },indent=2))
 
 def _to_id(val):
+    return f'0x{val.as_pointer():012X}'
     #return str(val)
     #return hex(val.as_pointer());
-    return f'0x{val.as_pointer():012X}'
     #return val.as_pointer()
 
 def _to_id2(val):
+    return f'0x{val.as_pointer():012X}'
     #return str(val)
     #return hex(val.as_pointer());
-    return f'0x{val.as_pointer():012X}'
     #return val.as_pointer()
 
 def _arr_or_val(val, desc):
@@ -40,22 +40,29 @@ def _enum_resolve(val, desc, enum_lot):
         if _enums: enum_lot[_id] = _enums
     
     return [val,_id]
- 
-def _to_val(val, desc, enum_lot=None):
+
+def _ptr_resolve(val, desc, enum_lot, n=1):
+    return { k:_to_val(getattr(val, k, None), v, enum_lot, n if not k in ['rna_type'] else 1) for k, v in val.rna_type.properties.items() } if not isinstance(val, BLOF.PTR_CLASS_EXCLUDE) and n > 0 else _to_id(val)
+
+def _coll_resolve(val, desc, enum_lot, n):
+    return [_to_val(x, None, enum_lot, n) for x in val] if n > 0 else _to_id(desc)
+
+def _to_val(val, desc, enum_lot=None, n=1):
     _val = None
     b_desc = not desc is None
 
     if val == None: pass
     elif isinstance(val, mathutils.Quaternion): _val = [val.x, val.y, val.z, val.w]
     elif isinstance(val, mathutils.Euler): _val = [val.x, val.y, val.z, str(val.order)]
-    elif isinstance(val, set): _val = _to_id(desc) #{ k: str(v) for k, v in val }
+    elif isinstance(val, set): _val = _coll_resolve(val, None, enum_lot, n - 1)
     elif b_desc and desc.type == 'BOOLEAN': _val = _arr_or_val(val, desc)
     elif b_desc and desc.type == 'INT':  _val = _arr_or_val(val, desc)
     elif b_desc and desc.type == 'FLOAT': _val = _arr_or_val(val, desc)
     elif b_desc and desc.type == 'STRING': _val = val
     elif b_desc and desc.type == 'ENUM': _val = _enum_resolve(val, desc, enum_lot)
-    elif b_desc and desc.type == 'POINTER': _val = _to_id(val)
-    elif b_desc and desc.type == 'COLLECTION': _val = _to_id(desc) #[ str(v) for v in val ] #[_to_val(x, val.fixed_type, k - 1) for x in val] 
+    elif b_desc and desc.type == 'POINTER': _val = _ptr_resolve(val, desc, enum_lot, n - 1)
+    elif b_desc and desc.type == 'COLLECTION': _val = _coll_resolve(val,desc, enum_lot, n - 1)
+    elif isinstance(val, bpy.types.bpy_struct): _val = _ptr_resolve(val, None, enum_lot, n - 1)
     else: _val = str(val)
     
     return _val
@@ -64,7 +71,8 @@ class BLOF:
     DEFAULT_NO_ID = "00000000000"
     DEFAULT_INDENT = None
     ENUM_EXCLUDE = ['type','id_type','bl_icon','subtype','socket_type','bl_static_type']
-
+    PTR_CLASS_EXCLUDE = (bpy.types.Node, bpy.types.NodeSocket, bpy.types.NodeLinks, bpy.types.NodeTree, bpy.types.NodeTreeInterface, bpy.types.NodeTreeInterfaceItem)
+    
     class Encoder(json.JSONEncoder):
         def default(self, obj):
             if isinstance(obj, BLOF.Group):
@@ -116,7 +124,7 @@ class BLOF:
         _EXCLUDE = ['inputs', 'outputs', 'internal_links']
         def __init__(self, context, enum_lot=None, opt_lot=None):
             self.id = _to_id(context)
-            self.properties = {k:_to_val(getattr(context, k, None), v, enum_lot) for k,v in context.rna_type.properties.items() if k not in BLOF.Node._EXCLUDE}
+            self.properties = {k:_to_val(getattr(context, k, None), v, enum_lot, 6) for k,v in context.rna_type.properties.items() if k not in BLOF.Node._EXCLUDE}
             self.inputs = BLOF.Collection()
             self.outputs = BLOF.Collection()
             self.internal_links = BLOF.Collection()
