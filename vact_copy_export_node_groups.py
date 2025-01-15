@@ -17,13 +17,7 @@ import bpy, json, mathutils
 #    print(json.dumps({ k: str(v)  for k,v in rna_a.properties.items() if k not in _set },indent=2))
 
 def _to_id(val):
-    return f'0x{val.as_pointer():012X}'
-    #return str(val)
-    #return hex(val.as_pointer());
-    #return val.as_pointer()
-
-def _to_id2(val):
-    return f'0x{val.as_pointer():012X}'
+    return f'0x{val.as_pointer():016X}'
     #return str(val)
     #return hex(val.as_pointer());
     #return val.as_pointer()
@@ -32,12 +26,11 @@ def _arr_or_val(val, desc):
     return [x for x in val] if desc.is_array else val
 
 def _enum_resolve(val, desc, enum_lot):
-    _id = _to_id2(desc)
+    b_items = len(desc.enum_items) > 0
+    _id = _to_id(desc.enum_items[0] if b_items else desc)
     
-    b_add = not enum_lot is None and desc.identifier not in BLOF.ENUM_EXCLUDE and not _id in enum_lot
-    if b_add:
-        _enums = { x.identifier: x.name  for x in desc.enum_items }
-        if _enums: enum_lot[_id] = _enums
+    b_add = b_items and (enum_lot is not None) and (desc.identifier not in BLOF.ENUM_EXCLUDE) and (_id not in enum_lot)
+    if b_add: enum_lot[_id] = { x.identifier: x.name  for x in desc.enum_items } # maybe add is_enum_flag
     
     return [val,_id]
 
@@ -68,7 +61,6 @@ def _to_val(val, desc, enum_lot=None, n=1):
     return _val
         
 class BLOF:
-    DEFAULT_NO_ID = "00000000000"
     DEFAULT_INDENT = None
     ENUM_EXCLUDE = ['type','id_type','bl_icon','subtype','socket_type','bl_static_type']
     PTR_CLASS_EXCLUDE = (bpy.types.Node, bpy.types.NodeSocket, bpy.types.NodeLinks, bpy.types.NodeTree, bpy.types.NodeTreeInterface, bpy.types.NodeTreeInterfaceItem)
@@ -129,7 +121,7 @@ class BLOF:
             self.outputs = BLOF.Collection()
             self.internal_links = BLOF.Collection()
             
-            _id = _to_id2(context.rna_type)
+            _id = _to_id(context.rna_type)
             b_add = not opt_lot is None and id not in opt_lot
             if b_add:
                 _base = set(context.rna_type.base.properties.keys())
