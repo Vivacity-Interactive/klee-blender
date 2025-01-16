@@ -1,3 +1,5 @@
+const _HTML_ED_HELPER = document.createElement('textarea');
+
 export function insertSpacesBetweenCapitalizedWords(str: string) {
     str = str || '';
     return str.replace(/((?<=[a-z])[A-Z]+)/g, ' $1');
@@ -46,6 +48,12 @@ export function parseStringSimple(raw: string): string {
     return raw.substring(1, raw.length - 1);
 }
 
+export function encodeTextHtml(text: string): string {
+    _HTML_ED_HELPER.innerText = text;
+    return _HTML_ED_HELPER.value;
+}
+
 export function decodeHtmlText(htmlText: string): string {
-    return htmlText.replace("lt;", "<").replace("gt;", ">");;
+    _HTML_ED_HELPER.innerHTML = htmlText;
+    return _HTML_ED_HELPER.value;
 }

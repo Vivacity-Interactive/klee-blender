@@ -1,5 +1,5 @@
 import { NodeCategory } from "../../data/nodes/node-enums";
-import { PinType } from "../../data/pin/pin-enums";
+import { PropertyType } from "../../data/custom-property-enums";
 import { PinProperty } from "../../data/pin/pin-property";
 import { Node } from "../../data/nodes/node";
 
@@ -38,25 +38,25 @@ export class ColorUtils {
     }
 }
 
-export const LOT_PIN_COLOR: Partial<{ [key in PinType]: string }> = {
-    [PinType.VALUE]:  "#a1a1a1",
-    [PinType.INT]:  "#598c5c",
-    [PinType.BOOLEAN]:  "#cca6d6",
-    [PinType.VECTOR]:  "#6363c7",
-    [PinType.ROTATION]:  "#a663c7",
-    [PinType.MATRIX]:  "#b83385",
-    [PinType.STRING]:  "#70b2ff",
-    [PinType.RGBA]:  "#c7c729",
-    [PinType.SHADER]:  "#63c763",
-    [PinType.OBJECT]:  "#ed9e5c",
-    [PinType.GEOMETRY]:  "#00d6a3",
-    [PinType.COLLECTION]:  "#f5f5f5",
-    [PinType.TEXTURE]:  "#9e4fa3",
-    [PinType.MATERIAL]:  "#eb7582",
-    [PinType.MENU]:  "#666666",
-    [PinType.IMAGE]:  "#633863",
-    [PinType.CUSTOM]:  "#63c763",
-    [PinType._UNKNOWN]:  "#515151"
+export const LOT_PIN_COLOR: Partial<{ [key in PropertyType]: string }> = {
+    [PropertyType.VALUE]:  "#a1a1a1",
+    [PropertyType.INT]:  "#598c5c",
+    [PropertyType.BOOLEAN]:  "#cca6d6",
+    [PropertyType.VECTOR]:  "#6363c7",
+    [PropertyType.ROTATION]:  "#a663c7",
+    [PropertyType.MATRIX]:  "#b83385",
+    [PropertyType.STRING]:  "#70b2ff",
+    [PropertyType.RGBA]:  "#c7c729",
+    [PropertyType.SHADER]:  "#63c763",
+    [PropertyType.OBJECT]:  "#ed9e5c",
+    [PropertyType.GEOMETRY]:  "#00d6a3",
+    [PropertyType.COLLECTION]:  "#f5f5f5",
+    [PropertyType.TEXTURE]:  "#9e4fa3",
+    [PropertyType.MATERIAL]:  "#eb7582",
+    [PropertyType.MENU]:  "#666666",
+    [PropertyType.IMAGE]:  "#633863",
+    [PropertyType.CUSTOM]:  "#63c763",
+    [PropertyType._UNKNOWN]:  "#515151"
 }
 
 export const LOT_COLOR_CUSTOM:  { [key in CustomColorCategory]: string } = {
@@ -64,24 +64,24 @@ export const LOT_COLOR_CUSTOM:  { [key in CustomColorCategory]: string } = {
 };
 
 export const LOT_NODE_RESOLVE_COLOR:  Partial<{ [key in (NodeCategory)]: RegExp }> = {
-    [NodeCategory.CONVERTER_NODE]: /Math|Function/i,
-    [NodeCategory.COLOR_NODE]: /RGB|Color|HSV/i,
+    [NodeCategory.CONVERTER_NODE]: /Math|Function|ValTo|Switch/i,
+    [NodeCategory.COLOR_NODE]: /RGB|Color|HSV|Mix/i,
     [NodeCategory.GROUP_NODE]: /CustromGroup/i,
     [NodeCategory.GROUP_SOCKET_NODE]: /(Simulation|Group|Repeat|Foreach).*(Input|Output)/i,
     [NodeCategory.FRAME_NODE]: /NodeFrame/i,
     [NodeCategory.MATTE_NODE]: /Matte/i,
     [NodeCategory.DISTOR_NODE]: /Distor/i,
-    [NodeCategory.INPUT_NODE]: /NodeOutput/i,
-    [NodeCategory.OUTPUT_NODE]: /NodeInput/i,
+    [NodeCategory.INPUT_NODE]: /Input|Info/i,
+    [NodeCategory.OUTPUT_NODE]: /NodeOutput/i,
     [NodeCategory.FILTER_NODE]: /CompositorNode/i,
     [NodeCategory.VECTOR_NODE]: /Vector/i,
-    [NodeCategory.TEXTURE_NODE]: /TextureNode/i,
+    [NodeCategory.TEXTURE_NODE]: /Texture/i,
     [NodeCategory.SHADER_NODE]: /ShaderNode/i,
     [NodeCategory.SCRIPT_NODE]: /Script/i,
     [NodeCategory.PATTERN_NODE]: /TextureNodeTex/i,
     [NodeCategory.LAYOUT_NODE]: null,
+    [NodeCategory.ATTRIBUTE_NODE]: /Attribute/i,
     [NodeCategory.GEOMETRY_NODE]: /GeometryNode/i,
-    [NodeCategory.ATTRIBUTE_NODE]: /Attribute|Field/i,
     [NodeCategory.SIMULATION_ZONE]: null,
     [NodeCategory.REPEAT_ZONE]: null,
     [NodeCategory.FOREACH_GEOMETRY_ELEMENT_ZONE]: null

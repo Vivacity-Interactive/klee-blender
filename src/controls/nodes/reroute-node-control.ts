@@ -19,7 +19,7 @@ export class RerouteNodeControl extends NodeControl implements DrawableControl {
         this.drawChildren = false;
         this.mainPanel.width = 0;
 
-        this.createPins();
+        this.createProperties();
     }
 
     protected override onPinCreated(pin: PinControl) {

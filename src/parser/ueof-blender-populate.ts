@@ -1,14 +1,16 @@
 import { Graph } from "../data/graph";
 import { Node } from "../data/nodes/node";
 import { NodeState } from "../data/nodes/node-enums";
-import { PinCategory, PinSubCategory, PinType } from "../data/pin/pin-enums";
+import { PropertyType } from "../data/custom-property-enums";
+import { PropertySubCategory } from "../data/custom-property-enums";
 import { PinDirection } from "../data/pin/pin-enums";
 import { PinLink } from "../data/pin/pin-link";
 import { PinLinkState } from "../data/pin/pin-link-enums";
 import { PinProperty } from "../data/pin/pin-property";
-import { PinState } from "../data/pin/pin-enums";
+import { PropertyState } from "../data/custom-property-enums";
 import { PinShape } from "../data/pin/pin-enums";
 import { LOT_VALUE } from "../utils/value-utils";
+import { OptionProperty } from "../data/option/option";
 
 export class BLOEFPopulate {
     protected _graph: Graph;
@@ -38,7 +40,7 @@ export class BLOEFPopulate {
         node.label = scope.bl_label;
         node.class = scope.bl_idname;
         node.width = scope.dimensions[0];
-        //node.height = scope.dimensions[1];
+        node.height = scope.dimensions[1];
         node.pos.x = scope.location[0]
         node.pos.y = -scope.location[1]
 
@@ -50,7 +52,6 @@ export class BLOEFPopulate {
         if (scope.show_options) { node.state |= NodeState.OPTIONS; }
         if (scope.hide) { node.state |= NodeState.COLLAPSED; }
 
-        //if (scope.operation) { node.title = this.enums['operation'][scope.operation]; }
         const bOperator = !bLabel && scope.operation;
         if (bOperator) { node.title = this.enums[scope.operation[1]][scope.operation[0]]; }
 
@@ -65,6 +66,23 @@ export class BLOEFPopulate {
             this.populatePin(pin, _pin);
             node.customProperties.push(_pin);
         }
+
+        const options = this.options[node.cid];
+        if (options) for (let index = options.length - 1; index >= 0 ; index--) {
+            const option = options[index];
+            let _options = new OptionProperty(node.name);
+            this.populateOption(option, _options, scope[option.identifier]);
+            node.customProperties.push(_options);
+            
+        }
+
+        // if (options) for (const option of options) {
+        //     let _options = new OptionProperty(node.name);
+        //     console.log(scope[option.identifier])
+        //     this.populateOption(option, _options, scope[option.identifier]);
+        //     node.customProperties.push(_options);
+        // }
+        
         //this.lot[node.id] = node;
         //node.assert()
     }
@@ -78,36 +96,43 @@ export class BLOEFPopulate {
         if (bLabel) { pin.friendlyName = scope.label; }
         
         pin.direction = +scope.is_output as PinDirection;
-        pin.hidden = scope.hide || scope.is_unavailable;
-        pin.enabled = scope.enabled;
-        
-        pin.subCategory = PinSubCategory[scope.bl_subtype_label as keyof PinSubCategory];
-        pin.category = PinCategory[scope.bl_label as keyof PinCategory];
+        pin.shape = PinShape[scope.display_shape[0] as keyof PinShape];
         pin.valueType = scope.bl_idname;
         
-        //pin.shape = PinShape[scope.display_shape[0] as keyof PinShape];
-        //pin.type = PinType[scope.type[0] as keyof PinType];
-        pin.shape = PinShape[scope.display_shape[0] as keyof PinShape];
-        pin.type = PinType[scope.type[0] as keyof PinType];
+        pin.subCategory = PropertySubCategory[scope.bl_subtype_label as keyof PropertySubCategory];
+        pin.type = PropertyType[scope.type[0] as keyof PropertyType];
         pin.toolTip = scope.description;
         
-        pin.defaultValue = LOT_VALUE[pin.type](scope.default_value);
+        pin.defaultValue = LOT_VALUE[pin.type](scope.default_value, this.graph);
         
-        if (scope.enable) { pin.state |= PinState.ENABLED; pin.enabled = true; }
-        if (scope.hide) { pin.state |= PinState.HIDDEN; pin.hidden = true }
-        if (scope.hide_value) { pin.state |= PinState.VALUELESS; }
-        if (scope.is_unavailable) { pin.state |= PinState.UNAVAILABLE; }
-        if (scope.is_linked) { pin.state |= PinState.LINKED; }
-        if (scope.show_expanded) { pin.state |= PinState.OPTIONS; }
-        if (scope.is_multi_input) { pin.state |= PinState.MULTI; }
-        if (scope.pin_gizmo) { pin.state |= PinState.GIZOM; }
+        if (scope.enable) { pin.state |= PropertyState.ENABLED; }
+        if (scope.hide) { pin.state |= PropertyState.HIDDEN; }
+        if (scope.hide_value) { pin.state |= PropertyState.VALUELESS; }
+        if (scope.is_unavailable) { pin.state |= PropertyState.UNAVAILABLE; }
+        if (scope.is_linked) { pin.state |= PropertyState.LINKED; }
+        if (scope.show_expanded) { pin.state |= PropertyState.OPTIONS; }
+        if (scope.is_multi_input) { pin.state |= PropertyState.MULTI; }
+        if (scope.pin_gizmo) { pin.state |= PropertyState.GIZOM; }
         
         if (pin.valueType == "NodeSocketVirtual") { 
-            pin.state |= PinState.NAMELESS; pin.hideName = true;
+            pin.state |= PropertyState.NAMELESS;
             pin.shape = PinShape.CIRCLE_DOT;
         }
         //this.lot[pin.id] = pin;
         //pin.assert()
+    }
+
+    public populateOption(scope: any, option: OptionProperty, value: any) {
+        option.id = scope._id; //decodeHtmlText(scope._id)
+        option.name = scope.identifier
+        option.friendlyName = scope.name;
+
+        option.subCategory = PropertySubCategory[scope.bl_subtype_label as keyof PropertySubCategory];
+        option.type = PropertyType[scope.type[0] as keyof PropertyType];
+        option.toolTip = scope.description;
+        option.defaultValue = LOT_VALUE[option.type](value, this.graph);
+
+        if (scope.is_hidden) { option.state |= PropertyState.HIDDEN; }
     }
 
     public populateLink(scope: any, link: PinLink): void {

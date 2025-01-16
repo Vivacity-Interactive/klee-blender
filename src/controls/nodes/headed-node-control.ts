@@ -2,18 +2,12 @@ import { Canvas2D } from "../../canvas";
 import { Node } from "../../data/nodes/node";
 import { DrawableControl } from "../interfaces/drawable";
 import { NodeControl } from "./node-control";
-import { Application } from "../../application";
 import { Vector2 } from "../../math/vector2";
 import { Constants } from "../../constants";
 import { Header } from "../header";
-import { HorizontalPanel } from "../horizontal-panel";
-import { VerticalPanel } from "../vertical-panel";
 import { PinProperty } from "../../data/pin/pin-property";
 import { PinControl } from "../pin-control";
 import { PinDirection } from "../../data/pin/pin-enums";
-import { PinCategory } from "../../data/pin/pin-enums";
-import { WarningBar } from "../warning-bar";
-import { prettifyText } from "../../utils/text-utils";
 
 
 export class HeadedNodeControl extends NodeControl implements DrawableControl {
@@ -36,7 +30,7 @@ export class HeadedNodeControl extends NodeControl implements DrawableControl {
 
         this.pinPanel.padding = { top: 3, right: 0, bottom: 3, left: 0 };
 
-        this.createPins(new Vector2(0, this.headerHeight));
+        this.createProperties(new Vector2(0, this.headerHeight));
         this.mainPanel.insert(this.header, 0);
 
         this.initializeEnabledState();

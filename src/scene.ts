@@ -18,7 +18,7 @@ import { Application } from "./application";
 import { Graph } from "./data/graph";
 import { HeadedNodeControl } from "./controls/nodes/headed-node-control";
 import { PinLink } from "./data/pin/pin-link";
-import { PinState } from "./data/pin/pin-enums";
+import { PropertyState } from "./data/custom-property-enums";
 import { NodeUtils } from "./controls/utils/node-utils";
 
 export class Scene {
@@ -172,12 +172,12 @@ export class Scene {
         for (const link of links) {
             let _from = this._pins.find(p => {
                 const bLinked = p.pinProperty.id == link.fromPinID;
-                if (bLinked) { p.pinProperty.state |= PinState.LINKED; }
+                if (bLinked) { p.pinProperty.state |= PropertyState.LINKED; }
                 return bLinked;
             });
             let _to = this._pins.find(p => {
                 const bLinked = p.pinProperty.id == link.toPinID;
-                if (bLinked) { p.pinProperty.state |= PinState.LINKED; }
+                if (bLinked) { p.pinProperty.state |= PropertyState.LINKED; }
                 return bLinked;
             });
             let control = (_to && _from) 

@@ -6,6 +6,6 @@ export class Graph {
     links: Array<PinLink> = [];
     _raw: any;
     _enums: {[key: string | number]: { id: string|number, name: string }} = {};
-    _options: {[key: string | number]: string } = {}
+    _options: {[key: string | number]: [{ [key: string]: any }] } = {}
     _lot: {} = {};
 }

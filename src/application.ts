@@ -2,6 +2,7 @@ import { Canvas2D } from "./canvas";
 import { Controller } from "./controller";
 import { BLOEFPopulate } from "./parser/ueof-blender-populate";
 import { Scene } from "./scene";
+import { GraphUtils } from "./utils/graph-utils";
 
 export class Application {
 
@@ -90,16 +91,13 @@ export class Application {
         this._scene.refresh();
     }
 
-    private assureGraphScopeClosure(scope) {
-
-    }
-
     private copyNodeGroupSelectionToClipboard() {
         console.log("Copy selection");
 
         let scope = { _enums: {}, _options: {}, nodes: [], links: [] };
         // TODO needs improvement (not efficent at all)
         let _links = new Set<any>();
+        let _enums = new Set<string>();
         const _this = this;
         const _graph = this.scene.graph;
         this._scene.nodes.forEach(n => {
@@ -112,10 +110,13 @@ export class Application {
                 })
                 const options = _graph._options[n.node.cid]
                 if (options) { scope._options[n.node.cid] = options; }
+                
+                GraphUtils.traverse_enums(n.node._raw, _enums, _graph);
             }
         });
-        // skip formalities lazy assign enums (needs meta data to track enume association)
-        scope._enums = _graph._enums;
+        
+        for (const eid of _enums) { scope._enums[eid] = _graph._enums[eid]; }
+
         scope.links = Array.from(_links);
         navigator.clipboard.writeText(JSON.stringify(scope));
         return true;

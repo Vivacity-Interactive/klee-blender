@@ -1,9 +1,9 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
-import { PinCategory, PinType } from "../data/pin/pin-enums";
+import { PropertyType } from "../data/custom-property-enums";
 import { PinDirection } from "../data/pin/pin-enums";
 import { PinProperty } from "../data/pin/pin-property";
-import { PinState } from "../data/pin/pin-enums";
+import { PropertyState } from "../data/custom-property-enums";
 import { PinShape } from "../data/pin/pin-enums";
 import { Vector2 } from "../math/vector2";
 import { NodeConnectionControl } from "./node-connection-control";
@@ -24,8 +24,6 @@ export class PinControl extends UserControl {
 
     private _pinProperty: PinProperty;
     private defaultValueBox: UserControl;
-
-    private category: PinCategory;
 
     private _isInput: boolean;
     private _color: string;
@@ -48,8 +46,7 @@ export class PinControl extends UserControl {
         this.width = 0;
         this.height = 27;
 
-        this.visible = !pin.hidden;
-        this.category = pin.category;
+        this.visible = !pin.isHidden;
 
         const data = LOT_ICONS[this._pinProperty.shape];
         if (data) { 
@@ -60,9 +57,9 @@ export class PinControl extends UserControl {
 
     override initialize() {
         if (this.visible) {
-            if (!this.pinProperty.hidden && !this.pinProperty.hideName) {
+            if (!this.pinProperty.isHidden && !this.pinProperty.isNameless) {
                 this.width = this.formattedNameWidth(this.pinProperty) + PinControl.PINS_PADDING_HORIZONTAL + PinControl.PIN_ICON_WIDTH;
-            } else if (!this.pinProperty.hidden) {
+            } else if (!this.pinProperty.isHidden) {
                 this.width = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PIN_ICON_WIDTH;
             }
         }
@@ -121,16 +118,12 @@ export class PinControl extends UserControl {
 /// #endif
 
         canvas.save();
-        let pinCategory = this.pinProperty.category;
         canvas.fillStyle(this._color).strokeStyle(this._color);
 
         let paddingX = (this.pinProperty.direction === PinDirection.Output) ? -this.padding.right : this.padding.left;
         canvas.translate(paddingX, Math.floor(this.height * 0.5));
 
-        switch (pinCategory) {
-            default:
-                this.drawPin(canvas);
-        }
+        this.drawPin(canvas);
 
         canvas.restore();
     }

@@ -1,5 +1,4 @@
 import { Canvas2D } from "../canvas";
-import { PinCategory, PinType } from "../data/pin/pin-enums";
 import { PinDirection } from "../data/pin/pin-enums";
 import { PinLink } from "../data/pin/pin-link";
 import { PinShape } from "../data/pin/pin-enums";

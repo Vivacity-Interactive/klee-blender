@@ -16,7 +16,7 @@ export class HeadlessNodeControl extends NodeControl {
         this.minHeight = 32;
         this.padding = { top: 2, right: 0, bottom: 0, left: 0 };
 
-        this.createPins(new Vector2(0, 0));
+        this.createProperties(new Vector2(0, 0));
     }
 
     override initialize() {
@@ -34,7 +34,6 @@ export class HeadlessNodeControl extends NodeControl {
             .fill()
 
         this.drawTitle(canvas);
-        this.drawFirstSubTitle(canvas);
         this.drawStroke(canvas);
     }
 
@@ -46,17 +45,6 @@ export class HeadlessNodeControl extends NodeControl {
             .textAlign('center')
             .fillStyle(Constants.NODE_MATHFUNC_TITLE_COLOR)
             .fillText(this.node.title, this.size.x * 0.5, this.size.y * 0.5 + 8);
-    }
-
-
-    protected drawFirstSubTitle(canvas: Canvas2D) {
-        // if(!this.node.subTitles || this.node.subTitles.length === 0) { return; }
-
-        // canvas
-        //     .font(Constants.NODE_MATHFUNC_SUBTITLE_FONT)
-        //     .textAlign('center')
-        //     .fillStyle(Constants.NODE_MATHFUNC_TITLE_COLOR)
-        //     .fillText(this.node.subTitles[0].text, this.size.x * 0.5, this.size.y * 0.5 + 22);
     }
 
     private measureText(font: string, text: string): TextMetrics {

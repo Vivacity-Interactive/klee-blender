@@ -9,8 +9,8 @@ import { PinProperty } from "../../data/pin/pin-property";
 import { PinDirection } from "../../data/pin/pin-enums";
 import { Container } from "../container";
 import { ErrorBar } from "../error-bar";
-import { NodeInfoIcon } from "../node-info-icon";
-import { LOT_ICONS } from "../utils/icon-library";
+import { OptionProperty } from "../../data/option/option";
+import { OptionControl } from "../option-control";
 
 
 export abstract class NodeControl extends Container {
@@ -22,9 +22,11 @@ export abstract class NodeControl extends Container {
 
     private _node: Node;
     protected pins: Array<PinControl> = [];
+    protected options: Array<OptionControl> = [];
 
     protected mainPanel: VerticalPanel;
     protected pinPanel: VerticalPanel;
+    protected optionPanel: VerticalPanel;
     protected inputPinPanel: VerticalPanel;
     protected outputPinPanel: VerticalPanel;
 
@@ -39,8 +41,10 @@ export abstract class NodeControl extends Container {
     constructor(node: Node) {
         super(node.pos.x, node.pos.y);
         this._node = node;
-        this.width = node.width;
-        this.height = node.height;
+        //this.width = node.width;
+        //this.height = node.height;
+        this.desiredWidth = node.width;
+        this.desiredHeight = node.height;
 
         this._selected = false;
         this._stroke = {
@@ -56,15 +60,18 @@ export abstract class NodeControl extends Container {
         
         this.pinPanel = new VerticalPanel();
         this.pinPanel.fillParentHorizontal = true;
-
         this.mainPanel.add(this.pinPanel);
 
+        this.optionPanel = new VerticalPanel();
+        this.optionPanel.fillParentHorizontal = true;
+        
         this.inputPinPanel = new VerticalPanel();
         this.outputPinPanel = new VerticalPanel();
         this.outputPinPanel.childAlignment = HorizontalAlignment.RIGHT;
         this.outputPinPanel.fillParentHorizontal = true;
         
         this.pinPanel.add(this.outputPinPanel);
+        this.pinPanel.add(this.optionPanel);
         this.pinPanel.add(this.inputPinPanel);
         
         this.initErrorBar();
@@ -106,12 +113,20 @@ export abstract class NodeControl extends Container {
         return this._node;
     }
 
-    protected createPins(offset?: Vector2): void {
+    protected createProperties(offset?: Vector2): void {
         for (let property of this.node.customProperties) {
             if (property instanceof PinProperty) {
                 this.createPin(property);
+            } else if (property instanceof OptionProperty) {
+                this.createOption(property);
             }
         }
+    }
+
+    protected createOption(property: OptionProperty) {
+        let optionControl = new OptionControl(this.position, property);
+        this.options.push(optionControl);
+        this.optionPanel.add(optionControl);
     }
 
     protected createPin(property: PinProperty) {

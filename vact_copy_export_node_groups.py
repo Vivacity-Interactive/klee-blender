@@ -25,6 +25,9 @@ def _to_id(val):
 def _arr_or_val(val, desc):
     return [x for x in val] if desc.is_array else val
 
+def _opt_resolve(desc, enum_lot):
+    return { k:_to_val(getattr(desc, k, None), v, enum_lot, 6) for k,v in desc.rna_type.properties.items() if k in BLOF.PROPS_INCLUDE}
+
 def _enum_resolve(val, desc, enum_lot):
     b_items = len(desc.enum_items) > 0
     _id = _to_id(desc.enum_items[0] if b_items else desc)
@@ -62,7 +65,8 @@ def _to_val(val, desc, enum_lot=None, n=1):
         
 class BLOF:
     DEFAULT_INDENT = None
-    ENUM_EXCLUDE = ['type','id_type','bl_icon','subtype','socket_type','bl_static_type']
+    ENUM_EXCLUDE = ['id_type','bl_icon','bl_static_type']
+    PROPS_INCLUDE = ['name','identifier','description','type', 'subtype','is_hidden']
     PTR_CLASS_EXCLUDE = (bpy.types.Node, bpy.types.NodeSocket, bpy.types.NodeLinks, bpy.types.NodeTree, bpy.types.NodeTreeInterface, bpy.types.NodeTreeInterfaceItem)
     
     class Encoder(json.JSONEncoder):
@@ -125,8 +129,8 @@ class BLOF:
             b_add = not opt_lot is None and id not in opt_lot
             if b_add:
                 _base = set(context.rna_type.base.properties.keys())
-                _keys = context.rna_type.properties.keys()
-                _options = [ k for k in _keys if k not in _base ];
+                _keys = context.rna_type.properties.items()
+                _options = [ _opt_resolve(v, enum_lot) for k,v in _keys if k not in _base ];
                 if _options: opt_lot[_id] = _options
             #_print_diff(context.rna_type, context.rna_type.base)
     

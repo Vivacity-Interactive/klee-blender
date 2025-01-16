@@ -1,10 +1,14 @@
 import { Color } from "../data/color";
-import { PinType } from "../data/pin/pin-enums";
+import { PropertyType } from "../data/custom-property-enums";
+import { Graph } from "../data/graph";
+import { decodeHtmlText } from "./text-utils";
 
-type ValueConstrutor = (raw: any) => any
+type ValueConstrutor = (raw: any, graph:Graph) => any
 
-const _passOn: ValueConstrutor = (value: any): any => value;
-const _asColor: ValueConstrutor = (value: any): any => new Color(value);
+const _passOn: ValueConstrutor = (value: any, graph:Graph): any => value;
+const _asColor: ValueConstrutor = (value: any, graph:Graph): any => new Color(value);
+const _asEnum: ValueConstrutor = (value: any, graph:Graph): any => decodeHtmlText(graph._enums[value[1]][value[0]])
+const _asString: ValueConstrutor = (value: any, graph:Graph): any => decodeHtmlText(value)
 
 export enum CustomValueClass {
 
@@ -33,27 +37,29 @@ export class UserUtils {
     }
 }
 
-export const LOT_VALUE: { [key in CustomValueClass | PinType]: ValueConstrutor } = {
-    [PinType.VALUE]: _passOn,
-    [PinType.INT]: _passOn,
-    [PinType.BOOLEAN]: _passOn,
-    [PinType.VECTOR]: _passOn,
-    [PinType.ROTATION]: _passOn,
-    [PinType.MATRIX]: _passOn,
-    [PinType.STRING]: _passOn,
-    [PinType.RGBA]: _asColor,
-    [PinType.SHADER]: _passOn,
-    [PinType.OBJECT]: _passOn,
-    [PinType.GEOMETRY]: _passOn,
-    [PinType.COLLECTION]: _passOn,
-    [PinType.TEXTURE]: _passOn,
-    [PinType.MATERIAL]: _passOn,
-    [PinType.MENU]: _passOn, //ComboBoxControl
-    [PinType.IMAGE]: _passOn, //CreateBoxControl
-    [PinType.CUSTOM]: _passOn,
-    [PinType._UNKNOWN]: _passOn
+export const LOT_VALUE: { [key in CustomValueClass | PropertyType]: ValueConstrutor } = {
+    [PropertyType.VALUE]: _passOn,
+    [PropertyType.INT]: _passOn,
+    [PropertyType.BOOLEAN]: _passOn,
+    [PropertyType.VECTOR]: _passOn,
+    [PropertyType.ROTATION]: _passOn,
+    [PropertyType.MATRIX]: _passOn,
+    [PropertyType.STRING]: _asString,
+    [PropertyType.RGBA]: _asColor,
+    [PropertyType.SHADER]: _passOn,
+    [PropertyType.OBJECT]: _passOn,
+    [PropertyType.GEOMETRY]: _passOn,
+    [PropertyType.COLLECTION]: _passOn,
+    [PropertyType.TEXTURE]: _passOn,
+    [PropertyType.MATERIAL]: _passOn,
+    [PropertyType.MENU]: _passOn, //ComboBoxControl
+    [PropertyType.IMAGE]: _passOn, //CreateBoxControl
+    [PropertyType.CUSTOM]: _passOn,
+    [PropertyType._UNKNOWN]: _passOn,
+    [PropertyType.ENUM]: _asEnum,
+    [PropertyType.POINTER]:_passOn
 }
 
-export const LOT_VALUE_RESOLVE:  Partial<{ [key in CustomValueClass | PinType]: RegExp }> = {
+export const LOT_VALUE_RESOLVE:  Partial<{ [key in CustomValueClass | PropertyType]: RegExp }> = {
 
 };

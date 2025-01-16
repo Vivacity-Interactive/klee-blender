@@ -1,4 +1,4 @@
-import { PinType } from "../../data/pin/pin-enums";
+import { PropertyType } from "../../data/custom-property-enums";
 import { CheckBoxControl } from "../check-box-control";
 import { ColorBoxControl } from "../color-box-control";
 import { StructBoxControl } from "../struct-box-control";
@@ -37,27 +37,29 @@ export class UserUtils {
     }
 }
 
-export const LOT_USER_CONTROL: { [key in CustomUserClass | PinType]: UserControlConstrutor } = {
-    [PinType.VALUE]: TextBoxControl,//NumberBoxControl
-    [PinType.INT]: TextBoxControl,//NumberBoxControl
-    [PinType.BOOLEAN]: CheckBoxControl,
-    [PinType.VECTOR]: TextBoxControl,//StructBoxControl,
-    [PinType.ROTATION]: TextBoxControl,//StructBoxControl,
-    [PinType.MATRIX]: null,//StructBoxControl,
-    [PinType.STRING]: TextBoxControl,
-    [PinType.RGBA]: ColorBoxControl,
-    [PinType.SHADER]: null,
-    [PinType.OBJECT]: TextBoxControl,//ReferenceBoxControl
-    [PinType.GEOMETRY]: null,
-    [PinType.COLLECTION]: TextBoxControl,//ReferenceBoxControl
-    [PinType.TEXTURE]: null,
-    [PinType.MATERIAL]: TextBoxControl,//ReferenceBoxControl
-    [PinType.MENU]: TextBoxControl,//ComboBoxControl
-    [PinType.IMAGE]: TextBoxControl,//AssetBoxControl
-    [PinType.CUSTOM]: null,
-    [PinType._UNKNOWN]: null
+export const LOT_USER_CONTROL: { [key in CustomUserClass | PropertyType]: UserControlConstrutor } = {
+    [PropertyType.VALUE]: TextBoxControl, //NumberBoxControl
+    [PropertyType.INT]: TextBoxControl, //NumberBoxControl
+    [PropertyType.BOOLEAN]: CheckBoxControl,
+    [PropertyType.VECTOR]: TextBoxControl, //StructBoxControl,
+    [PropertyType.ROTATION]: TextBoxControl, //StructBoxControl,
+    [PropertyType.MATRIX]: null, //StructBoxControl,
+    [PropertyType.STRING]: TextBoxControl,
+    [PropertyType.RGBA]: ColorBoxControl,
+    [PropertyType.SHADER]: null,
+    [PropertyType.OBJECT]: TextBoxControl, //ReferenceBoxControl
+    [PropertyType.GEOMETRY]: null,
+    [PropertyType.COLLECTION]: TextBoxControl, //ReferenceBoxControl
+    [PropertyType.TEXTURE]: null,
+    [PropertyType.MATERIAL]: TextBoxControl, //ReferenceBoxControl
+    [PropertyType.MENU]: TextBoxControl, //ComboBoxControl
+    [PropertyType.IMAGE]: TextBoxControl, //AssetBoxControl
+    [PropertyType.CUSTOM]: null,
+    [PropertyType._UNKNOWN]: null,
+    [PropertyType.ENUM]: TextBoxControl,
+    [PropertyType.POINTER]: TextBoxControl
 }
 
-export const LOT_USER_RESOLVE_CONTROL:  Partial<{ [key in CustomUserClass | PinType]: RegExp }> = {
+export const LOT_USER_RESOLVE_CONTROL:  Partial<{ [key in CustomUserClass | PropertyType]: RegExp }> = {
 
 };
