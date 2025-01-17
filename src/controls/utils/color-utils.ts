@@ -2,6 +2,7 @@ import { NodeCategory } from "../../data/nodes/node-enums";
 import { PropertyType } from "../../data/custom-property-enums";
 import { PinProperty } from "../../data/pin/pin-property";
 import { Node } from "../../data/nodes/node";
+import { LOT_NODE_RESOLVE_CATEGORY, NodeUtils } from "./node-utils";
 
 
 export enum CustomColorCategory {
@@ -14,7 +15,7 @@ export class ColorUtils {
     }
 
     public static getNodeColor(node: Node): string {
-        return LOT_NODE_COLOR[node.category] ?? LOT_NODE_COLOR[NodeCategory._UNKNOWN];
+        return LOT_NODE_COLOR[NodeCategory[node.category]] ?? LOT_NODE_COLOR[NodeCategory._UNKNOWN];
     }
 
     public static getCustomColor(key: string): string {
@@ -23,18 +24,7 @@ export class ColorUtils {
     }
 
     public static resolveNodeColor(node: Node): string {
-        const _unknown = LOT_PIN_COLOR[NodeCategory._UNKNOWN];
-
-        for (const key in LOT_NODE_RESOLVE_COLOR) {
-            const regex: RegExp = LOT_NODE_RESOLVE_COLOR[key];
-            const bMatch = regex && regex.test(node.class);
-            
-            if (bMatch) {
-                //console.log (bMatch, LOT_NODE_COLOR[key], node.class, regex)
-                return LOT_NODE_COLOR[key] ?? _unknown;
-            }
-        }
-        return _unknown;
+        return LOT_NODE_COLOR[NodeUtils.resolveNodeCategory(node)];
     }
 }
 
@@ -63,35 +53,11 @@ export const LOT_COLOR_CUSTOM:  { [key in CustomColorCategory]: string } = {
    [CustomColorCategory.NodeSocketVirtual]: "#a1a1a1"
 };
 
-export const LOT_NODE_RESOLVE_COLOR:  Partial<{ [key in (NodeCategory)]: RegExp }> = {
-    [NodeCategory.CONVERTER_NODE]: /Math|Function|ValTo|Switch/i,
-    [NodeCategory.COLOR_NODE]: /RGB|Color|HSV|Mix/i,
-    [NodeCategory.GROUP_NODE]: /CustromGroup/i,
-    [NodeCategory.GROUP_SOCKET_NODE]: /(Simulation|Group|Repeat|Foreach).*(Input|Output)/i,
-    [NodeCategory.FRAME_NODE]: /NodeFrame/i,
-    [NodeCategory.MATTE_NODE]: /Matte/i,
-    [NodeCategory.DISTOR_NODE]: /Distor/i,
-    [NodeCategory.INPUT_NODE]: /Input|Info/i,
-    [NodeCategory.OUTPUT_NODE]: /NodeOutput/i,
-    [NodeCategory.FILTER_NODE]: /CompositorNode/i,
-    [NodeCategory.VECTOR_NODE]: /Vector/i,
-    [NodeCategory.TEXTURE_NODE]: /Texture/i,
-    [NodeCategory.SHADER_NODE]: /ShaderNode/i,
-    [NodeCategory.SCRIPT_NODE]: /Script/i,
-    [NodeCategory.PATTERN_NODE]: /TextureNodeTex/i,
-    [NodeCategory.LAYOUT_NODE]: null,
-    [NodeCategory.ATTRIBUTE_NODE]: /Attribute/i,
-    [NodeCategory.GEOMETRY_NODE]: /GeometryNode/i,
-    [NodeCategory.SIMULATION_ZONE]: null,
-    [NodeCategory.REPEAT_ZONE]: null,
-    [NodeCategory.FOREACH_GEOMETRY_ELEMENT_ZONE]: null
-};
-
 export const LOT_NODE_COLOR:  { [key in NodeCategory]: string } = {
     [NodeCategory.CONVERTER_NODE]: "#12adff80", 
     [NodeCategory.COLOR_NODE]: "#cccc0080", 
-    [NodeCategory.GROUP_NODE]: "#3b660a80", 
     [NodeCategory.GROUP_SOCKET_NODE]: "#00000080", 
+    [NodeCategory.GROUP_NODE]: "#3b660a80", 
     [NodeCategory.FRAME_NODE]: "#0f0f0fcc", 
     [NodeCategory.MATTE_NODE]: "#973c3c80", 
     [NodeCategory.DISTOR_NODE]: "#4c979780", 

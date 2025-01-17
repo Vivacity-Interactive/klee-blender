@@ -1,26 +1,23 @@
 import { Canvas2D } from "../canvas";
-import { Constants } from "../constants";
-import { PropertyType } from "../data/custom-property-enums";
 import { PinDirection } from "../data/pin/pin-enums";
 import { PinProperty } from "../data/pin/pin-property";
-import { PropertyState } from "../data/custom-property-enums";
-import { PinShape } from "../data/pin/pin-enums";
 import { Vector2 } from "../math/vector2";
+import { HorizontalPanel } from "./horizontal-panel";
 import { NodeConnectionControl } from "./node-connection-control";
 import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
 import { ColorUtils } from "./utils/color-utils";
-import { IconData, LOT_ICONS } from "./utils/icon-library";
-import { _DDxIcon, SVGIcon } from "./utils/icon-utils";
-import { LOT_USER_CONTROL, UserUtils } from "./utils/user-utils";
+import { _DDxIcon, IconUtils, SVGIcon } from "./utils/icon-utils";
+import { LOT_USER_CONTROL } from "./utils/user-utils";
 
 
-export class PinControl extends UserControl {
+export class PinControl extends HorizontalPanel {
 
-    private static readonly PIN_NAME_PADDING_LEFT = 14;
+    private static readonly PIN_NAME_VALUED_PADDING_LEFT = 32 //14;
+    private static readonly PIN_NAME_PADDING_LEFT = 12;
     private static readonly PIN_ICON_WIDTH = 10;
     private static readonly PINS_PADDING_HORIZONTAL = 0;
-    private static readonly PINS_PADDING_LEFT_DEFAULT_BOX = 8;
+    private static readonly PINS_PADDING_LEFT_DEFAULT_BOX = 12;
 
     private _pinProperty: PinProperty;
     private defaultValueBox: UserControl;
@@ -37,18 +34,19 @@ export class PinControl extends UserControl {
     constructor(parentPosition: Vector2, pin: PinProperty) {
         super(0, 0);
         this._pinProperty = pin;
-        this.hidden = false;
+        this.fillParentHorizontal = true;
+        this.hidden = this._pinProperty.isHidden;//false;
 
         this._isInput = this._pinProperty.direction !== PinDirection.Output;
         this._color = ColorUtils.getCustomColor(this.pinProperty.valueType) 
             ?? ColorUtils.getPinColor(this.pinProperty);
         
         this.width = 0;
-        this.height = 27;
+        this.height = 24;
 
         this.visible = !pin.isHidden;
 
-        const data = LOT_ICONS[this._pinProperty.shape];
+        const data = IconUtils.getIconDataPinState(this._pinProperty);//LOT_ICONS[this._pinProperty.shape];
         if (data) { 
             this._icon = new SVGIcon(data, null, this._color);
             this._iconScale = Math.floor(this.height * 0.45);
@@ -56,14 +54,6 @@ export class PinControl extends UserControl {
     }
 
     override initialize() {
-        if (this.visible) {
-            if (!this.pinProperty.isHidden && !this.pinProperty.isNameless) {
-                this.width = this.formattedNameWidth(this.pinProperty) + PinControl.PINS_PADDING_HORIZONTAL + PinControl.PIN_ICON_WIDTH;
-            } else if (!this.pinProperty.isHidden) {
-                this.width = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PIN_ICON_WIDTH;
-            }
-        }
-
         this.postInit();
     }
     
@@ -91,15 +81,14 @@ export class PinControl extends UserControl {
     }
 
     public postInit(): void {
-        const box = this.pinProperty.isValued && LOT_USER_CONTROL[this.pinProperty.type];
-        if (box) {
-            this.defaultValueBox = new box(this.pinProperty.defaultValue);
-            this.defaultValueBox.initControl(this.app);
-            this.defaultValueBox.position.x = this.formattedNameWidth(this._pinProperty) + PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-            this.defaultValueBox.padding.right = PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-            this.defaultValueBox.padding.left = PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-            this.width += this.defaultValueBox.width + this.defaultValueBox.padding.left + this.defaultValueBox.padding.right;
-            this.height += this.defaultValueBox.padding.top + this.defaultValueBox.padding.bottom;
+        const _BoxClass = this.pinProperty.isValued && LOT_USER_CONTROL[this.pinProperty.type];
+        if (_BoxClass) {
+            //console.log(this.pinProperty.name, this.pinProperty._raw);
+            const _box = this.defaultValueBox = new _BoxClass(this.pinProperty.defaultValue);
+            _box.position.x = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
+            _box.position.y = Math.floor(this.height * 0.5) - _box.height/2;
+            this.height = Math.max(_box.height, this.height);
+            this.children.push(_box);
         }
     }
 
@@ -108,10 +97,9 @@ export class PinControl extends UserControl {
     }
 
     public onDraw(canvas: Canvas2D): void {
-
         if (this.hidden)
             return;
-
+        
 /// #if DEBUG_UI
         canvas.strokeStyle("#e0e");
         canvas.strokeRect(0, 0, this.size.x + this.padding.left + this.padding.right, this.size.y + this.padding.top + this.padding.bottom);
@@ -146,36 +134,27 @@ export class PinControl extends UserControl {
         let textX = this.setupTextDrawing(canvas);
 
         canvas.fillText(this._pinProperty.formattedName, textX, 4);    
-
-        if (this.defaultValueBox) {
-            this.drawDefaultValueBox(canvas);
-        }
         
         if (this.icon) { this.drawPinIcon(canvas, this.icon); }
     }
 
-    private drawDefaultValueBox(canvas: Canvas2D) {
-        if(this.defaultValueBox) {
-            this.defaultValueBox.draw(canvas);
-        }
-    }
-
     private getPinX() : number {
-        if (!this._isInput) {
-            return this.size.x - PinControl.PINS_PADDING_HORIZONTAL;
-        }
-        return PinControl.PINS_PADDING_HORIZONTAL;
+        return !this._isInput
+            ?this.size.x - PinControl.PINS_PADDING_HORIZONTAL
+            : PinControl.PINS_PADDING_HORIZONTAL;
     }
 
     private setupTextDrawing(canvas: Canvas2D) : number {
-        let textX = this.size.x - (PinControl.PIN_NAME_PADDING_LEFT + PinControl.PINS_PADDING_HORIZONTAL);
+        const bVlued = this._pinProperty.isValued && this.defaultValueBox;
+        const padding = bVlued ? PinControl.PIN_NAME_VALUED_PADDING_LEFT : PinControl.PIN_NAME_PADDING_LEFT;
+        let textX = this.size.x - (PinControl.PINS_PADDING_LEFT_DEFAULT_BOX + PinControl.PINS_PADDING_HORIZONTAL);
 
         if (this._isInput) {
             canvas.textAlign("left")
-            textX = PinControl.PIN_NAME_PADDING_LEFT + PinControl.PINS_PADDING_HORIZONTAL;
-        }
-        else
+            textX = padding + PinControl.PINS_PADDING_HORIZONTAL;
+        } else {
             canvas.textAlign("right")
+        } 
 
         canvas.font('400 11px sans-serif')
         .fillStyle("#eee");
@@ -183,9 +162,9 @@ export class PinControl extends UserControl {
         return textX;
     }
 
-    public formattedNameWidth(pin: PinProperty): number {
-        return this.app.canvas.font(Constants.NODE_FONT).getContext().measureText(pin.formattedName).width + PinControl.PIN_NAME_PADDING_LEFT;
-    }
+    // public formattedNameWidth(pin: PinProperty): number {
+    //     return this.app.canvas.font(Constants.NODE_FONT).getContext().measureText(pin.formattedName).width + PinControl.PIN_NAME_PADDING_LEFT;
+    // }
 
     public getPinAbsolutePosition(): Vector2 {
         let position = this.getAbsolutPosition();
@@ -193,8 +172,6 @@ export class PinControl extends UserControl {
 
         if (this.pinProperty.direction === PinDirection.Output) {
             position.x += (this.width || this.size.x) - PinControl.PINS_PADDING_HORIZONTAL;
-            // if (this.pinProperty.category === PinCategory.delegate)
-            //     position.x += 8;
         } else {
             position.x += PinControl.PINS_PADDING_HORIZONTAL;
         }

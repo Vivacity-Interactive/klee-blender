@@ -60,6 +60,8 @@ export enum PropertyState {
     MULTI = 1 << 11,
     GIZOM = 1 << 12,
     LINKED = 1 << 13,
+    RUNTIME = 1 << 14,
+    ANIMATABLE = 1 << 15,
     DEFAULT = ENABLED
 }
 

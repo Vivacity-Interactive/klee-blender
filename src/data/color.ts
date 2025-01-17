@@ -1,18 +1,17 @@
 export class Color {
-
     public R: number;
     public G: number;
     public B: number;
     public A: number;
 
-    constructor(value: string | number, ...params : number[]) {
+    constructor(value: string | number | number[], ...params : number[]) {
         if (typeof value == "string") {
             this.initializeFromString(value);
-        }
-        else if (typeof value == "number" && params.length >= 2) 
-        {
+        } else if (typeof value == "number" && params.length >= 2) {
             params.unshift(value);
             this.initializeFromComponentValues(params);
+        } else if (Array.isArray(value)) {
+            this.initializeFromComponentValues(value);
         }
 
     }
@@ -45,9 +44,9 @@ export class Color {
     }
 
     initializeFromComponentValues(values: number[]): void {
-        this.R = values[0];
-        this.G = values[1];
-        this.B = values[2];
+        this.R = values[0] * 255.0;
+        this.G = values[1] * 255.0;
+        this.B = values[2] * 255.0;
         this.A = 1;
 
         if (values.length > 3)

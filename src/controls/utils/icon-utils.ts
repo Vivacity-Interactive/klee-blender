@@ -1,9 +1,22 @@
 import { Canvas2D } from "../../canvas";
-import { IconData } from "./icon-library";
+import { PropertyState } from "../../data/custom-property-enums";
+import { PinShape } from "../../data/pin/pin-enums";
+import { PinProperty } from "../../data/pin/pin-property";
+import { IconData, LOT_ICONS } from "./icon-library";
 
 const SVG_DESC = { type: 'image/svg+xml;charset=utf-8' };
 
 type SVGIconCallback = (icon: SVGIcon) => void;
+
+export class IconUtils {
+    public static getIconDataPinState(pinProperty: PinProperty): IconData {
+        return LOT_ICONS[LOT_PIN_ICON_STATE[(pinProperty.state & PropertyState.LINKED)]?.[pinProperty.shape] ?? pinProperty.shape];
+    }
+
+    public static getIconDataPin(pinProperty: PinProperty): IconData {
+        return LOT_ICONS[pinProperty.shape];
+    }
+}
 
 export class SVGIcon extends Image {
     public pt: number = 10;
@@ -51,5 +64,16 @@ export function _DDxIcon(canvas: Canvas2D, callback: SVGIconCallback): SVGIconCa
         context.setTransform(transform);
         callback(icon);
         canvas.restore();
+    }
+}
+
+export const LOT_PIN_ICON_STATE: Partial<{ [key in PropertyState]: { [key in PinShape]: PinShape } }> = {
+    [PropertyState.LINKED]: {
+        [PinShape.CIRCLE]: PinShape.CIRCLE,
+        [PinShape.SQUARE]: PinShape.SQUARE,
+        [PinShape.DIAMOND]: PinShape.DIAMOND,
+        [PinShape.CIRCLE_DOT]: PinShape.CIRCLE,
+        [PinShape.SQUARE_DOT]: PinShape.SQUARE,
+        [PinShape.DIAMOND_DOT]: PinShape.DIAMOND
     }
 }

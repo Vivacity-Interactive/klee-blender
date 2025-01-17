@@ -10,7 +10,8 @@ import { PinProperty } from "../data/pin/pin-property";
 import { PropertyState } from "../data/custom-property-enums";
 import { PinShape } from "../data/pin/pin-enums";
 import { LOT_VALUE } from "../utils/value-utils";
-import { OptionProperty } from "../data/option/option";
+import { OptionProperty } from "../data/option/option-property";
+import { NodeUtils } from "../controls/utils/node-utils";
 
 export class BLOEFPopulate {
     protected _graph: Graph;
@@ -68,27 +69,22 @@ export class BLOEFPopulate {
         }
 
         const options = this.options[node.cid];
-        if (options) for (let index = options.length - 1; index >= 0 ; index--) {
-            const option = options[index];
-            let _options = new OptionProperty(node.name);
-            this.populateOption(option, _options, scope[option.identifier]);
-            node.customProperties.push(_options);
-            
+        if (options) {
+            for (let index = options.length - 1; index >= 0 ; index--) {
+                const option = options[index];
+                let _option = new OptionProperty(node.name);
+                this.populateOption(option, _option, scope[option.identifier]);
+                node.customProperties.push(_option);
+            }
         }
 
-        // if (options) for (const option of options) {
-        //     let _options = new OptionProperty(node.name);
-        //     console.log(scope[option.identifier])
-        //     this.populateOption(option, _options, scope[option.identifier]);
-        //     node.customProperties.push(_options);
-        // }
-        
+        node.category = NodeUtils.resolveNodeCategory(node);
         //this.lot[node.id] = node;
         //node.assert()
     }
 
     public populatePin(scope: any, pin: PinProperty): void {
-        pin.id = scope._id; //decodeHtmlText(scope._id)
+        pin.id = scope._id;
         pin.name = scope.identifier
         pin.friendlyName = scope.name;
         
@@ -113,6 +109,7 @@ export class BLOEFPopulate {
         if (scope.show_expanded) { pin.state |= PropertyState.OPTIONS; }
         if (scope.is_multi_input) { pin.state |= PropertyState.MULTI; }
         if (scope.pin_gizmo) { pin.state |= PropertyState.GIZOM; }
+        if (scope.is_animatable) { pin.state |= PropertyState.ANIMATABLE; }
         
         if (pin.valueType == "NodeSocketVirtual") { 
             pin.state |= PropertyState.NAMELESS;

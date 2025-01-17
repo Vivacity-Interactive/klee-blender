@@ -1,10 +1,9 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
-import { Vector2 } from "../math/vector2";
 import { UserControl } from "./user-control";
 
 
-export class TextBoxControl extends UserControl {
+export class ValueBoxControl extends UserControl {
 
     private text: string;
 
@@ -27,12 +26,12 @@ export class TextBoxControl extends UserControl {
 /// #endif
         canvas
             .roundedRectangle(0, 0, this.size.x, this.size.y, Constants.DEFAULT_BOX_RADIUS)
-            .fillStyle('#1D1D1DFF')
+            .fillStyle('#545454FF')
             .clip()
             .fill()
             .font(Constants.NODE_FONT)
             .fillStyle("#ccc")
-            .textAlign("left")
-            .fillText(this.text, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING + this.size.y/2)
+            .textAlign("right")
+            .fillText(this.text, this.size.x - Constants.DEFAULT_VALUE_BOX_TEXT_PADDING, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING + this.size.y/2)
     }
 }

@@ -28,6 +28,11 @@ export class Canvas2D {
         return this;
     }
 
+    clip() {
+        this._context.clip() 
+        return this;
+    }
+
     strokeStyle(style: string | CanvasGradient | CanvasPattern) {
         this._context.strokeStyle = style;
         return this;

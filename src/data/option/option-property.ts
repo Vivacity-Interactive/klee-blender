@@ -1,4 +1,5 @@
 import { CustomProperty } from "../custom-property";
+import { PropertyState } from "../custom-property-enums";
 
 export class OptionProperty extends CustomProperty {
     name: string;
@@ -13,6 +14,11 @@ export class OptionProperty extends CustomProperty {
         super();
         this.nodeName = nodeName;
     }
+
+    // public get isHidden(): boolean {
+    //     return super.isHidden
+    //         || ((this.state & PropertyState.RUNTIME) !== PropertyState.RUNTIME)
+    // }
 
     public get formattedName(): string {
         if (this.isNameless) { return ''; }

@@ -14,6 +14,7 @@ export abstract class Container extends UserControl {
 
     constructor(x?: number, y?: number, zIndex?: number) {
         super(x, y, zIndex);
+        this.fillParentHorizontal = true;
 
         this.children = [];
     }
@@ -96,6 +97,8 @@ export abstract class Container extends UserControl {
                 child.desiredHeight = this.size.y - this.padding.top - this.padding.top;
             }
         }
+
+        
 
         return size;
     }

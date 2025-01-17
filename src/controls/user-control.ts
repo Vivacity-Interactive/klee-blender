@@ -11,6 +11,7 @@ export abstract class UserControl extends Control implements DrawableControl {
     protected controlParent?: UserControl;
     public padding: Thickness = { top: 0, right: 0, bottom: 0, left: 0};
     public ignoreLayout: boolean;
+    public noTitle: boolean = false;
 
     protected dirty: boolean;
     public controlSize: Vector2 = new Vector2(0, 0);

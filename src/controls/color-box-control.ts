@@ -12,15 +12,18 @@ export class ColorBoxControl extends UserControl {
         super();
 
         this.color = color;
+        this.width = Constants.DEFAULT_BOX_HEIGHT;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
-        this.width = this.height;
-        this.padding.top = 1;
-        this.padding.bottom = 1;
+        this.ignoreLayout = true;
     }
 
     protected onDraw(canvas: Canvas2D) {
+/// #if DEBUG_UI
+        canvas.strokeStyle("#0FF");
+        canvas.strokeRect(0, 0, this.size.x + this.padding.left + this.padding.right, this.size.y + this.padding.top + this.padding.bottom);
+/// #endif
         canvas
-            .roundedRectangle(0, 0 - Constants.DEFAULT_BOX_HEIGHT / 2, this.width, this.height, Constants.DEFAULT_BOX_RADIUS)
+            .roundedRectangle(0, 0, this.size.x, this.size.y, Constants.DEFAULT_BOX_RADIUS)
             .fillStyle(this.color.toRGBAString())
             .fill()
     }

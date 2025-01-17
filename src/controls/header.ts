@@ -44,12 +44,6 @@ export class Header extends HorizontalPanel {
         title.padding = { top: 6, right: 0, bottom: 3, left: 0 };
         this.titlePanel.add(title);
 
-        // let subTitles = this.node.subTitles.sort((a, b) => (b.orderIndex || 0) - (a.orderIndex || 0))
-        // for (const subTitle of subTitles) {
-        //     let label = new Label(subTitle.text, Constants.NODE_FONT, Constants.NODE_SUBTITLE_COLOR)
-        //     this.titlePanel.add(label);
-        // }
-
         this.add(this.titlePanel);
 
         this.delegatePanel = new VerticalPanel();
@@ -59,7 +53,7 @@ export class Header extends HorizontalPanel {
     }
 
     override initialize() {
-        this.fillStyleHeader = ColorUtils.resolveNodeColor(this.node);
+        this.fillStyleHeader = ColorUtils.getNodeColor(this.node);//.resolveNodeColor(this.node);
     }
 
     protected onDraw(canvas: Canvas2D) {

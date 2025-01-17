@@ -1,18 +1,20 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
-import { OptionProperty } from "../data/option/option";
+import { OptionProperty } from "../data/option/option-property";
 import { Vector2 } from "../math/vector2";
+import { HorizontalPanel } from "./horizontal-panel";
 import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
 import { LOT_USER_CONTROL } from "./utils/user-utils";
 
 
-export class OptionControl extends UserControl {
+export class OptionControl extends HorizontalPanel {
 
-    private static readonly PIN_NAME_PADDING_LEFT = 14;
+    private static readonly PIN_NAME_VALUED_PADDING_LEFT = 32
+    private static readonly PIN_NAME_PADDING_LEFT = 12;
     private static readonly PIN_ICON_WIDTH = 10;
     private static readonly PINS_PADDING_HORIZONTAL = 0;
-    private static readonly PINS_PADDING_LEFT_DEFAULT_BOX = 8;
+    private static readonly PINS_PADDING_LEFT_DEFAULT_BOX = 12;
 
     private _optionProperty: OptionProperty;
     private defaultValueBox: UserControl;
@@ -22,23 +24,16 @@ export class OptionControl extends UserControl {
     constructor(parentPosition: Vector2, option: OptionProperty) {
         super(0, 0);
         this._optionProperty = option;
-        this.hidden = false;
+        this.fillParentHorizontal = true;
+        this.hidden = this._optionProperty.isHidden;//false;
         
         this.width = 0;
-        this.height = 27;
+        this.height = 24;
 
         this.visible = !option.isHidden;
     }
 
     override initialize() {
-        if (this.visible) {
-            if (!this.optionProperty.isHidden && !this.optionProperty.isNameless) {
-                this.width = this.formattedNameWidth(this.optionProperty) + OptionControl.PINS_PADDING_HORIZONTAL + OptionControl.PIN_ICON_WIDTH;
-            } else if (!this.optionProperty.isHidden) {
-                this.width = OptionControl.PINS_PADDING_HORIZONTAL + OptionControl.PIN_ICON_WIDTH;
-            }
-        }
-
         this.postInit();
     }
 
@@ -58,15 +53,13 @@ export class OptionControl extends UserControl {
     }
 
     public postInit(): void {
-        const box = this.optionProperty.isValued && LOT_USER_CONTROL[this.optionProperty.type];
-        if (box) {
-            this.defaultValueBox = new box(this.optionProperty.defaultValue);
-            this.defaultValueBox.initControl(this.app);
-            this.defaultValueBox.position.x = this.formattedNameWidth(this._optionProperty) + OptionControl.PINS_PADDING_HORIZONTAL + OptionControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-            this.defaultValueBox.padding.right = OptionControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-            this.defaultValueBox.padding.left = OptionControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-            this.width += this.defaultValueBox.width + this.defaultValueBox.padding.left + this.defaultValueBox.padding.right;
-            this.height += this.defaultValueBox.padding.top + this.defaultValueBox.padding.bottom;
+        const _BoxClass = this.optionProperty.isValued && LOT_USER_CONTROL[this.optionProperty.type];
+        if (_BoxClass) {
+            this.defaultValueBox = new _BoxClass(this.optionProperty.defaultValue);
+            this.defaultValueBox.position.x = OptionControl.PINS_PADDING_HORIZONTAL + OptionControl.PINS_PADDING_LEFT_DEFAULT_BOX;
+            this.defaultValueBox.position.y = Math.floor(this.height * 0.5) - this.defaultValueBox.height/2;
+            this.height = Math.max(this.defaultValueBox.height, this.height);
+            this.children.push(this.defaultValueBox);
         }
     }
 
@@ -98,23 +91,14 @@ export class OptionControl extends UserControl {
         let textX = this.setupTextDrawing(canvas);
 
         canvas.fillText(this._optionProperty.formattedName, textX, 4);    
-
-        if (this.defaultValueBox) {
-            this.drawDefaultValueBox(canvas);
-        }
-    }
-
-    private drawDefaultValueBox(canvas: Canvas2D) {
-        if(this.defaultValueBox) {
-            this.defaultValueBox.draw(canvas);
-        }
     }
 
     private setupTextDrawing(canvas: Canvas2D) : number {
+        const padding = this._optionProperty.isValued ? OptionControl.PIN_NAME_VALUED_PADDING_LEFT : OptionControl.PIN_NAME_PADDING_LEFT;
         let textX = this.size.x - (OptionControl.PIN_NAME_PADDING_LEFT + OptionControl.PINS_PADDING_HORIZONTAL);
 
         canvas.textAlign("left")
-        textX = OptionControl.PIN_NAME_PADDING_LEFT + OptionControl.PINS_PADDING_HORIZONTAL;
+        textX = OptionControl.PINS_PADDING_HORIZONTAL + padding;
 
         canvas.font('400 11px sans-serif')
         .fillStyle("#eee");

@@ -9,7 +9,7 @@ import { PinProperty } from "../../data/pin/pin-property";
 import { PinDirection } from "../../data/pin/pin-enums";
 import { Container } from "../container";
 import { ErrorBar } from "../error-bar";
-import { OptionProperty } from "../../data/option/option";
+import { OptionProperty } from "../../data/option/option-property";
 import { OptionControl } from "../option-control";
 
 
@@ -30,8 +30,6 @@ export abstract class NodeControl extends Container {
     protected inputPinPanel: VerticalPanel;
     protected outputPinPanel: VerticalPanel;
 
-    //public showOptions: boolean;
-
     private _selected: boolean;
     protected _stroke: {
         lineWidth: number,
@@ -43,16 +41,15 @@ export abstract class NodeControl extends Container {
         this._node = node;
         //this.width = node.width;
         //this.height = node.height;
-        this.desiredWidth = node.width;
-        this.desiredHeight = node.height;
+        this.minWidth = node.width;
+        this.minHeight = node.height;
+        this.padding.bottom = 4;
 
         this._selected = false;
         this._stroke = {
             lineWidth: 1,
             style: '#000000'
         }
-
-        //this.showOptions = (node.state & NodeState.OPTIONS) === NodeState.OPTIONS;
 
         this.mainPanel = new VerticalPanel();
         this.mainPanel.fillParentHorizontal = true;
