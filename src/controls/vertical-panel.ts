@@ -39,7 +39,7 @@ export class VerticalPanel extends Container {
             size.x = Math.max(size.x, childSize.x)
             size.y += childSize.y;
 
-            if (child.fillParentVertical) {
+            if (child.fillParent && child.fillHorizontal) {
                 this.verticalFillCount++;
             } else {
                 childHeight += childSize.y;
@@ -82,10 +82,10 @@ export class VerticalPanel extends Container {
             child.position.x = position.x;
             child.position.y = position.y;
 
-            if (child.fillParentHorizontal) {
+            if (child.fillParent && child.fillHorizontal) {
                 child.desiredWidth = width;
             }
-            if (child.fillParentVertical) {
+            if (child.fillParent && child.fillVertical) {
                 child.desiredHeight = height;
             }
 

@@ -1,8 +1,22 @@
 import { Application } from "../application";
 import { Vector2 } from "../math/vector2";
 
+export enum ControlLayout {
+    Fixed = 0,
+    IgnoreLayout = 1 << 0,
+    FillParent = 1 << 1,
+    FillChild = 1 << 2,
+    FillHorizontal = 1 << 3,
+    FillVertical = 1 << 4,
+    FillParentHorizontal = FillParent | FillHorizontal,
+    FillParentVertical = FillParent | FillVertical,
+    FillChildHorizontal = FillChild | FillHorizontal,
+    FillChildVertical = FillChild | FillVertical,
+}
+
 export abstract class Control {
 
+    public controlLayout: ControlLayout;
     private _position: Vector2;
     public width?: number;
     public height?: number;
@@ -12,8 +26,21 @@ export abstract class Control {
     public desiredHeight: number;
     protected zIndex: number;
 
-    public fillParentHorizontal: boolean;
-    public fillParentVertical: boolean;
+    get fillChild(): boolean {
+        return (this.controlLayout & ControlLayout.FillChild) == ControlLayout.FillChild;
+    }
+
+    get fillParent(): boolean {
+        return (this.controlLayout & ControlLayout.FillParent) == ControlLayout.FillParent;
+    }
+
+    get fillHorizontal(): boolean {
+        return (this.controlLayout & ControlLayout.FillHorizontal) == ControlLayout.FillHorizontal;
+    }
+
+    get fillVertical(): boolean {
+        return (this.controlLayout & ControlLayout.FillVertical) == ControlLayout.FillVertical;
+    }
 
     protected app: Application;
 

@@ -1,6 +1,7 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
 import { Vector2 } from "../math/vector2";
+import { ControlLayout } from "./control";
 import { UserControl } from "./user-control";
 
 
@@ -14,7 +15,7 @@ export class TextBoxControl extends UserControl {
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.width = 96;
         this.ignoreLayout = true;
-        this.fillParentHorizontal = true;
+        this.controlLayout |= ControlLayout.FillParentHorizontal;
     }
 
     override initialize() {

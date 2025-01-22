@@ -1,6 +1,7 @@
 import { Application } from "../application";
 import { Canvas2D } from "../canvas";
 import { Container } from "./container";
+import { ControlLayout } from "./control";
 import { Label } from "./label";
 import { UserControl } from "./user-control";
 import { VerticalPanel } from "./vertical-panel";
@@ -23,12 +24,12 @@ export class WarningBar extends VerticalPanel {
         this.svg.height = "22px";
         this.svg.onload = () => { this.imageLoaded() };
 
-        this.fillParentHorizontal = true;
+        this.controlLayout |= ControlLayout.FillParentHorizontal;
 
         this.minHeight = 22;
 
         this.label = new Label(text);
-        this.label.fillParentHorizontal = true;
+        this.label.controlLayout |= ControlLayout.FillParentHorizontal;
         this.label.textAlign = 'center';
         this.label.padding = { top: 3, right: 0, bottom: 2, left: 0 }
         this.add(this.label);

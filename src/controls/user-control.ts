@@ -53,8 +53,8 @@ export abstract class UserControl extends Control implements DrawableControl {
         }
     }
 
-    public getCalculatedSize(): Vector2 {
-        
+    public getCalculatedSize(): Vector2
+    {
         let size = this.size;
         size.x += this.padding.left + this.padding.right;
         size.y += this.padding.top + this.padding.bottom;

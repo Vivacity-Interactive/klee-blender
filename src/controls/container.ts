@@ -1,6 +1,7 @@
 
 import { Canvas2D } from "../canvas";
 import { Vector2 } from "../math/vector2";
+import { ControlLayout } from "./control";
 import { UserControl } from "./user-control";
 
 export abstract class Container extends UserControl {
@@ -14,7 +15,7 @@ export abstract class Container extends UserControl {
 
     constructor(x?: number, y?: number, zIndex?: number) {
         super(x, y, zIndex);
-        this.fillParentHorizontal = true;
+        this.controlLayout |= ControlLayout.FillParentHorizontal;
 
         this.children = [];
     }
@@ -66,8 +67,8 @@ export abstract class Container extends UserControl {
         return this.children;
     }
 
-    public getCalculatedSize(): Vector2 {
-        
+    override getCalculatedSize(): Vector2
+    {
         let size = new Vector2(0, 0);
 
         for (let child of this.children) {
@@ -90,15 +91,13 @@ export abstract class Container extends UserControl {
         this.controlSize = size.copy();
 
         for (let child of this.children) {
-            if (child.fillParentHorizontal) {
+            if (child.fillParent && child.fillHorizontal) {
                 child.desiredWidth = this.size.x - this.padding.left - this.padding.right;
             }
-            if (child.fillParentVertical) {
+            if (child.fillParent && child.fillVertical) {
                 child.desiredHeight = this.size.y - this.padding.top - this.padding.top;
             }
         }
-
-        
 
         return size;
     }

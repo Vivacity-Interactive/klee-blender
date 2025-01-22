@@ -2,6 +2,7 @@ import { Canvas2D } from "../canvas";
 import { PinDirection } from "../data/pin/pin-enums";
 import { PinProperty } from "../data/pin/pin-property";
 import { Vector2 } from "../math/vector2";
+import { ControlLayout } from "./control";
 import { HorizontalPanel } from "./horizontal-panel";
 import { NodeConnectionControl } from "./node-connection-control";
 import { NodeControl } from "./nodes/node-control";
@@ -34,7 +35,7 @@ export class PinControl extends HorizontalPanel {
     constructor(parentPosition: Vector2, pin: PinProperty) {
         super(0, 0);
         this._pinProperty = pin;
-        this.fillParentHorizontal = true;
+        this.controlLayout |= ControlLayout.FillParentHorizontal;;
         this.hidden = this._pinProperty.isHidden;//false;
 
         this._isInput = this._pinProperty.direction !== PinDirection.Output;

@@ -1,5 +1,6 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
+import { ControlLayout } from "./control";
 import { UserControl } from "./user-control";
 
 
@@ -13,7 +14,7 @@ export class ValueBoxControl extends UserControl {
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.width = 96;
         this.ignoreLayout = true;
-        this.fillParentHorizontal = true;
+        this.controlLayout |= ControlLayout.FillParentHorizontal;
     }
 
     override initialize() {

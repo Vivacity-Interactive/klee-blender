@@ -8,6 +8,7 @@ import { Header } from "../header";
 import { PinProperty } from "../../data/pin/pin-property";
 import { PinControl } from "../pin-control";
 import { PinDirection } from "../../data/pin/pin-enums";
+import { ControlLayout } from "../control";
 
 
 export class HeadedNodeControl extends NodeControl implements DrawableControl {
@@ -26,7 +27,7 @@ export class HeadedNodeControl extends NodeControl implements DrawableControl {
         this.minHeight = HeadedNodeControl.NODE_HEADER_TITLE_HEIGHT;
         
         this.header = new Header(node, icon);
-        this.header.fillParentHorizontal = true;
+        this.header.controlLayout |= ControlLayout.FillParentHorizontal;
 
         this.pinPanel.padding = { top: 3, right: 0, bottom: 3, left: 0 };
 

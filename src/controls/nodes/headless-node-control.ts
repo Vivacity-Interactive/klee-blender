@@ -4,6 +4,7 @@ import { Vector2 } from "../../math/vector2";
 import { Node } from "../../data/nodes/node";
 import { Constants } from "../../constants";
 import { HorizontalSpacerControl } from "../horizontal-spacer-control";
+import { ControlLayout } from "../control";
 
 
 export class HeadlessNodeControl extends NodeControl {
@@ -23,7 +24,7 @@ export class HeadlessNodeControl extends NodeControl {
         if(this.node.title) {
             const textWidth = this.measureText(Constants.NODE_MATHFUNC_TITLE_FONT, this.node.title).width + 32;
             const spacer = new HorizontalSpacerControl(textWidth);
-            spacer.fillParentVertical = true;
+            spacer.controlLayout |= ControlLayout.FillParentVertical;
             this.pinPanel.insert(spacer, 1);
         }
     }

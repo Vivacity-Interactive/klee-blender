@@ -11,6 +11,7 @@ import { Container } from "../container";
 import { ErrorBar } from "../error-bar";
 import { OptionProperty } from "../../data/option/option-property";
 import { OptionControl } from "../option-control";
+import { ControlLayout } from "../control";
 
 
 export abstract class NodeControl extends Container {
@@ -52,20 +53,20 @@ export abstract class NodeControl extends Container {
         }
 
         this.mainPanel = new VerticalPanel();
-        this.mainPanel.fillParentHorizontal = true;
+        this.mainPanel.controlLayout |= ControlLayout.FillParentHorizontal;
         this.add(this.mainPanel);
         
         this.pinPanel = new VerticalPanel();
-        this.pinPanel.fillParentHorizontal = true;
+        this.pinPanel.controlLayout |= ControlLayout.FillParentHorizontal;
         this.mainPanel.add(this.pinPanel);
 
         this.optionPanel = new VerticalPanel();
-        this.optionPanel.fillParentHorizontal = true;
+        this.optionPanel.controlLayout |= ControlLayout.FillParentHorizontal;
         
         this.inputPinPanel = new VerticalPanel();
         this.outputPinPanel = new VerticalPanel();
         this.outputPinPanel.childAlignment = HorizontalAlignment.RIGHT;
-        this.outputPinPanel.fillParentHorizontal = true;
+        this.outputPinPanel.controlLayout |= ControlLayout.FillParentHorizontal;
         
         this.pinPanel.add(this.outputPinPanel);
         this.pinPanel.add(this.optionPanel);

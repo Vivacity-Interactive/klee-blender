@@ -17,7 +17,8 @@ export class HorizontalPanel extends Container {
 /// #endif
     }
 
-    override getCalculatedSize(): Vector2 {
+    override getCalculatedSize(): Vector2
+    {
         let size = new Vector2(0, 0);
         let childWidth = 0;
         this.horizontalFillCount = 0;
@@ -32,7 +33,7 @@ export class HorizontalPanel extends Container {
             size.x += childSize.x;
             size.y = Math.max(size.y, childSize.y)
 
-            if (child.fillParentHorizontal) {
+            if (child.fillParent && child.fillHorizontal) {
                 this.horizontalFillCount++;
             } else {
                 childWidth += childSize.x;
@@ -68,10 +69,10 @@ export class HorizontalPanel extends Container {
             child.position.x = position.x;
             child.position.y = position.y;
 
-            if (child.fillParentHorizontal) {
+            if (child.fillParent && child.fillHorizontal) {
                 child.desiredWidth = width;
             }
-            if (child.fillParentVertical) {
+            if (child.fillParent && child.fillVertical) {
                 child.desiredHeight = height;
             }
 

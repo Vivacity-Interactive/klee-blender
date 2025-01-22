@@ -1,4 +1,5 @@
 import { Canvas2D } from "../canvas";
+import { ControlLayout } from "./control";
 import { UserControl } from "./user-control";
 
 export class HorizontalSpacerControl extends UserControl {
@@ -6,7 +7,7 @@ export class HorizontalSpacerControl extends UserControl {
     constructor(width: number) {
         super();
 
-        this.fillParentVertical = true;
+        this.controlLayout |= ControlLayout.FillChildVertical;
         this.minWidth = width;
         this.padding = { top: 0, right: 0, bottom: 0, left: 0 }
     }

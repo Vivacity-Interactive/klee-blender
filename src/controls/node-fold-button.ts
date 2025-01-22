@@ -1,6 +1,6 @@
 import { Application } from "../application";
 import { Canvas2D } from "../canvas";
-import { Control } from "./control";
+import { Control, ControlLayout } from "./control";
 import { InteractableUserControl } from "./interactable-user-control";
 import { DrawableControl } from "./interfaces/drawable";
 import { InteractableControl } from "./interfaces/interactable";
@@ -28,7 +28,7 @@ export class NodeFoldButton extends InteractableUserControl implements Interacta
         super();
 
         this.height = NodeFoldButton.BUTTON_HEIGHT;
-        this.fillParentHorizontal = true;
+        this.controlLayout |= ControlLayout.FillParentHorizontal;
         this.padding = { top: 0, right: 0, bottom: 3, left: 0 };
         this.foldout = foldOut;
 

@@ -10,6 +10,7 @@ import { Icon } from "./icon";
 import { Label } from "./label";
 import { PinControl } from "./pin-control";
 import { ColorUtils } from "./utils/color-utils";
+import { ControlLayout } from "./control";
 
 
 export class Header extends HorizontalPanel {
@@ -47,7 +48,7 @@ export class Header extends HorizontalPanel {
         this.add(this.titlePanel);
 
         this.delegatePanel = new VerticalPanel();
-        this.delegatePanel.fillParentHorizontal = true;
+        this.delegatePanel.controlLayout |= ControlLayout.FillParentHorizontal;
         this.delegatePanel.minWidth = 28;
         this.add(this.delegatePanel);
     }

@@ -2,6 +2,7 @@ import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
 import { OptionProperty } from "../data/option/option-property";
 import { Vector2 } from "../math/vector2";
+import { ControlLayout } from "./control";
 import { HorizontalPanel } from "./horizontal-panel";
 import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
@@ -24,7 +25,7 @@ export class OptionControl extends HorizontalPanel {
     constructor(parentPosition: Vector2, option: OptionProperty) {
         super(0, 0);
         this._optionProperty = option;
-        this.fillParentHorizontal = true;
+        this.controlLayout |= ControlLayout.FillParentHorizontal;
         this.hidden = this._optionProperty.isHidden;//false;
         
         this.width = 0;
