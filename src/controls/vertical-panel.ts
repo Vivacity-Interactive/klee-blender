@@ -34,15 +34,20 @@ export class VerticalPanel extends Container {
                 continue;
 
             let childSize = child.getCalculatedSize();
-            child.position.y = size.y;
 
-            size.x = Math.max(size.x, childSize.x)
-            size.y += childSize.y;
+            if (!child.ignoreHorizontalLayout) {
+                size.x = Math.max(size.x, childSize.x);
+            }
 
-            if (child.fillParent && child.fillHorizontal) {
-                this.verticalFillCount++;
-            } else {
-                childHeight += childSize.y;
+            if(!child.ignoreVerticalLayout) {
+                child.position.y = size.y;
+                size.y += childSize.y;
+
+                if (child.fillParent && child.fillHorizontal) {
+                    this.verticalFillCount++;
+                } else {
+                    childHeight += childSize.y;
+                }
             }
         }
 
@@ -79,17 +84,20 @@ export class VerticalPanel extends Container {
             if (child.ignoreLayout || !child.visible)
                 continue;
 
-            child.position.x = position.x;
-            child.position.y = position.y;
-
-            if (child.fillParent && child.fillHorizontal) {
-                child.desiredWidth = width;
-            }
-            if (child.fillParent && child.fillVertical) {
-                child.desiredHeight = height;
+            if (!child.ignoreHorizontalLayout) {
+                child.position.x = position.x;
+                if (child.fillParent && child.fillHorizontal) {
+                    child.desiredWidth = width;
+                }
             }
 
-            position.y += child.size.y + (child.padding.top || 0) + (child.padding.bottom || 0);
+            if(!child.ignoreVerticalLayout) {
+                child.position.y = position.y;
+                if (child.fillParent && child.fillVertical) {
+                    child.desiredHeight = height;
+                }
+                position.y += child.size.y + (child.padding.top || 0) + (child.padding.bottom || 0);
+            }
 
             if (child instanceof Container) {
                 (child as Container).applyFills(new Vector2(width, height));

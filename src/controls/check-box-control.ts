@@ -1,6 +1,7 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
 import { IconCategory } from "../data/icon-category";
+import { ControlLayout } from "./control";
 import { UserControl } from "./user-control";
 import { LOT_ICONS } from "./utils/icon-library";
 import { SVGIcon } from "./utils/icon-utils";
@@ -14,7 +15,7 @@ export class CheckBoxControl extends UserControl {
         this.isTrue = isTrue;
         this.width = Constants.DEFAULT_BOX_HEIGHT;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
-        this.ignoreLayout = true;
+        this.controlLayout |= ControlLayout.Ignore;
     }
 
     protected onDraw(canvas: Canvas2D) {

@@ -1,16 +1,13 @@
-import { Application } from "../application";
 import { Canvas2D } from "../canvas";
 import { Vector2 } from "../math/vector2";
 import { Control } from "./control";
 import { DrawableControl } from "./interfaces/drawable";
-import { PinControl } from "./pin-control";
 import { Thickness } from "./thickness";
 
 export abstract class UserControl extends Control implements DrawableControl {
 
     protected controlParent?: UserControl;
-    public padding: Thickness = { top: 0, right: 0, bottom: 0, left: 0};
-    public ignoreLayout: boolean;
+    public padding: Thickness = { top: 0, right: 0, bottom: 0, left: 0 };
     public noTitle: boolean = false;
 
     protected dirty: boolean;
@@ -28,6 +25,10 @@ export abstract class UserControl extends Control implements DrawableControl {
 
     set parent(value: UserControl) {
         this.controlParent = value;
+    }
+
+    get fillParentSafe(): boolean {
+        return this.fillParent && !this.parent.fillChild;
     }
 
     draw(canvas: Canvas2D): void {

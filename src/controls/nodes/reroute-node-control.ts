@@ -4,6 +4,7 @@ import { NodeControl } from "./node-control";
 import { Node } from "../../data/nodes/node";
 import { PinControl } from "../pin-control";
 import { SVGIcon } from "../utils/icon-utils";
+import { ControlLayout } from "../control";
 
 
 export class RerouteNodeControl extends NodeControl implements DrawableControl {
@@ -21,7 +22,7 @@ export class RerouteNodeControl extends NodeControl implements DrawableControl {
     }
 
     protected override onPinCreated(pin: PinControl) {
-        pin.ignoreLayout = true;
+        pin.controlLayout |= ControlLayout.Ignore;
         this.mainPanel.add(pin);
         pin.position.y = 8;
         pin.position.x = 8;

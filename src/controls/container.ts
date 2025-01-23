@@ -20,6 +20,14 @@ export abstract class Container extends UserControl {
         this.children = [];
     }
 
+    get fillChildSafe(): boolean {
+        return this.fillChild && !this.children.reduce((a, b) => a || !b.fillChild, true)
+    }
+
+    _fillChildSafe(child: UserControl): boolean {
+        return this.fillChild && !child.fillParent
+    }
+
     override refreshLayout() {
         super.refreshLayout();
 
@@ -74,11 +82,16 @@ export abstract class Container extends UserControl {
         for (let child of this.children) {
             if (child.ignoreLayout)
                 continue;
-
+            
             let childSize = child.getCalculatedSize();
 
-            size.x = Math.max(size.x, childSize.x);
-            size.y = Math.max(size.y, childSize.y);
+            if (!child.ignoreHorizontalLayout) {
+                size.x = Math.max(size.x, childSize.x);
+            }
+
+            if(!child.ignoreVerticalLayout) {
+                size.y = Math.max(size.y, childSize.y);
+            }
         }
 
 
@@ -94,6 +107,7 @@ export abstract class Container extends UserControl {
             if (child.fillParent && child.fillHorizontal) {
                 child.desiredWidth = this.size.x - this.padding.left - this.padding.right;
             }
+            
             if (child.fillParent && child.fillVertical) {
                 child.desiredHeight = this.size.y - this.padding.top - this.padding.top;
             }

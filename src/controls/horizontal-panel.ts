@@ -28,15 +28,20 @@ export class HorizontalPanel extends Container {
                 continue;
 
             let childSize = child.getCalculatedSize();
-            child.position.x = size.x;
 
-            size.x += childSize.x;
-            size.y = Math.max(size.y, childSize.y)
+            if (!child.ignoreHorizontalLayout) {
+                child.position.x = size.x;
+                size.x += childSize.x;
+                
+                if (child.fillParent && child.fillHorizontal) {
+                    this.horizontalFillCount++;
+                } else {
+                    childWidth += childSize.x;
+                }
+            }
 
-            if (child.fillParent && child.fillHorizontal) {
-                this.horizontalFillCount++;
-            } else {
-                childWidth += childSize.x;
+            if(!child.ignoreVerticalLayout) {
+                size.y = Math.max(size.y, childSize.y)
             }
         }
 
@@ -66,18 +71,21 @@ export class HorizontalPanel extends Container {
             if (child.ignoreLayout || !child.visible)
                 continue;
 
-            child.position.x = position.x;
-            child.position.y = position.y;
-
-            if (child.fillParent && child.fillHorizontal) {
-                child.desiredWidth = width;
-            }
-            if (child.fillParent && child.fillVertical) {
-                child.desiredHeight = height;
+            if (!child.ignoreHorizontalLayout) {
+                child.position.x = position.x;
+                if (child.fillParent && child.fillHorizontal) {
+                    child.desiredWidth = width;
+                }
+                position.x += child.size.x + (child.padding.left || 0) + (child.padding.right || 0);
             }
 
-            position.x += child.size.x + (child.padding.left || 0) + (child.padding.right || 0);
-
+            if(!child.ignoreVerticalLayout) {
+                child.position.y = position.y;
+                if (child.fillParent && child.fillVertical) {
+                    child.desiredHeight = height;
+                }
+            }
+            
             if (child instanceof Container) {
                 (child as Container).applyFills(new Vector2(width, height));
             }

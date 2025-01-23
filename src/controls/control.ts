@@ -3,11 +3,14 @@ import { Vector2 } from "../math/vector2";
 
 export enum ControlLayout {
     Fixed = 0,
-    IgnoreLayout = 1 << 0,
-    FillParent = 1 << 1,
-    FillChild = 1 << 2,
-    FillHorizontal = 1 << 3,
-    FillVertical = 1 << 4,
+    IgnoreHorizontal = 1 << 1,
+    IgnoreVertical = 1 << 2,
+    FillParent = 1 << 3,
+    FillChild = 1 << 4,
+    FillHorizontal = 1 << 5,
+    FillVertical = 1 << 6,
+
+    Ignore = IgnoreHorizontal | IgnoreVertical,
     FillParentHorizontal = FillParent | FillHorizontal,
     FillParentVertical = FillParent | FillVertical,
     FillChildHorizontal = FillChild | FillHorizontal,
@@ -26,6 +29,13 @@ export abstract class Control {
     public desiredHeight: number;
     protected zIndex: number;
 
+    protected app: Application;
+
+    constructor(x?: number, y?: number, zIndex?: number) {
+        this.position = new Vector2((x || 0), (y || 0));
+        this.zIndex = zIndex || 0;
+    }
+
     get fillChild(): boolean {
         return (this.controlLayout & ControlLayout.FillChild) == ControlLayout.FillChild;
     }
@@ -42,11 +52,24 @@ export abstract class Control {
         return (this.controlLayout & ControlLayout.FillVertical) == ControlLayout.FillVertical;
     }
 
-    protected app: Application;
+    get ignoreHorizontalLayout(): boolean {
+        return (this.controlLayout & ControlLayout.IgnoreHorizontal) == ControlLayout.IgnoreHorizontal;
+    }
 
-    constructor(x?: number, y?: number, zIndex?: number) {
-        this.position = new Vector2((x || 0), (y || 0));
-        this.zIndex = zIndex || 0;
+    get ignoreVerticalLayout(): boolean {
+        return (this.controlLayout & ControlLayout.IgnoreVertical) == ControlLayout.IgnoreVertical;
+    }
+
+    get ignoreLayout(): boolean {
+        return (this.controlLayout & ControlLayout.Ignore) == ControlLayout.Ignore;
+    }
+
+    get fillChildSafe(): boolean {
+        return true;
+    }
+
+    get fillParentSafe(): boolean {
+        return true;
     }
 
     get position() {

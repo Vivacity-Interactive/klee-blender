@@ -45,6 +45,8 @@ export class PinControl extends HorizontalPanel {
         this.width = 0;
         this.height = 24;
 
+        PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
+
         this.visible = !pin.isHidden;
 
         const data = IconUtils.getIconDataPinState(this._pinProperty);//LOT_ICONS[this._pinProperty.shape];
@@ -86,7 +88,7 @@ export class PinControl extends HorizontalPanel {
         if (_BoxClass) {
             //console.log(this.pinProperty.name, this.pinProperty._raw);
             const _box = this.defaultValueBox = new _BoxClass(this.pinProperty.defaultValue);
-            _box.position.x = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
+            //_box.position.x = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
             _box.position.y = Math.floor(this.height * 0.5) - _box.height/2;
             this.height = Math.max(_box.height, this.height);
             this.children.push(_box);

@@ -1,5 +1,6 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
+import { ControlLayout } from "./control";
 import { Icon } from "./icon";
 import { UserControl } from "./user-control";
 
@@ -11,7 +12,7 @@ export class NodeInfoIcon extends Icon {
     constructor(icon: string) {
         super(icon);
 
-        this.ignoreLayout = true;
+        this.controlLayout |= ControlLayout.Ignore;
 
         this.width = NodeInfoIcon.ICON_SIZE;
         this.height = NodeInfoIcon.ICON_SIZE;

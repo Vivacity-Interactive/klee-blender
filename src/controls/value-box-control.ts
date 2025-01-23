@@ -12,9 +12,7 @@ export class ValueBoxControl extends UserControl {
         super();
         this.text = text;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
-        this.width = 96;
-        this.ignoreLayout = true;
-        this.controlLayout |= ControlLayout.FillParentHorizontal;
+        this.controlLayout |= ControlLayout.FillParentHorizontal | ControlLayout.IgnoreVertical;
     }
 
     override initialize() {

@@ -2,6 +2,7 @@ import { Canvas2D } from "../canvas";
 import { UserControl } from "./user-control";
 import { Color } from "../data/color";
 import { Constants } from "../constants";
+import { ControlLayout } from "./control";
 
 
 export class ColorBoxControl extends UserControl {
@@ -14,7 +15,7 @@ export class ColorBoxControl extends UserControl {
         this.color = color;
         this.width = Constants.DEFAULT_BOX_HEIGHT;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
-        this.ignoreLayout = true;
+        this.controlLayout |= ControlLayout.Ignore;
     }
 
     protected onDraw(canvas: Canvas2D) {

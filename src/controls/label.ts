@@ -24,7 +24,7 @@ export class Label extends UserControl {
 
     override initialize() {
         let textMetrics = this.measureText();
-        this.minWidth = textMetrics.width;
+        //this.minWidth = textMetrics.width;
         this.minHeight = textMetrics.fontBoundingBoxAscent + textMetrics.fontBoundingBoxDescent;
         if (isNaN(this.minHeight)) {
             textMetrics = this.measureText("|_");
@@ -40,6 +40,7 @@ export class Label extends UserControl {
 /// #endif
         let position = this.getPosition();
         canvas.font(this.font)
+            .clip()
             .textAlign(this.textAlign)
             .fillStyle(this.color)
             .fillText(this.text, position.x, position.y);
