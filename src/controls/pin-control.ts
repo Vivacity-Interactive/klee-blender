@@ -1,9 +1,11 @@
 import { Canvas2D } from "../canvas";
+import { Constants } from "../constants";
 import { PinDirection } from "../data/pin/pin-enums";
 import { PinProperty } from "../data/pin/pin-property";
 import { Vector2 } from "../math/vector2";
 import { ControlLayout } from "./control";
 import { HorizontalPanel } from "./horizontal-panel";
+import { Label } from "./label";
 import { NodeConnectionControl } from "./node-connection-control";
 import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
@@ -45,8 +47,6 @@ export class PinControl extends HorizontalPanel {
         this.width = 0;
         this.height = 24;
 
-        PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-
         this.visible = !pin.isHidden;
 
         const data = IconUtils.getIconDataPinState(this._pinProperty);//LOT_ICONS[this._pinProperty.shape];
@@ -86,12 +86,18 @@ export class PinControl extends HorizontalPanel {
     public postInit(): void {
         const _BoxClass = this.pinProperty.isValued && LOT_USER_CONTROL[this.pinProperty.type];
         if (_BoxClass) {
-            //console.log(this.pinProperty.name, this.pinProperty._raw);
-            const _box = this.defaultValueBox = new _BoxClass(this.pinProperty.defaultValue);
-            //_box.position.x = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-            _box.position.y = Math.floor(this.height * 0.5) - _box.height/2;
-            this.height = Math.max(_box.height, this.height);
-            this.children.push(_box);
+            const _panel = new HorizontalPanel();
+            const _box = this.defaultValueBox = new _BoxClass(this.pinProperty.defaultValue, this._pinProperty.formattedName);
+            const _paddingH = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
+            const _paddingV = _panel.padding.bottom = Math.floor(this.height * 0.5) - _box.height/2;
+            _panel.padding.left = _panel.padding.right = _paddingH;
+            _panel.padding.top = _panel.padding.bottom = _paddingV;
+            _panel.height = Constants.DEFAULT_BOX_HEIGHT//Math.max(_box.height, _panel.height, Constants.DEFAULT_BOX_HEIGHT);
+            _panel.height = Math.max(_box.height, _panel.height);
+            _panel.controlLayout |= ControlLayout.FillParentVertical;
+            _panel.add(_box);
+            this.height = Math.max(this.height, _panel.height);
+            this.children.push(_panel);
         }
     }
 
@@ -134,9 +140,10 @@ export class PinControl extends HorizontalPanel {
     }
 
     private drawPin(canvas: Canvas2D) {
-        let textX = this.setupTextDrawing(canvas);
-
-        canvas.fillText(this._pinProperty.formattedName, textX, 4);    
+        if (!this.defaultValueBox) {
+            let textX = this.setupTextDrawing(canvas);
+            canvas.fillText(this._pinProperty.formattedName, textX, 4);
+        }
         
         if (this.icon) { this.drawPinIcon(canvas, this.icon); }
     }
@@ -159,7 +166,7 @@ export class PinControl extends HorizontalPanel {
             canvas.textAlign("right")
         } 
 
-        canvas.font('400 11px sans-serif')
+        canvas.font(Constants.NODE_FONT)
         .fillStyle("#eee");
 
         return textX;
