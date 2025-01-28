@@ -29,7 +29,7 @@ export class TextBoxControl extends UserControl {
     const bText = this.text && this.text.length;
     canvas
         .roundedRectangle(0, 0, this.size.x, this.size.y, Constants.DEFAULT_BOX_RADIUS)
-        .fillStyle('#282828FF')
+        .fillStyle('#1d1d1d')
         .clip()
         .fill()
         .font(Constants.NODE_FONT)

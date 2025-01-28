@@ -4,7 +4,7 @@ import { Application } from "../application";
 import { Constants } from "../constants";
 import { Container } from "./container";
 import { Vector2 } from "../math/vector2";
-import { HorizontalAlignment, VerticalPanel } from "./vertical-panel";
+import { VerticalPanel } from "./vertical-panel";
 import { HorizontalPanel } from "./horizontal-panel";
 import { Icon } from "./icon";
 import { Label } from "./label";
@@ -60,7 +60,8 @@ export class Header extends HorizontalPanel {
     protected onDraw(canvas: Canvas2D) {
         canvas.fillStyle(this.fillStyleHeader)
             .roundedRectangle(1, 1, this.size.x - 2, this.size.y, { radiusTopLeft: 5, radiusTopRight: 5, radiusBottomLeft: 0, radiusBottomRight: 0 })
-            .fill();
+            .fill()
+            .clip() // todo needs fix
     }
 
     public addDelegate(pinControl: PinControl) {

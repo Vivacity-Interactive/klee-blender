@@ -43,8 +43,8 @@ export const LOT_USER_CONTROL: { [key in CustomUserClass | PropertyType]: UserCo
     [PropertyType.VALUE]: ValueBoxControl, //NumberBoxControl
     [PropertyType.INT]: ValueBoxControl, //NumberBoxControl
     [PropertyType.BOOLEAN]: CheckBoxControl,
-    [PropertyType.VECTOR]: ValueBoxControl, //StructBoxControl,
-    [PropertyType.ROTATION]: ValueBoxControl, //StructBoxControl,
+    [PropertyType.VECTOR]: StructBoxControl,
+    [PropertyType.ROTATION]: StructBoxControl,
     [PropertyType.MATRIX]: null, //StructBoxControl,
     [PropertyType.STRING]: TextBoxControl,
     [PropertyType.RGBA]: ColorBoxControl,

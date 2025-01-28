@@ -10,18 +10,44 @@ export class CheckBoxControl extends UserControl {
 
     private isTrue: boolean;
     private title: string;
+    
+    private _uid: number | string;
+    private _icon: SVGIcon;
+    private _iconScale: number;
 
-    constructor(isTrue: boolean, title: string = "") {
+    constructor(isTrue: boolean, title: string = "", _uid: number | string = null) {
         super();
         this.title = title;
         this.isTrue = isTrue;
         //this.width = Constants.DEFAULT_BOX_HEIGHT;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.controlLayout |= ControlLayout.FillParentHorizontal | ControlLayout.IgnoreVertical;
+        
+        const data = this.isTrue && LOT_ICONS[IconCategory.CHECKMARK];
+        if (data) {
+            this._uid = _uid;
+            this._icon = this._icon = new SVGIcon(data, null, '#cccccc');
+            this._iconScale = Math.floor(this.height * 0.85);
+        }
+    }
+
+    get icon(): SVGIcon { return this._icon; }
+
+    drawIcons(canvas: Canvas2D) {
+        if(this.isTrue) {
+            const _scale = this._iconScale;
+            const _margin:number = (this.height - this._iconScale)/2
+            
+            const _this = this;
+            const _f = (icon: SVGIcon) => {
+                canvas.drawImage(icon, _margin, _margin*2, _scale, icon.ratio * _scale);
+            }
+
+            this.icon.queueId(this._uid, _f, canvas);
+        }
     }
 
     protected onDraw(canvas: Canvas2D) {
-        //const icon = new Path2D(IconLibrary.DEFAULT_VALUE_BOOL_TRUE);
 /// #if DEBUG_UI
         canvas.strokeStyle("#0FF");
         canvas.strokeRect(0, 0, this.size.x + this.padding.left + this.padding.right, this.size.y + this.padding.top + this.padding.bottom);
@@ -37,23 +63,7 @@ export class CheckBoxControl extends UserControl {
             .lineWidth(1)
             .stroke();
 
-        // if(this.isTrue) {
-        //     const data = LOT_ICONS[IconCategory.CHECKBOX_HLT];
-            
-        //     // const check = new SVGIcon(data,(icon) => {
-        //     //     const _scale = Constants.DEFAULT_BOX_HEIGHT;
-                
-        //     //     canvas
-        //     //         .fillStyle(Constants.NODE_TEXT_COLOR)
-        //     //         .drawImage(icon, this.padding.left, this.padding.right, _scale, icon.ratio * _scale);
-
-        //     // }, '#4772b3ff');
-            
-        //     // canvas
-        //     //     .fillStyle(Constants.NODE_TEXT_COLOR)
-        //     //     .translate(-0.5, - Constants.DEFAULT_BOX_HEIGHT / 2)
-        //     //     .fill(icon, 'evenodd');
-        // }
+        this.drawIcons(canvas);
 
         canvas.restore();
         canvas.roundedRectangle(0, 0, this.size.x, this.size.y, Constants.DEFAULT_BOX_RADIUS)

@@ -1,7 +1,10 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
+import { IconCategory } from "../data/icon-category";
 import { ControlLayout } from "./control";
 import { UserControl } from "./user-control";
+import { LOT_ICONS } from "./utils/icon-library";
+import { SVGIcon } from "./utils/icon-utils";
 
 
 export class ValueBoxControl extends UserControl {
@@ -36,7 +39,7 @@ export class ValueBoxControl extends UserControl {
             .font(Constants.NODE_FONT)
             .fillStyle(fillStyle)
             .textAlign("right")
-            .fillText(this.text, this.size.x - Constants.DEFAULT_VALUE_BOX_MARGIN_LEFT, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING + this.size.y/2)
+            .fillText(this.text, this.size.x - Constants.DEFAULT_VALUE_BOX_TEXT_PADDING*3, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING + this.size.y/2)
         
         canvas.restore();
         canvas.roundedRectangle(0, 0, this.size.x*0.5, this.size.y, Constants.DEFAULT_BOX_RADIUS)

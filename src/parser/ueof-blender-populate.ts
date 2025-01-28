@@ -72,6 +72,7 @@ export class BLOEFPopulate {
         if (options) {
             for (let index = options.length - 1; index >= 0 ; index--) {
                 const option = options[index];
+                option._id = scope._id+index; // bad fix
                 let _option = new OptionProperty(node.name);
                 this.populateOption(option, _option, scope[option.identifier]);
                 node.customProperties.push(_option);

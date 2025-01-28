@@ -3,18 +3,30 @@ import { Vector2 } from "../math/vector2";
 
 export enum ControlLayout {
     Fixed = 0,
-    IgnoreHorizontal = 1 << 1,
-    IgnoreVertical = 1 << 2,
-    FillParent = 1 << 3,
-    FillChild = 1 << 4,
-    FillHorizontal = 1 << 5,
-    FillVertical = 1 << 6,
+    IgnoreHorizontal = 1 << 0,
+    IgnoreVertical = 1 << 1,
+    FillParent = 1 << 2,
+    FillChild = 1 << 3,
+    FillHorizontal = 1 << 4,
+    FillVertical = 1 << 5,
 
     Ignore = IgnoreHorizontal | IgnoreVertical,
     FillParentHorizontal = FillParent | FillHorizontal,
     FillParentVertical = FillParent | FillVertical,
     FillChildHorizontal = FillChild | FillHorizontal,
     FillChildVertical = FillChild | FillVertical,
+}
+
+export enum VerticalAlignment {
+    Top,
+    Middle,
+    Bottom
+}
+
+export enum HorizontalAlignment {
+    Left,
+    Center,
+    Right
 }
 
 export abstract class Control {

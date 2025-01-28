@@ -3,12 +3,26 @@ import { PropertyType } from "../data/custom-property-enums";
 import { Graph } from "../data/graph";
 import { decodeHtmlText } from "./text-utils";
 
+export const LOT_VECTOR_ELEMENT_NAME: Array<string> = [
+    "X",
+    "Y",
+    "Z",
+    "W"
+]
+
+type _KeyValuePair = { key: string, value: any }
+
+const _toKVArrLOT = (arr:any[], lot:Array<string>): _KeyValuePair[] => { return arr.map((x: any, i: number): _KeyValuePair => { return { key: lot[i%arr.length], value: x } }); }
+const _toKVArr = (arr:any[]): _KeyValuePair[] => { return arr.map((x:any): _KeyValuePair => { return { key: "", value: x }; }); }
+
 type ValueConstrutor = (raw: any, graph:Graph) => any
 
 const _passOn: ValueConstrutor = (value: any, graph:Graph): any => value;
 const _asColor: ValueConstrutor = (value: any, graph:Graph): any => new Color(value);
 const _asEnum: ValueConstrutor = (value: any, graph:Graph): any => decodeHtmlText(graph._enums[value[1]][value[0]])
-const _asString: ValueConstrutor = (value: any, graph:Graph): any => decodeHtmlText(value)
+const _asString: ValueConstrutor = (value: any, graph:Graph): any => decodeHtmlText(value);
+const _asVector: ValueConstrutor = (value: any, graph:Graph): any => (value.length <= 4 ? _toKVArrLOT(value, LOT_VECTOR_ELEMENT_NAME) : _toKVArr(value));
+const _asEuler: ValueConstrutor = (value: any, graph:Graph): any => [{ key: LOT_VECTOR_ELEMENT_NAME[0], value: value[0] }, { key: LOT_VECTOR_ELEMENT_NAME[1], value: value[1] }, { key: LOT_VECTOR_ELEMENT_NAME[2], value: value[2] }]
 
 export enum CustomValueClass {
 
@@ -41,8 +55,8 @@ export const LOT_VALUE: { [key in CustomValueClass | PropertyType]: ValueConstru
     [PropertyType.VALUE]: _passOn,
     [PropertyType.INT]: _passOn,
     [PropertyType.BOOLEAN]: _passOn,
-    [PropertyType.VECTOR]: _passOn,
-    [PropertyType.ROTATION]: _passOn,
+    [PropertyType.VECTOR]: _asVector,
+    [PropertyType.ROTATION]: _asEuler,
     [PropertyType.MATRIX]: _passOn,
     [PropertyType.STRING]: _asString,
     [PropertyType.RGBA]: _asColor,

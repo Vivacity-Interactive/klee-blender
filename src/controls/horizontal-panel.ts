@@ -1,10 +1,13 @@
 import { Canvas2D } from "../canvas";
 import { Vector2 } from "../math/vector2";
 import { Container } from "./container";
+import { VerticalAlignment } from "./control";
 import { VerticalPanel } from "./vertical-panel";
 
 export class HorizontalPanel extends Container {
     
+    public childAlignment: VerticalAlignment = VerticalAlignment.Top;
+
     constructor(x?: number, y?: number, zIndex?: number) {
         super(x, y, zIndex);
     }
@@ -13,7 +16,7 @@ export class HorizontalPanel extends Container {
 /// #if DEBUG_UI
         canvas.fillStyle("rgba(0,220,220,0.1)");
         canvas.lineWidth(1);
-        canvas.fillRect(0, 0, this.size.x + this.padding.left + this.padding.right, this.size.y + this.padding.top + this.padding.bottom);
+        canvas.fillRect(0, 0, this.size.x + this.padding.left + this.padding.right, this.size.y - this.padding.top + this.padding.bottom);
 /// #endif
     }
 
@@ -29,6 +32,10 @@ export class HorizontalPanel extends Container {
 
             let childSize = child.getCalculatedSize();
 
+            if(!child.ignoreVerticalLayout) {
+                size.y = Math.max(size.y, childSize.y)
+            }
+
             if (!child.ignoreHorizontalLayout) {
                 child.position.x = size.x;
                 size.x += childSize.x;
@@ -38,10 +45,6 @@ export class HorizontalPanel extends Container {
                 } else {
                     childWidth += childSize.x;
                 }
-            }
-
-            if(!child.ignoreVerticalLayout) {
-                size.y = Math.max(size.y, childSize.y)
             }
         }
 
@@ -60,6 +63,19 @@ export class HorizontalPanel extends Container {
         return size;
     }
 
+    private positionChildren() {
+        if (this.childAlignment == VerticalAlignment.Bottom) {
+            for (let child of this.children) {
+                child.position.y = (this.size.y - this.padding.top) - child.size.y;
+            }
+        } else if(this.childAlignment == VerticalAlignment.Middle) {
+            for (let child of this.children) {
+                const _childHalf = child.size.y/2;
+                child.position.y = -_childHalf;
+            }
+        }
+    }
+
     override applyFills(remainingSize?: Vector2): void {
         let remainingWidth = (remainingSize?.x || this.size.x) - this.childrenWidth - (this.padding.left + this.padding.right);
         let width = remainingWidth / this.horizontalFillCount;
@@ -71,6 +87,13 @@ export class HorizontalPanel extends Container {
             if (child.ignoreLayout || !child.visible)
                 continue;
 
+            if(!child.ignoreVerticalLayout) {
+                child.position.y = position.y;
+                if (child.fillParent && child.fillVertical) {
+                    child.desiredHeight = height;
+                }
+            }
+
             if (!child.ignoreHorizontalLayout) {
                 child.position.x = position.x;
                 if (child.fillParent && child.fillHorizontal) {
@@ -78,17 +101,12 @@ export class HorizontalPanel extends Container {
                 }
                 position.x += child.size.x + (child.padding.left || 0) + (child.padding.right || 0);
             }
-
-            if(!child.ignoreVerticalLayout) {
-                child.position.y = position.y;
-                if (child.fillParent && child.fillVertical) {
-                    child.desiredHeight = height;
-                }
-            }
             
             if (child instanceof Container) {
                 (child as Container).applyFills(new Vector2(width, height));
             }
         }
+
+        this.positionChildren();
     }
 }

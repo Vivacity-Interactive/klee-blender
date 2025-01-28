@@ -3,7 +3,7 @@ import { Vector2 } from "../../math/vector2";
 import { Node } from "../../data/nodes/node";
 import { NodeState } from "../../data/nodes/node-enums";
 import { PinControl } from "../pin-control";
-import { HorizontalAlignment, VerticalPanel } from "../vertical-panel";
+import { VerticalPanel } from "../vertical-panel";
 import { HorizontalPanel } from "../horizontal-panel";
 import { PinProperty } from "../../data/pin/pin-property";
 import { PinDirection } from "../../data/pin/pin-enums";
@@ -11,7 +11,7 @@ import { Container } from "../container";
 import { ErrorBar } from "../error-bar";
 import { OptionProperty } from "../../data/option/option-property";
 import { OptionControl } from "../option-control";
-import { ControlLayout } from "../control";
+import { ControlLayout, HorizontalAlignment } from "../control";
 
 
 export abstract class NodeControl extends Container {
@@ -65,7 +65,7 @@ export abstract class NodeControl extends Container {
         
         this.inputPinPanel = new VerticalPanel();
         this.outputPinPanel = new VerticalPanel();
-        this.outputPinPanel.childAlignment = HorizontalAlignment.RIGHT;
+        this.outputPinPanel.childAlignment = HorizontalAlignment.Right;
         this.outputPinPanel.controlLayout |= ControlLayout.FillParentHorizontal;
         
         this.pinPanel.add(this.outputPinPanel);

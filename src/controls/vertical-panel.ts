@@ -1,17 +1,12 @@
 import { Canvas2D } from "../canvas";
 import { Vector2 } from "../math/vector2";
 import { Container } from "./container";
+import { HorizontalAlignment } from "./control";
 import { UserControl } from "./user-control";
-
-export enum HorizontalAlignment {
-    LEFT,
-    CENTER,
-    RIGHT
-}
 
 export class VerticalPanel extends Container {
 
-    public childAlignment: HorizontalAlignment = HorizontalAlignment.LEFT;
+    public childAlignment: HorizontalAlignment = HorizontalAlignment.Left;
 
     constructor(x?: number, y?: number, zIndex?: number) {
         super(x, y, zIndex);
@@ -54,6 +49,9 @@ export class VerticalPanel extends Container {
         size.x = Math.max(size.x, (this.minWidth || 0));
         size.y = Math.max(size.y, (this.minHeight || 0));
 
+        size.x = (this.width || size.x);
+        size.y = (this.height || size.y);
+
         this.controlSize = size.copy();
         this.childrenHeight = childHeight;
 
@@ -64,10 +62,13 @@ export class VerticalPanel extends Container {
     }
 
     private positionChildren() {
-        if (this.childAlignment == HorizontalAlignment.RIGHT) {
+        if (this.childAlignment == HorizontalAlignment.Right) {
             for (let child of this.children) {
-                let rest = (this.size.x - this.padding.left) - child.size.x;
-                child.position.x = rest;
+                child.position.x = (this.size.x - this.padding.left) - child.size.x;
+            }
+        } else if (this.childAlignment == HorizontalAlignment.Center) {
+            for (let child of this.children) {
+                child.position.x = this.padding.left + child.size.x/2;
             }
         }
     }

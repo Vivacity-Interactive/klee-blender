@@ -2,7 +2,7 @@ import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
 import { OptionProperty } from "../data/option/option-property";
 import { Vector2 } from "../math/vector2";
-import { ControlLayout } from "./control";
+import { ControlLayout, VerticalAlignment } from "./control";
 import { HorizontalPanel } from "./horizontal-panel";
 import { Label } from "./label";
 import { NodeControl } from "./nodes/node-control";
@@ -30,7 +30,7 @@ export class OptionControl extends HorizontalPanel {
         this.hidden = this._optionProperty.isHidden;//false;
         
         this.width = 0;
-        this.height = 24;
+        this.height = Constants.DEFAULT_PROPERTY_HEIGHT;
 
         this.visible = !option.isHidden;
     }
@@ -58,14 +58,16 @@ export class OptionControl extends HorizontalPanel {
         const _BoxClass = this.optionProperty.isValued && LOT_USER_CONTROL[this.optionProperty.type];
         if (_BoxClass) {
             const _panel = new HorizontalPanel();
-            const _box = this.defaultValueBox = new _BoxClass(this.optionProperty.defaultValue, this.optionProperty.formattedName);
+            const _box = this.defaultValueBox = new _BoxClass(this.optionProperty.defaultValue, this.optionProperty.formattedName, this.optionProperty.id);
             const _paddingH = OptionControl.PINS_PADDING_HORIZONTAL + OptionControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-            const _paddingV = _panel.padding.bottom = Math.floor(this.height * 0.5) - _box.height/2;
+            const _paddingV = (Constants.DEFAULT_PROPERTY_HEIGHT - Constants.DEFAULT_BOX_HEIGHT)/2;
             _panel.padding.left = _panel.padding.right = _paddingH;
             _panel.padding.top = _panel.padding.bottom = _paddingV;
             _panel.height = Constants.DEFAULT_BOX_HEIGHT//Math.max(_box.height, _panel.height, Constants.DEFAULT_BOX_HEIGHT);
             _panel.height = Math.max(_box.height, _panel.height);
             _panel.controlLayout |= ControlLayout.FillParentVertical;
+            _panel.childAlignment = VerticalAlignment.Top;
+
             _panel.add(_box);
             this.height = Math.max(_box.height, this.height, _panel.height);
             this.children.push(_panel);
@@ -89,7 +91,7 @@ export class OptionControl extends HorizontalPanel {
         canvas.save();
 
         let paddingX = this.padding.left;
-        canvas.translate(paddingX, Math.floor(this.height * 0.5));
+        canvas.translate(paddingX, Math.floor(Constants.DEFAULT_PROPERTY_HEIGHT/2));
 
         this.drawOption(canvas);
 

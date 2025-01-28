@@ -182,11 +182,12 @@ class BLOF:
 class _Settings:
     def __init__(self):
         self.name = "GN_Wireframe"
+        #self.name = "GN_Contribute"
         #self.name = "GN_Test"
         #self.name = "Material"
         #self.name = "World"
         #self.name = "Scene"
-        self.html_save = False
+        self.html_save = True
         
 class VActCopyExportNodeGroups:
     def do_execute(self, context, settings):

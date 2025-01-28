@@ -3,7 +3,7 @@ import { Constants } from "../constants";
 import { PinDirection } from "../data/pin/pin-enums";
 import { PinProperty } from "../data/pin/pin-property";
 import { Vector2 } from "../math/vector2";
-import { ControlLayout } from "./control";
+import { ControlLayout, VerticalAlignment } from "./control";
 import { HorizontalPanel } from "./horizontal-panel";
 import { Label } from "./label";
 import { NodeConnectionControl } from "./node-connection-control";
@@ -37,7 +37,7 @@ export class PinControl extends HorizontalPanel {
     constructor(parentPosition: Vector2, pin: PinProperty) {
         super(0, 0);
         this._pinProperty = pin;
-        this.controlLayout |= ControlLayout.FillParentHorizontal;;
+        this.controlLayout |= ControlLayout.FillParentHorizontal;
         this.hidden = this._pinProperty.isHidden;//false;
 
         this._isInput = this._pinProperty.direction !== PinDirection.Output;
@@ -45,7 +45,7 @@ export class PinControl extends HorizontalPanel {
             ?? ColorUtils.getPinColor(this.pinProperty);
         
         this.width = 0;
-        this.height = 24;
+        this.height = Constants.DEFAULT_PROPERTY_HEIGHT;
 
         this.visible = !pin.isHidden;
 
@@ -87,14 +87,16 @@ export class PinControl extends HorizontalPanel {
         const _BoxClass = this.pinProperty.isValued && LOT_USER_CONTROL[this.pinProperty.type];
         if (_BoxClass) {
             const _panel = new HorizontalPanel();
-            const _box = this.defaultValueBox = new _BoxClass(this.pinProperty.defaultValue, this._pinProperty.formattedName);
+            const _box = this.defaultValueBox = new _BoxClass(this.pinProperty.defaultValue, this._pinProperty.formattedName, this.pinProperty.id);
             const _paddingH = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
-            const _paddingV = _panel.padding.bottom = Math.floor(this.height * 0.5) - _box.height/2;
+            const _paddingV = (Constants.DEFAULT_PROPERTY_HEIGHT - Constants.DEFAULT_BOX_HEIGHT)/2;
             _panel.padding.left = _panel.padding.right = _paddingH;
             _panel.padding.top = _panel.padding.bottom = _paddingV;
-            _panel.height = Constants.DEFAULT_BOX_HEIGHT//Math.max(_box.height, _panel.height, Constants.DEFAULT_BOX_HEIGHT);
+            _panel.height = Constants.DEFAULT_BOX_HEIGHT
             _panel.height = Math.max(_box.height, _panel.height);
             _panel.controlLayout |= ControlLayout.FillParentVertical;
+            _panel.childAlignment = VerticalAlignment.Top
+
             _panel.add(_box);
             this.height = Math.max(this.height, _panel.height);
             this.children.push(_panel);
@@ -118,7 +120,7 @@ export class PinControl extends HorizontalPanel {
         canvas.fillStyle(this._color).strokeStyle(this._color);
 
         let paddingX = (this.pinProperty.direction === PinDirection.Output) ? -this.padding.right : this.padding.left;
-        canvas.translate(paddingX, Math.floor(this.height * 0.5));
+        canvas.translate(paddingX, Math.floor(Constants.DEFAULT_PROPERTY_HEIGHT/2));//this.height
 
         this.drawPin(canvas);
 
@@ -131,9 +133,7 @@ export class PinControl extends HorizontalPanel {
 
         const _this = this;
         const _f = (icon: SVGIcon) => {
-            canvas
-                .fillStyle(_this._color)
-                .drawImage(icon, pinX - _scale * 0.5, -_scale * 0.5, _scale, icon.ratio * _scale);
+            canvas.drawImage(icon, pinX - _scale * 0.5, -_scale * 0.5, _scale, icon.ratio * _scale);
         }
 
         this.icon.queueId(this.pinProperty.id, _f, canvas);
