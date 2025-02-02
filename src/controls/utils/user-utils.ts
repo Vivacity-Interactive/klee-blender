@@ -2,6 +2,7 @@ import { PropertyType } from "../../data/custom-property-enums";
 import { CheckBoxControl } from "../check-box-control";
 import { ColorBoxControl } from "../color-box-control";
 import { EnumBoxControl } from "../enum-box-control";
+import { ReferenceBoxControl } from "../reference-box-control";
 import { StructBoxControl } from "../struct-box-control";
 import { TextBoxControl } from "../text-box-control";
 import { UserControl } from "../user-control";
@@ -40,8 +41,8 @@ export class UserUtils {
 }
 
 export const LOT_USER_CONTROL: { [key in CustomUserClass | PropertyType]: UserControlConstrutor } = {
-    [PropertyType.VALUE]: ValueBoxControl, //NumberBoxControl
-    [PropertyType.INT]: ValueBoxControl, //NumberBoxControl
+    [PropertyType.VALUE]: ValueBoxControl,
+    [PropertyType.INT]: ValueBoxControl,
     [PropertyType.BOOLEAN]: CheckBoxControl,
     [PropertyType.VECTOR]: StructBoxControl,
     [PropertyType.ROTATION]: StructBoxControl,
@@ -49,11 +50,11 @@ export const LOT_USER_CONTROL: { [key in CustomUserClass | PropertyType]: UserCo
     [PropertyType.STRING]: TextBoxControl,
     [PropertyType.RGBA]: ColorBoxControl,
     [PropertyType.SHADER]: null,
-    [PropertyType.OBJECT]: TextBoxControl, //ReferenceBoxControl
+    [PropertyType.OBJECT]: ReferenceBoxControl,
     [PropertyType.GEOMETRY]: null,
-    [PropertyType.COLLECTION]: TextBoxControl, //ReferenceBoxControl
+    [PropertyType.COLLECTION]: ReferenceBoxControl,
     [PropertyType.TEXTURE]: null,
-    [PropertyType.MATERIAL]: TextBoxControl, //ReferenceBoxControl
+    [PropertyType.MATERIAL]: ReferenceBoxControl,
     [PropertyType.MENU]: EnumBoxControl, //Enu
     [PropertyType.IMAGE]: TextBoxControl, //AssetBoxControl
     [PropertyType.CUSTOM]: null,

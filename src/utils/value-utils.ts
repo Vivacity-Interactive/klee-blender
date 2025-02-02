@@ -22,7 +22,8 @@ const _asColor: ValueConstrutor = (value: any, graph:Graph): any => new Color(va
 const _asEnum: ValueConstrutor = (value: any, graph:Graph): any => decodeHtmlText(graph._enums[value[1]][value[0]])
 const _asString: ValueConstrutor = (value: any, graph:Graph): any => decodeHtmlText(value);
 const _asVector: ValueConstrutor = (value: any, graph:Graph): any => (value.length <= 4 ? _toKVArrLOT(value, LOT_VECTOR_ELEMENT_NAME) : _toKVArr(value));
-const _asEuler: ValueConstrutor = (value: any, graph:Graph): any => [{ key: LOT_VECTOR_ELEMENT_NAME[0], value: value[0] }, { key: LOT_VECTOR_ELEMENT_NAME[1], value: value[1] }, { key: LOT_VECTOR_ELEMENT_NAME[2], value: value[2] }]
+const _asEuler: ValueConstrutor = (value: any, graph:Graph): any => [{ key: LOT_VECTOR_ELEMENT_NAME[0], value: value[0] + "\u00b0" }, { key: LOT_VECTOR_ELEMENT_NAME[1], value: value[1] + "\u00b0" }, { key: LOT_VECTOR_ELEMENT_NAME[2], value: value[2] + "\u00b0" }]
+const _asObject: ValueConstrutor = (value: any, graph:Graph): any => (value == 'null' || !value) ? "" : value;
 
 export enum CustomValueClass {
 
@@ -61,11 +62,11 @@ export const LOT_VALUE: { [key in CustomValueClass | PropertyType]: ValueConstru
     [PropertyType.STRING]: _asString,
     [PropertyType.RGBA]: _asColor,
     [PropertyType.SHADER]: _passOn,
-    [PropertyType.OBJECT]: _passOn,
+    [PropertyType.OBJECT]: _asObject,
     [PropertyType.GEOMETRY]: _passOn,
-    [PropertyType.COLLECTION]: _passOn,
+    [PropertyType.COLLECTION]: _asObject,
     [PropertyType.TEXTURE]: _passOn,
-    [PropertyType.MATERIAL]: _passOn,
+    [PropertyType.MATERIAL]: _asObject,
     [PropertyType.MENU]: _passOn, //ComboBoxControl
     [PropertyType.IMAGE]: _passOn, //CreateBoxControl
     [PropertyType.CUSTOM]: _passOn,

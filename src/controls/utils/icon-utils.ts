@@ -1,5 +1,6 @@
 import { Canvas2D } from "../../canvas";
-import { PropertyState } from "../../data/custom-property-enums";
+import { PropertyState, PropertyType } from "../../data/custom-property-enums";
+import { IconCategory } from "../../data/icon-category";
 import { PinShape } from "../../data/pin/pin-enums";
 import { PinProperty } from "../../data/pin/pin-property";
 import { IconData, LOT_ICONS } from "./icon-library";
@@ -76,4 +77,12 @@ export const LOT_PIN_ICON_STATE: Partial<{ [key in PropertyState]: { [key in Pin
         [PinShape.SQUARE_DOT]: PinShape.SQUARE,
         [PinShape.DIAMOND_DOT]: PinShape.DIAMOND
     }
+}
+
+export const LOT_DATA_ICON: Partial<{ [key in PropertyType]: IconCategory }> = {
+    [PropertyType.OBJECT]: IconCategory.OBJECT_DATA,
+    [PropertyType.TEXTURE]: IconCategory.TEXTURE_DATA,
+    [PropertyType.IMAGE]: IconCategory.IMAGE_DATA,
+    [PropertyType.COLLECTION]: IconCategory.GROUP,
+    [PropertyType.MATERIAL]: IconCategory.MATERIAL_DATA
 }
