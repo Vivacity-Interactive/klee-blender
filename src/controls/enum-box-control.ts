@@ -26,7 +26,7 @@ export class EnumBoxControl extends UserControl {
         const data = LOT_ICONS[IconCategory.DOWNARROW_HLT];
         if (data) {
             this._uid = _uid;
-            this._icon = this._icon = new SVGIcon(data, null, '#cccccc');
+            this._icon = this._icon = new SVGIcon(data, 'DOWNARROW_HLT#cccccc', '#cccccc');
             this._iconScale = Math.floor(this.height * 0.5);
         }
     }
@@ -46,7 +46,7 @@ export class EnumBoxControl extends UserControl {
             canvas.drawImage(icon, this.size.x - _scale - _margin, _margin*1.5, _scale, icon.ratio * _scale);
         }
 
-        this.icon.queueId(this._uid, _f, canvas);
+        this.icon.queue(this._uid, _f, canvas);
     }
 
     protected onDraw(canvas: Canvas2D) {

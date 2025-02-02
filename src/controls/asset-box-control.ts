@@ -30,14 +30,14 @@ export class AssetBoxControl extends UserControl {
         const data = LOT_ICONS[IconCategory.EYEDROPPER];
         if (data) {
             this._uid = _uid;
-            this._icon = new SVGIcon(data, null, '#cccccc');
+            this._icon = new SVGIcon(data, 'EYEDROPPER#cccccc', '#cccccc');
             this._iconScale = Math.floor(this.height * 0.9);
         }
 
          // Fix this optional, needs custon icon sequence or none.
         const data2 = LOT_ICONS[IconCategory.IMAGE_DATA];
         if (data2) {
-            this._icon2 = new SVGIcon(data2, null, '#cccccc');
+            this._icon2 = new SVGIcon(data2, 'IMAGE_DATA#ccccc','#cccccc');
         }
     }
 
@@ -63,8 +63,8 @@ export class AssetBoxControl extends UserControl {
             canvas.drawImage(icon, _margin*1.2, _margin*1.2, _scale, icon.ratio * _scale);
         }
 
-        this.icon.queueId(this._uid, _f, canvas);
-        this.icon2.queueId(this._uid, _f2, canvas);
+        this.icon.queue(this._uid, _f, canvas);
+        this.icon2.queue(this._uid, _f2, canvas);
     }
 
     protected onDraw(canvas: Canvas2D) {

@@ -26,7 +26,7 @@ export class CheckBoxControl extends UserControl {
         const data = this.isTrue && LOT_ICONS[IconCategory.CHECKMARK];
         if (data) {
             this._uid = _uid;
-            this._icon = this._icon = new SVGIcon(data, null, '#cccccc');
+            this._icon = this._icon = new SVGIcon(data, 'CHECKMARK#cccccc', '#cccccc');
             this._iconScale = Math.floor(this.height * 0.85);
         }
     }
@@ -43,7 +43,7 @@ export class CheckBoxControl extends UserControl {
                 canvas.drawImage(icon, _margin, _margin*2, _scale, icon.ratio * _scale);
             }
 
-            this.icon.queueId(this._uid, _f, canvas);
+            this.icon.queue(this._uid, _f, canvas);
         }
     }
 

@@ -37,10 +37,10 @@ export class RerouteNodeControl extends NodeControl implements DrawableControl {
         const _this = this;
         const _fx = (icon: SVGIcon) => {
             const _scale = _this.pins[0].iconScale;
-            // Todo find where 2 comes from
+            // Todo find where 2 comes from, not sure if pins failed to load icon if it still works.
             canvas.drawImage(icon, 0, 2, _scale, icon.ratio * _scale);
         }
         
-        if (icon) { icon.queueId(this.node.id, _fx, canvas); }
+        if (icon) { icon.queue(this.node.id, _fx, canvas); }
     }
 }

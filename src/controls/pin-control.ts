@@ -10,6 +10,7 @@ import { NodeConnectionControl } from "./node-connection-control";
 import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
 import { ColorUtils } from "./utils/color-utils";
+import { LOT_ICONS } from "./utils/icon-library";
 import { _DDxIcon, IconUtils, SVGIcon } from "./utils/icon-utils";
 import { LOT_USER_CONTROL } from "./utils/user-utils";
 
@@ -49,9 +50,10 @@ export class PinControl extends HorizontalPanel {
 
         this.visible = !pin.isHidden;
 
-        const data = IconUtils.getIconDataPinState(this._pinProperty);//LOT_ICONS[this._pinProperty.shape];
+        const _iconId = IconUtils.getIconCategoryPinState(this._pinProperty);
+        const data = LOT_ICONS[_iconId];
         if (data) { 
-            this._icon = new SVGIcon(data, null, this._color);
+            this._icon = new SVGIcon(data, _iconId+this._color, this._color);
             this._iconScale = Math.floor(this.height * 0.45);
         }
     }
@@ -136,7 +138,7 @@ export class PinControl extends HorizontalPanel {
             canvas.drawImage(icon, pinX - _scale * 0.5, -_scale * 0.5, _scale, icon.ratio * _scale);
         }
 
-        this.icon.queueId(this.pinProperty.id, _f, canvas);
+        this.icon.queue(this.pinProperty.id, _f, canvas);
     }
 
     private drawPin(canvas: Canvas2D) {
