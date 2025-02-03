@@ -68,7 +68,7 @@ export const LOT_VALUE: { [key in CustomValueClass | PropertyType]: ValueConstru
     [PropertyType.TEXTURE]: _passOn,
     [PropertyType.MATERIAL]: _asObject,
     [PropertyType.MENU]: _passOn, //ComboBoxControl
-    [PropertyType.IMAGE]: _passOn, //CreateBoxControl
+    [PropertyType.IMAGE]: _asObject, //CreateBoxControl
     [PropertyType.CUSTOM]: _passOn,
     [PropertyType._UNKNOWN]: _passOn,
     [PropertyType.ENUM]: _asEnum,

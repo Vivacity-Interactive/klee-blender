@@ -14,20 +14,21 @@ export class EnumBoxControl extends UserControl {
 
     private _uid: number | string;
     private _icon: SVGIcon;
+    private _icon2: SVGIcon;
     private _iconScale: number;
 
     constructor(text: string, title: string = "", _uid: number | string = null) {
         super();
+        this._uid = _uid;
         //this.title = title;
         this.text = text;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.controlLayout |= ControlLayout.FillParentHorizontal | ControlLayout.IgnoreVertical;
+        this._iconScale = Math.floor(this.height * 0.5);
 
         const data = LOT_ICONS[IconCategory.DOWNARROW_HLT];
         if (data) {
-            this._uid = _uid;
-            this._icon = this._icon = new SVGIcon(data, 'DOWNARROW_HLT#cccccc', '#cccccc');
-            this._iconScale = Math.floor(this.height * 0.5);
+            this._icon2 = new SVGIcon(data, 'DOWNARROW_HLT#cccccc', '#cccccc');
         }
     }
 
@@ -35,18 +36,16 @@ export class EnumBoxControl extends UserControl {
         
     }
 
-    get icon(): SVGIcon { return this._icon; }
-
     drawIcons(canvas: Canvas2D) {
         const _scale = this._iconScale;
         const _margin:number = (this.height - this._iconScale)/2
-        
         const _this = this;
+        
         const _f = (icon: SVGIcon) => {
-            canvas.drawImage(icon, this.size.x - _scale - _margin, _margin*1.5, _scale, icon.ratio * _scale);
+            canvas.drawImage(icon, _this.size.x - _scale - _margin, (_this.size.y - icon.ratio * _scale)/2, _scale, icon.ratio * _scale);
         }
 
-        this.icon.queue(this._uid, _f, canvas);
+        this._icon2.queue(this._uid, _f, canvas);
     }
 
     protected onDraw(canvas: Canvas2D) {

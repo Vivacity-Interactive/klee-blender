@@ -17,33 +17,31 @@ export class CheckBoxControl extends UserControl {
 
     constructor(isTrue: boolean, title: string = "", _uid: number | string = null) {
         super();
+        this._uid = _uid;
         this.title = title;
         this.isTrue = isTrue;
-        //this.width = Constants.DEFAULT_BOX_HEIGHT;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.controlLayout |= ControlLayout.FillParentHorizontal | ControlLayout.IgnoreVertical;
         
+        this._iconScale = Math.floor(this.height * 0.85);
+
         const data = this.isTrue && LOT_ICONS[IconCategory.CHECKMARK];
         if (data) {
-            this._uid = _uid;
-            this._icon = this._icon = new SVGIcon(data, 'CHECKMARK#cccccc', '#cccccc');
-            this._iconScale = Math.floor(this.height * 0.85);
+            this._icon = new SVGIcon(data, 'CHECKMARK#cccccc', '#cccccc');
         }
     }
-
-    get icon(): SVGIcon { return this._icon; }
 
     drawIcons(canvas: Canvas2D) {
         if(this.isTrue) {
             const _scale = this._iconScale;
             const _margin:number = (this.height - this._iconScale)/2
-            
             const _this = this;
+            
             const _f = (icon: SVGIcon) => {
-                canvas.drawImage(icon, _margin, _margin*2, _scale, icon.ratio * _scale);
+                canvas.drawImage(icon, _margin, _margin + (_this.size.y - _scale)/2, _scale, icon.ratio * _scale);
             }
 
-            this.icon.queue(this._uid, _f, canvas);
+            this._icon.queue(this._uid, _f, canvas);
         }
     }
 

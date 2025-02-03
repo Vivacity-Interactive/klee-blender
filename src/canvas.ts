@@ -29,7 +29,7 @@ export class Canvas2D {
     }
 
     clip() {
-        this._context.clip() 
+        this._context.clip();
         return this;
     }
 
@@ -49,7 +49,7 @@ export class Canvas2D {
     }
 
     drawImage(image: CanvasImageSource, x: number, y: number, width: number, height: number) {
-        this._context.drawImage(image, x, y, width, height)
+        this._context.drawImage(image, x, y, width, height);
         return this;
     }
 

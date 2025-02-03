@@ -49,12 +49,12 @@ export class PinControl extends HorizontalPanel {
         this.height = Constants.DEFAULT_PROPERTY_HEIGHT;
 
         this.visible = !pin.isHidden;
-
+        
+        this._iconScale = Math.floor(this.height * 0.45);
         const _iconId = IconUtils.getIconCategoryPinState(this._pinProperty);
         const data = LOT_ICONS[_iconId];
         if (data) { 
             this._icon = new SVGIcon(data, _iconId+this._color, this._color);
-            this._iconScale = Math.floor(this.height * 0.45);
         }
     }
 
@@ -132,10 +132,10 @@ export class PinControl extends HorizontalPanel {
     drawPinIcon(canvas: Canvas2D, icon: SVGIcon) {
         const pinX = Math.floor(this.getPinX());
         const _scale = this._iconScale;
+        const scale = _scale * 0.5;
 
-        const _this = this;
         const _f = (icon: SVGIcon) => {
-            canvas.drawImage(icon, pinX - _scale * 0.5, -_scale * 0.5, _scale, icon.ratio * _scale);
+            canvas.drawImage(icon, pinX - scale, -scale, _scale, icon.ratio * _scale);
         }
 
         this.icon.queue(this.pinProperty.id, _f, canvas);

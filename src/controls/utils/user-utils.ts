@@ -1,4 +1,5 @@
 import { PropertyType } from "../../data/custom-property-enums";
+import { AssetBoxControl } from "../asset-box-control";
 import { CheckBoxControl } from "../check-box-control";
 import { ColorBoxControl } from "../color-box-control";
 import { EnumBoxControl } from "../enum-box-control";
@@ -56,7 +57,7 @@ export const LOT_USER_CONTROL: { [key in CustomUserClass | PropertyType]: UserCo
     [PropertyType.TEXTURE]: null,
     [PropertyType.MATERIAL]: ReferenceBoxControl,
     [PropertyType.MENU]: EnumBoxControl, //Enu
-    [PropertyType.IMAGE]: TextBoxControl, //AssetBoxControl
+    [PropertyType.IMAGE]: AssetBoxControl,
     [PropertyType.CUSTOM]: null,
     [PropertyType._UNKNOWN]: null,
     [PropertyType.ENUM]: EnumBoxControl, //282828

@@ -13,6 +13,7 @@ export class Constants {
     public static readonly DEFAULT_VALUE_BOX_TEXT_PADDING = 4;
     public static readonly DEFAULT_VALUE_BOX_MARGIN_LEFT = 8;
     public static readonly DEFAULT_VALUE_BOX_TITLE_PADDING = 20;
+    public static readonly DEFAULT_ASSET_BOX_TITLE_PADDING = 28;
 
     public static readonly DEFAULT_FUNC_BACKGROUND_COLOR = '0, 214, 163';
     public static readonly DEFAULT_FUNC_PURE_BACKGROUND_COLOR = '0, 214, 163';
