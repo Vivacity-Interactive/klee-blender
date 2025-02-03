@@ -12,6 +12,7 @@ export class AssetBoxControl extends UserControl {
 
     private text: string;
     private title: string;
+    private users: number;
 
     private _uid: number | string;
     private _icon: SVGIcon;
@@ -24,6 +25,7 @@ export class AssetBoxControl extends UserControl {
         this._uid = _uid;
         this.title = title;
         this.text = ref ? ref.name_full ?? ref.name : "";
+        this.users = ref.users - (+!!ref.use_fake_user);
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.controlLayout |= ControlLayout.FillParentHorizontal | ControlLayout.IgnoreVertical;
         
@@ -136,6 +138,17 @@ export class AssetBoxControl extends UserControl {
             _entry.icon.queue(this._uid+String(index), _h, canvas);
             index++;
         }
+
+        if (this.users > 1) {
+            const _textX = _scalex/2;
+            const _offsetx = (_scalex - _scalex)/2;
+            canvas
+                .fillStyle('#545454ff')
+                .fillRect(_this.size.x - (_scalex - _margin)*index, 0, _scalex, this.size.y)
+                .fillStyle('#cccccc')
+                .textAlign("center")
+                .fillText(String(this.users), _this.size.x - (_scalex - _margin)*index + _offsetx + _textX, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING + this.size.y/2);
+        }
     }
 
     drawNoAssetContext(canvas: Canvas2D)
@@ -187,6 +200,7 @@ export class AssetBoxControl extends UserControl {
                     .fillStyle('#cccccc')
                     .textAlign("left")
                     .fillText(bText ? this.text : this.title, Constants.DEFAULT_ASSET_BOX_TITLE_PADDING, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING + this.size.y/2);
+                
                 this.drawAssetContext(canvas);
             }
             else { this.drawNoAssetContext(canvas); }

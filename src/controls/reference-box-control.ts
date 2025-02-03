@@ -17,9 +17,11 @@ export class ReferenceBoxControl extends UserControl {
     private _icon: SVGIcon;
     private _icon2: SVGIcon;
     private _iconScale: number;
+    private _icon2Scale: number;
 
     constructor(ref: any, title: string = "", _uid: number | string = null) {
         super();
+        this._uid = _uid;
         this.title = title;
         this.text = ref ? ref.name_full ?? ref.name : "";
         this.height = Constants.DEFAULT_BOX_HEIGHT;
@@ -28,15 +30,16 @@ export class ReferenceBoxControl extends UserControl {
         // Fix this optional, needs argument variation on show, 
         const data = LOT_ICONS[IconCategory.OBJECT_DATA];
         if (data) {
-            this._uid = _uid;
             this._icon = new SVGIcon(data, 'OBJECT_DATA#cccccc', '#cccccc');
             this._iconScale = Math.floor(this.height * 0.9);
         }
 
         // Fix this optional, needs custon icon or none.
-        const data2 = LOT_ICONS[IconCategory.EYEDROPPER];
+        const bText = this.text && this.text.length;
+        const data2 = LOT_ICONS[bText ? IconCategory.X : IconCategory.EYEDROPPER];
         if (data2) {
-            this._icon2 = new SVGIcon(data2, 'EYEDROPPER#cccccc', '#cccccc');
+            this._icon2 = new SVGIcon(data2, bText ? 'X#cccccc' : 'EYEDROPPER#cccccc', '#cccccc');
+            this._icon2Scale = Math.floor(this.height * (bText ? 0.5 : 0.9));
         }
     }
 
@@ -47,6 +50,7 @@ export class ReferenceBoxControl extends UserControl {
 
     drawIcons(canvas: Canvas2D) {
         const _scale = this._iconScale;
+        const _scale2 = this._icon2Scale;
         const _margin:number = (this.height - this._iconScale)/2
         const _this = this;
         
@@ -60,7 +64,7 @@ export class ReferenceBoxControl extends UserControl {
 
         if (this._icon2) {
             const _f2 = (icon: SVGIcon) => {
-                canvas.drawImage(icon, _this.size.x - _scale - _margin, (_this.size.y - _scale)/2, _scale, icon.ratio * _scale);
+                canvas.drawImage(icon, _this.size.x - _scale - _margin, (_this.size.y - _scale2)/2, _scale2, icon.ratio * _scale2);
             }
             this._icon2.queue(this._uid, _f2, canvas);
         }
