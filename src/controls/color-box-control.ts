@@ -3,15 +3,18 @@ import { UserControl } from "./user-control";
 import { Color } from "../data/color";
 import { Constants } from "../constants";
 import { ControlLayout } from "./control";
+import { ValueType } from "./utils/user-utils";
 
 
 export class ColorBoxControl extends UserControl {
 
     private color: Color;
     private title: string;
+    private desc: ValueType;
 
-    constructor(color: Color, title: string = "") {
+    constructor(color: Color, title: string = "", desc: ValueType = null,  _uid: number | string = null) {
         super();
+        this.desc = desc;
         this.title = title;
         this.color = color;
         this.height = Constants.DEFAULT_BOX_HEIGHT;

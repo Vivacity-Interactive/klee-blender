@@ -1,9 +1,6 @@
 import { Canvas2D } from "../canvas";
 import { Node } from "../data/nodes/node";
-import { Application } from "../application";
 import { Constants } from "../constants";
-import { Container } from "./container";
-import { Vector2 } from "../math/vector2";
 import { VerticalPanel } from "./vertical-panel";
 import { HorizontalPanel } from "./horizontal-panel";
 import { Icon } from "./icon";

@@ -4,11 +4,9 @@ import { Node } from "../../data/nodes/node";
 import { NodeState } from "../../data/nodes/node-enums";
 import { PinControl } from "../pin-control";
 import { VerticalPanel } from "../vertical-panel";
-import { HorizontalPanel } from "../horizontal-panel";
 import { PinProperty } from "../../data/pin/pin-property";
 import { PinDirection } from "../../data/pin/pin-enums";
 import { Container } from "../container";
-import { ErrorBar } from "../error-bar";
 import { OptionProperty } from "../../data/option/option-property";
 import { OptionControl } from "../option-control";
 import { ControlLayout, HorizontalAlignment } from "../control";
@@ -40,8 +38,6 @@ export abstract class NodeControl extends Container {
     constructor(node: Node) {
         super(node.pos.x, node.pos.y);
         this._node = node;
-        //this.width = node.width;
-        //this.height = node.height;
         this.minWidth = node.width;
         this.minHeight = node.height;
         this.padding.bottom = 4;
@@ -72,20 +68,8 @@ export abstract class NodeControl extends Container {
         this.pinPanel.add(this.optionPanel);
         this.pinPanel.add(this.inputPinPanel);
         
-        this.initErrorBar();
         this.addInfoIcons();
 
-    }
-
-    private initErrorBar() {
-        if (this.node.errorType !== undefined && this.node.errorMsg !== undefined) {
-            switch (this.node.errorType) {
-                case 1: 
-                    let errorBar = new ErrorBar("ERROR!", this.node.errorMsg);
-                    this.mainPanel.add(errorBar);
-                    break;
-            }
-        }
     }
 
     private addInfoIcons() {

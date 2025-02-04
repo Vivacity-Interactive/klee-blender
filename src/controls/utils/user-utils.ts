@@ -1,4 +1,4 @@
-import { PropertyType } from "../../data/custom-property-enums";
+import { PropertySubCategory, PropertyType } from "../../data/custom-property-enums";
 import { AssetBoxControl } from "../asset-box-control";
 import { CheckBoxControl } from "../check-box-control";
 import { ColorBoxControl } from "../color-box-control";
@@ -10,6 +10,8 @@ import { UserControl } from "../user-control";
 import { ValueBoxControl } from "../value-box-control";
 
 type UserControlConstrutor = new (...parms: any) => UserControl
+
+export type ValueType = { type: PropertyType, unit: PropertySubCategory, min:number, max: number, decimal:number }
 
 export enum CustomUserClass {
     // Enum Control

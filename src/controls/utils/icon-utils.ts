@@ -75,6 +75,12 @@ export function _DDxIcon(canvas: Canvas2D, callback: SVGIconCallback): SVGIconCa
     }
 }
 
+export enum CustomDataType {
+    ERROR,
+    WARNING,
+    INFO
+ };
+
 export const LOT_PIN_ICON_STATE: Partial<{ [key in PropertyState]: { [key in PinShape]: PinShape } }> = {
     [PropertyState.LINKED]: {
         [PinShape.CIRCLE]: PinShape.CIRCLE,
@@ -90,6 +96,9 @@ export const LOT_DATA_ICON: Partial<{ [key in PropertyType]: IconCategory }> = {
     [PropertyType.OBJECT]: IconCategory.OBJECT_DATA,
     [PropertyType.TEXTURE]: IconCategory.TEXTURE_DATA,
     [PropertyType.IMAGE]: IconCategory.IMAGE_DATA,
-    [PropertyType.COLLECTION]: IconCategory.GROUP,
-    [PropertyType.MATERIAL]: IconCategory.MATERIAL_DATA
+    [PropertyType.COLLECTION]: IconCategory.OUTLINER_COLLECTION,
+    [PropertyType.MATERIAL]: IconCategory.MATERIAL_DATA,
+    [CustomDataType.ERROR]: IconCategory.CANCEL,
+    [CustomDataType.WARNING]: IconCategory.ERROR,
+    [CustomDataType.INFO]: IconCategory.INFO
 }

@@ -1,5 +1,6 @@
 import { Color } from "../data/color";
 import { PropertyType } from "../data/custom-property-enums";
+import { Enum } from "../data/Enum";
 import { Graph } from "../data/graph";
 import { decodeHtmlText } from "./text-utils";
 
@@ -19,10 +20,10 @@ type ValueConstrutor = (raw: any, graph:Graph) => any
 
 const _passOn: ValueConstrutor = (value: any, graph:Graph): any => value;
 const _asColor: ValueConstrutor = (value: any, graph:Graph): any => new Color(value);
-const _asEnum: ValueConstrutor = (value: any, graph:Graph): any => decodeHtmlText(graph._enums[value[1]][value[0]])
+const _asEnum: ValueConstrutor = (value: any, graph:Graph): any => new Enum(value[0], graph._enums[value[1]]); //decodeHtmlText(graph._enums[value[1]][value[0]])
 const _asString: ValueConstrutor = (value: any, graph:Graph): any => decodeHtmlText(value);
 const _asVector: ValueConstrutor = (value: any, graph:Graph): any => (value.length <= 4 ? _toKVArrLOT(value, LOT_VECTOR_ELEMENT_NAME) : _toKVArr(value));
-const _asEuler: ValueConstrutor = (value: any, graph:Graph): any => [{ key: LOT_VECTOR_ELEMENT_NAME[0], value: value[0] + "\u00b0" }, { key: LOT_VECTOR_ELEMENT_NAME[1], value: value[1] + "\u00b0" }, { key: LOT_VECTOR_ELEMENT_NAME[2], value: value[2] + "\u00b0" }]
+const _asEuler: ValueConstrutor = (value: any, graph:Graph): any => [{ key: LOT_VECTOR_ELEMENT_NAME[0], value: value[0] }, { key: LOT_VECTOR_ELEMENT_NAME[1], value: value[1] }, { key: LOT_VECTOR_ELEMENT_NAME[2], value: value[2] }]
 const _asObject: ValueConstrutor = (value: any, graph:Graph): any => (value == 'null' || !value) ? "" : value;
 
 export enum CustomValueClass {

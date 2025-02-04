@@ -1,4 +1,3 @@
-
 export enum PropertySubCategory {
     None,
     Angle,

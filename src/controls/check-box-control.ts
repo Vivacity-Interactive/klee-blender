@@ -5,29 +5,33 @@ import { ControlLayout } from "./control";
 import { UserControl } from "./user-control";
 import { LOT_ICONS } from "./utils/icon-library";
 import { SVGIcon } from "./utils/icon-utils";
+import { ValueType } from "./utils/user-utils";
 
 export class CheckBoxControl extends UserControl {
 
     private isTrue: boolean;
     private title: string;
+    private desc: ValueType;
     
     private _uid: number | string;
     private _icon: SVGIcon;
     private _iconScale: number;
 
-    constructor(isTrue: boolean, title: string = "", _uid: number | string = null) {
+    constructor(isTrue: boolean, title: string = "", desc: ValueType = null, _uid: number | string = null) {
         super();
         this._uid = _uid;
+        this.desc = desc;
         this.title = title;
         this.isTrue = isTrue;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.controlLayout |= ControlLayout.FillParentHorizontal | ControlLayout.IgnoreVertical;
         
         this._iconScale = Math.floor(this.height * 0.85);
-
-        const data = this.isTrue && LOT_ICONS[IconCategory.CHECKMARK];
+        const _iconId = IconCategory.CHECKMARK;
+        const _color = '#cccccc';
+        const data = this.isTrue && LOT_ICONS[_iconId];
         if (data) {
-            this._icon = new SVGIcon(data, 'CHECKMARK#cccccc', '#cccccc');
+            this._icon = new SVGIcon(data, _iconId+_color, _color);
         }
     }
 

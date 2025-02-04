@@ -15,7 +15,7 @@ export enum IconCategory {
     TEXTURE_DATA,
     MATERIAL_DATA,
     IMAGE_DATA,
-    GROUP,
+    OUTLINER_COLLECTION,
     ZOOM_IN,
     ZOOM_OUT,
     CHECKBOX_DEHLT,

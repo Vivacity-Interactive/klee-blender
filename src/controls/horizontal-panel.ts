@@ -2,7 +2,6 @@ import { Canvas2D } from "../canvas";
 import { Vector2 } from "../math/vector2";
 import { Container } from "./container";
 import { VerticalAlignment } from "./control";
-import { VerticalPanel } from "./vertical-panel";
 
 export class HorizontalPanel extends Container {
     

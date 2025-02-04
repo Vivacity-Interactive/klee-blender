@@ -5,14 +5,13 @@ import { PinProperty } from "../data/pin/pin-property";
 import { Vector2 } from "../math/vector2";
 import { ControlLayout, VerticalAlignment } from "./control";
 import { HorizontalPanel } from "./horizontal-panel";
-import { Label } from "./label";
 import { NodeConnectionControl } from "./node-connection-control";
 import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
 import { ColorUtils } from "./utils/color-utils";
 import { LOT_ICONS } from "./utils/icon-library";
 import { _DDxIcon, IconUtils, SVGIcon } from "./utils/icon-utils";
-import { LOT_USER_CONTROL } from "./utils/user-utils";
+import { LOT_USER_CONTROL, ValueType } from "./utils/user-utils";
 
 
 export class PinControl extends HorizontalPanel {
@@ -88,8 +87,9 @@ export class PinControl extends HorizontalPanel {
     public postInit(): void {
         const _BoxClass = this.pinProperty.isValued && LOT_USER_CONTROL[this.pinProperty.type];
         if (_BoxClass) {
+            const _desc: ValueType = { type: this.pinProperty.type, unit: this.pinProperty.subCategory, min: 0, max: 1, decimal: 3 }
             const _panel = new HorizontalPanel();
-            const _box = this.defaultValueBox = new _BoxClass(this.pinProperty.defaultValue, this._pinProperty.formattedName, this.pinProperty.id);
+            const _box = this.defaultValueBox = new _BoxClass(this.pinProperty.defaultValue, this._pinProperty.formattedName, _desc, this.pinProperty.id);
             const _paddingH = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;
             const _paddingV = (Constants.DEFAULT_PROPERTY_HEIGHT - Constants.DEFAULT_BOX_HEIGHT)/2;
             _panel.padding.left = _panel.padding.right = _paddingH;

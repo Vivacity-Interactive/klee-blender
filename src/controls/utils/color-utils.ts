@@ -2,7 +2,7 @@ import { NodeCategory } from "../../data/nodes/node-enums";
 import { PropertyType } from "../../data/custom-property-enums";
 import { PinProperty } from "../../data/pin/pin-property";
 import { Node } from "../../data/nodes/node";
-import { LOT_NODE_RESOLVE_CATEGORY, NodeUtils } from "./node-utils";
+import { NodeUtils } from "./node-utils";
 
 
 export enum CustomColorCategory {

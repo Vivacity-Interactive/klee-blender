@@ -1,9 +1,12 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
+import { PropertyType } from "../data/custom-property-enums";
 import { ControlLayout } from "./control";
 import { HorizontalPanel } from "./horizontal-panel";
 import { Label } from "./label";
 import { UserControl } from "./user-control";
+import { CustomDataType } from "./utils/icon-utils";
+import { ValueType } from "./utils/user-utils";
 import { ValueBoxControl } from "./value-box-control";
 import { VerticalPanel } from "./vertical-panel";
 
@@ -12,9 +15,11 @@ export class StructBoxControl extends VerticalPanel {
 
     private entries: Array<{ key: string, value: any }>;//Array<{ key: string, value: any }>;
     private title: string;
+    private desc: ValueType;
 
-    constructor(entries:Array<{ key: string, value: any }>, title: string = "") {
+    constructor(entries:Array<{ key: string, value: any }>, title: string = "", desc: ValueType = null, _uid: number | string = null) {
         super();
+        this.desc = desc;
         this.title = title;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.entries = entries;
@@ -30,7 +35,7 @@ export class StructBoxControl extends VerticalPanel {
         let index = 0;
         for (const entry of this.entries) {
             const _panel = new HorizontalPanel();
-            const _box = new ValueBoxControl(entry.value, entry.key);
+            const _box = new ValueBoxControl(entry.value, entry.key, desc, _uid);
             _box.height = Constants.DEFAULT_BOX_HEIGHT;
             _panel.height = Constants.DEFAULT_BOX_HEIGHT//Math.max(_box.height, _panel.height, Constants.DEFAULT_BOX_HEIGHT);
             _panel.height = Math.max(_box.height, _panel.height, Constants.DEFAULT_PROPERTY_HEIGHT - 6);
@@ -56,17 +61,5 @@ export class StructBoxControl extends VerticalPanel {
         canvas.strokeStyle("#8D4BBB");
         canvas.strokeRect(0, 0, this.size.x + this.padding.left + this.padding.right, this.size.y + this.padding.top + this.padding.bottom);
         /// #endif
-        
-        // canvas.save();
-        // canvas
-        //     .roundedRectangle(0, 0, this.size.x, this.size.y, Constants.DEFAULT_BOX_RADIUS)
-        //     .clip();
-        // canvas.restore();
-        // canvas.roundedRectangle(0, 0, this.size.x, this.size.y, Constants.DEFAULT_BOX_RADIUS)
-        //     .clip()
-        //     .font(Constants.NODE_FONT)
-        //     .fillStyle("#cccccc")
-        //     .textAlign("left")
-        //     .fillText(this.title, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING, Constants.DEFAULT_VALUE_BOX_TEXT_PADDING + this.size.y/2);
     }
 }

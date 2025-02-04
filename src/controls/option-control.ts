@@ -4,10 +4,9 @@ import { OptionProperty } from "../data/option/option-property";
 import { Vector2 } from "../math/vector2";
 import { ControlLayout, VerticalAlignment } from "./control";
 import { HorizontalPanel } from "./horizontal-panel";
-import { Label } from "./label";
 import { NodeControl } from "./nodes/node-control";
 import { UserControl } from "./user-control";
-import { LOT_USER_CONTROL } from "./utils/user-utils";
+import { LOT_USER_CONTROL, ValueType } from "./utils/user-utils";
 
 
 export class OptionControl extends HorizontalPanel {
@@ -57,8 +56,9 @@ export class OptionControl extends HorizontalPanel {
     public postInit(): void {
         const _BoxClass = this.optionProperty.isValued && LOT_USER_CONTROL[this.optionProperty.type];
         if (_BoxClass) {
+            const _desc: ValueType = { type: this.optionProperty.type, unit: this.optionProperty.subCategory, min: 0, max: 1, decimal: 3 }
             const _panel = new HorizontalPanel();
-            const _box = this.defaultValueBox = new _BoxClass(this.optionProperty.defaultValue, this.optionProperty.formattedName, this.optionProperty.id);
+            const _box = this.defaultValueBox = new _BoxClass(this.optionProperty.defaultValue, this.optionProperty.formattedName, _desc, this.optionProperty.id);
             const _paddingH = OptionControl.PINS_PADDING_HORIZONTAL + OptionControl.PINS_PADDING_LEFT_DEFAULT_BOX;
             const _paddingV = (Constants.DEFAULT_PROPERTY_HEIGHT - Constants.DEFAULT_BOX_HEIGHT)/2;
             _panel.padding.left = _panel.padding.right = _paddingH;

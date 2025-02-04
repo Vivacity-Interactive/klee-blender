@@ -1,4 +1,3 @@
-import { Application } from "../application";
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
 import { Vector2 } from "../math/vector2";

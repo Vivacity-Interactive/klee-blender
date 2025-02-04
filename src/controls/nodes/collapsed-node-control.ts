@@ -1,8 +1,4 @@
-import { Application } from "../../application";
-import { Canvas2D } from "../../canvas";
-import { Constants } from "../../constants";
 import { Node } from "../../data/nodes/node";
-import { Vector2 } from "../../math/vector2";
 import { DrawableControl } from "../interfaces/drawable";
 import { NodeFoldButton } from "../node-fold-button";
 import { HeadedNodeControl } from "./headed-node-control";

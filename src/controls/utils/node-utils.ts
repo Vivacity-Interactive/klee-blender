@@ -1,4 +1,3 @@
-import { Graph } from "../../data/graph";
 import { Node } from "../../data/nodes/node";
 import { NodeCategory } from "../../data/nodes/node-enums";
 import { NodeControl } from "../nodes/node-control";
