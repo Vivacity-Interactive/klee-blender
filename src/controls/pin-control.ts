@@ -174,10 +174,6 @@ export class PinControl extends HorizontalPanel {
         return textX;
     }
 
-    // public formattedNameWidth(pin: PinProperty): number {
-    //     return this.app.canvas.font(Constants.NODE_FONT).getContext().measureText(pin.formattedName).width + PinControl.PIN_NAME_PADDING_LEFT;
-    // }
-
     public getPinAbsolutePosition(): Vector2 {
         let position = this.getAbsolutPosition();
         position.y += this.height * 0.5;

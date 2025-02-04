@@ -9,6 +9,7 @@ import { PinProperty } from "../../data/pin/pin-property";
 import { PinControl } from "../pin-control";
 import { PinDirection } from "../../data/pin/pin-enums";
 import { ControlLayout } from "../control";
+import { IconCategory } from "../../data/icon-category";
 
 
 export class HeadedNodeControl extends NodeControl implements DrawableControl {
@@ -21,7 +22,7 @@ export class HeadedNodeControl extends NodeControl implements DrawableControl {
     protected headerHeight = HeadedNodeControl.NODE_HEADER_TITLE_HEIGHT;
     private header: Header;
 
-    constructor(node: Node, icon?: string) {
+    constructor(node: Node, icon?: IconCategory) {
         super(node);
 
         this.minHeight = HeadedNodeControl.NODE_HEADER_TITLE_HEIGHT;

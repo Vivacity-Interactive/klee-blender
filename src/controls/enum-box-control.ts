@@ -1,6 +1,6 @@
 import { Canvas2D } from "../canvas";
 import { Constants } from "../constants";
-import { Enum } from "../data/Enum";
+import { Enum } from "../data/enum";
 import { IconCategory } from "../data/icon-category";
 import { ControlLayout } from "./control";
 import { UserControl } from "./user-control";
@@ -12,7 +12,7 @@ import { ValueType } from "./utils/user-utils";
 export class EnumBoxControl extends UserControl {
 
     private text: string;
-    private desc: ValueType;
+    //private desc: ValueType;
     //private title: string;
 
     private _uid: number | string;
@@ -23,7 +23,7 @@ export class EnumBoxControl extends UserControl {
     constructor(value: Enum, title: string = "", desc: ValueType = null, _uid: number | string = null) {
         super();
         this._uid = _uid;
-        this.desc = desc;
+        //this.desc = desc;
         //this.title = title;
         this.text = value.title;
         this.height = Constants.DEFAULT_BOX_HEIGHT;

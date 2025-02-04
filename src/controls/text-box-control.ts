@@ -9,11 +9,11 @@ export class TextBoxControl extends UserControl {
 
     private text: string;
     private title: string;
-    private desc: ValueType;
+    //private desc: ValueType;
 
     constructor(text: string, title: string = "", desc: ValueType = null, _uid: number | string = null) {
         super();
-        this.desc = desc;
+        //this.desc = desc;
         this.title = title;
         this.text = text;
         this.height = Constants.DEFAULT_BOX_HEIGHT;

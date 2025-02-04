@@ -8,6 +8,7 @@ import { Label } from "./label";
 import { PinControl } from "./pin-control";
 import { ColorUtils } from "./utils/color-utils";
 import { ControlLayout } from "./control";
+import { IconCategory } from "../data/icon-category";
 
 
 export class Header extends HorizontalPanel {
@@ -17,13 +18,13 @@ export class Header extends HorizontalPanel {
 
     private fillStyleHeader: string;
     protected headerHeight = Header.HEADER_TITLE_HEIGHT;
-    private icon: Icon = undefined;
+    private icon: Icon
     private node: Node;
 
     private titlePanel: VerticalPanel;
     private delegatePanel: VerticalPanel;
 
-    constructor(node: Node, icon?: string) {
+    constructor(node: Node, icon?: IconCategory) {
         super();
 
         this.node = node;

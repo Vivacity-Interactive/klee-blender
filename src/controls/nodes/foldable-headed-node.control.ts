@@ -1,3 +1,4 @@
+import { IconCategory } from "../../data/icon-category";
 import { Node } from "../../data/nodes/node";
 import { DrawableControl } from "../interfaces/drawable";
 import { NodeFoldButton } from "../node-fold-button";
@@ -8,7 +9,7 @@ export class FoldableHeadedNodeControl extends HeadedNodeControl implements Draw
     nodeButton: NodeFoldButton;
     foldState: boolean = false;
 
-    constructor(node: Node, icon?: string) {
+    constructor(node: Node, icon?: IconCategory) {
         super(node, icon);
 
         //this.foldState = (node.advancedPinDisplay !== undefined) ? node.advancedPinDisplay : true;

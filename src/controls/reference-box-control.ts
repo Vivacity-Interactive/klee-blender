@@ -13,38 +13,36 @@ export class ReferenceBoxControl extends UserControl {
 
     private text: string;
     private title: string;
-    private desc: ValueType;
+    //private desc: ValueType;
 
     private _uid: number | string;
     private _icon: SVGIcon;
     private _icon2: SVGIcon;
     private _iconScale: number;
-    private _icon2Scale: number;
 
     constructor(ref: any, title: string = "", desc: ValueType = null, _uid: number | string = null) {
         super();
         this._uid = _uid;
-        this.desc = desc;
+        //this.desc = desc;
         this.title = title;
         this.text = ref ? ref.name_full ?? ref.name : "";
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.controlLayout |= ControlLayout.FillParentHorizontal | ControlLayout.IgnoreVertical;
+        
+        this._iconScale = Math.floor(this.height * 0.9);
 
-        // Fix this optional, needs argument variation on show,
+        const _color = '#cccccc';
         const iconId = LOT_DATA_ICON[desc.type];
         const data = LOT_ICONS[iconId];
         if (data) {
-            this._icon = new SVGIcon(data, iconId+'#cccccc', '#cccccc');
-            this._iconScale = Math.floor(this.height * 0.9);
+            this._icon = new SVGIcon(data, iconId+_color, _color);
         }
 
-        // Fix this optional, needs custon icon or none.
         const bText = this.text && this.text.length;
         const iconId2 = bText ? IconCategory.X : (desc.type == PropertyType.OBJECT ? IconCategory.EYEDROPPER : null);
         const data2 = LOT_ICONS[iconId2];
         if (data2) {
-            this._icon2 = new SVGIcon(data2, iconId2+'#cccccc', '#cccccc');
-            this._icon2Scale = Math.floor(this.height * (bText ? 0.5 : 0.9)); //TODO: X
+            this._icon2 = new SVGIcon(data2, iconId2+_color, _color);
         }
     }
 
@@ -54,8 +52,9 @@ export class ReferenceBoxControl extends UserControl {
 
 
     drawIcons(canvas: Canvas2D) {
+        const bText = this.text && this.text.length;
         const _scale = this._iconScale;
-        const _scale2 = this._icon2Scale;
+        const _scale2 = bText ? this._iconScale * .5 : this._iconScale;
         const _margin:number = (this.height - this._iconScale)/2
         const _this = this;
         

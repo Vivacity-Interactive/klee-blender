@@ -27,8 +27,6 @@ export class StructBoxControl extends VerticalPanel {
 
         const _label = new Label(this.title, Constants.NODE_FONT, "#cccccc");
         _label.height = Math.max(Constants.DEFAULT_BOX_HEIGHT, Constants.DEFAULT_PROPERTY_HEIGHT - 6);
-        //_label.padding = .padding = { top: 6, right: 0, bottom: 3, left: 0 };
-        //_label.controlLayout |= ControlLayout.IgnoreHorizontal;
         this.children.push(_label);
 
         let _height = _label.height;
@@ -37,7 +35,7 @@ export class StructBoxControl extends VerticalPanel {
             const _panel = new HorizontalPanel();
             const _box = new ValueBoxControl(entry.value, entry.key, desc, _uid);
             _box.height = Constants.DEFAULT_BOX_HEIGHT;
-            _panel.height = Constants.DEFAULT_BOX_HEIGHT//Math.max(_box.height, _panel.height, Constants.DEFAULT_BOX_HEIGHT);
+            _panel.height = Constants.DEFAULT_BOX_HEIGHT;
             _panel.height = Math.max(_box.height, _panel.height, Constants.DEFAULT_PROPERTY_HEIGHT - 6);
             _panel.controlLayout |= ControlLayout.FillParentVertical;
             _panel.add(_box);
