@@ -44,16 +44,3 @@ function initialize() {
 }
 
 window.addEventListener("load", initialize);
-
-/// #if UNIT_TEST
-import { UnitTest } from "./tests/unit-test";
-import { UnitTestBLOF } from "./tests/unit-test-blof";
-
-window.addEventListener("load", () => {
-    let units: Array<UnitTest> = [
-        //new UnitTestBLOF(),
-    ];
-    
-    for (const unit of units) { unit.execute(); }
-});
-/// #endif

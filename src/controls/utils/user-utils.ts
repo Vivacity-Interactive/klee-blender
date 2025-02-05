@@ -57,14 +57,14 @@ export const LOT_USER_CONTROL: { [key in CustomUserClass | PropertyType]: UserCo
     [PropertyType.OBJECT]: ReferenceBoxControl,
     [PropertyType.GEOMETRY]: null,
     [PropertyType.COLLECTION]: ReferenceBoxControl,
-    [PropertyType.TEXTURE]: null,
+    [PropertyType.TEXTURE]: AssetBoxControl,
     [PropertyType.MATERIAL]: ReferenceBoxControl,
     [PropertyType.MENU]: EnumBoxControl, //Enu
     [PropertyType.IMAGE]: AssetBoxControl,
     [PropertyType.CUSTOM]: null,
     [PropertyType._UNKNOWN]: null,
     [PropertyType.ENUM]: EnumBoxControl, //282828
-    [PropertyType.POINTER]: TextBoxControl
+    [PropertyType.POINTER]: ReferenceBoxControl
 }
 
 export const LOT_USER_RESOLVE_CONTROL:  Partial<{ [key in CustomUserClass | PropertyType]: RegExp }> = {

@@ -5,6 +5,8 @@ export class CustomProperty {
     state: PropertyState;
     subCategory: PropertySubCategory;
     type: PropertyType;
+    fixedType: string;
+    _type: PropertyType;
 
     get isLinked(): boolean {
         return (this.state & PropertyState.LINKED) == PropertyState.LINKED;  //(this.linkedTo && this.linkedTo.length > 0);

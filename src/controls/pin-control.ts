@@ -85,9 +85,10 @@ export class PinControl extends HorizontalPanel {
     }
 
     public postInit(): void {
+        const _idType = this.pinProperty._type ?? this.pinProperty.type;
         const _BoxClass = this.pinProperty.isValued && LOT_USER_CONTROL[this.pinProperty.type];
         if (_BoxClass) {
-            const _desc: ValueType = { type: this.pinProperty.type, unit: this.pinProperty.subCategory, min: 0, max: 1, decimal: 3 }
+            const _desc: ValueType = { type: _idType, unit: this.pinProperty.subCategory, min: 0, max: 1, decimal: 3 }
             const _panel = new HorizontalPanel();
             const _box = this.defaultValueBox = new _BoxClass(this.pinProperty.defaultValue, this._pinProperty.formattedName, _desc, this.pinProperty.id);
             const _paddingH = PinControl.PINS_PADDING_HORIZONTAL + PinControl.PINS_PADDING_LEFT_DEFAULT_BOX;

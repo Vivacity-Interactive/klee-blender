@@ -4,6 +4,28 @@ import { BLOEFPopulate } from "./parser/ueof-blender-populate";
 import { Scene } from "./scene";
 import { GraphUtils } from "./utils/graph-utils";
 
+export enum KleeFit {
+    None = 0,
+    FitX = 1 << 0,
+    FitY = 1 << 1,
+    StretchX = 1 << 2,
+    StretchY = 1 << 3,
+    FullScreen = 1 << 4,
+    Fit = FitX | FitY,
+    Stretch = StretchX | StretchY,
+}
+
+const LOT_SOURCE_SCALING: { [key: string]: KleeFit } = {
+    "none": KleeFit.None,
+    "fitx": KleeFit.FitX,
+    "fity": KleeFit.FitY,
+    "stretchx": KleeFit.StretchX,
+    "stretchy": KleeFit.StretchY,
+    "fit": KleeFit.Fit,
+    "stretch": KleeFit.Stretch,
+    "fullscreen": KleeFit.FullScreen,
+}
+
 export class Application {
 
     private _scene: Scene;
@@ -17,6 +39,7 @@ export class Application {
     private static instances: Array<Application> = [];
 
     private allowPaste: boolean;
+    private kleeFit: KleeFit;
 
     private constructor(element: HTMLCanvasElement) {
         this._element = element;
@@ -81,14 +104,39 @@ export class Application {
 
         let attrPaste = this._element.getAttributeNode("data-klee-paste");
         this.allowPaste = attrPaste?.value == "true" || false;
+        let attrFit = this._element.getAttributeNode('klee-fit');
+        const _fitProps = attrFit?.value.replace(/[-_]/g,"").toLowerCase().split(/[\s;:,\|]+/g) ?? [];
+        console.log(_fitProps)
+        for (const _prop of _fitProps) { this.kleeFit |= LOT_SOURCE_SCALING[_prop]}
+        
     }
 
     public refresh() {
         this._element.width = this._element.offsetWidth;
         this._element.height = this._element.offsetHeight;
+        this._evaluateFit();
         this._scene.collectInteractables();
         this._scene.updateLayout();
         this._scene.refresh();
+    }
+
+    private _evaluateFit()
+    {
+        const flag = this.kleeFit;
+        const bFullScreen = (flag & KleeFit.FullScreen) == KleeFit.FullScreen;
+        document.querySelector('body');
+
+        if ((flag & KleeFit.FitX) == KleeFit.FitX) {
+            this._element.width = bFullScreen ? window.innerWidth : this._element.parentElement.offsetWidth;
+        } else if ((flag & KleeFit.StretchX) == KleeFit.StretchX) {
+            
+        }
+
+        if ((flag & KleeFit.FitY) == KleeFit.FitY) {
+            this._element.height = bFullScreen ? window.innerHeight : this._element.parentElement.offsetHeight;
+        } else if ((flag & KleeFit.StretchY) == KleeFit.StretchY) {
+            
+        }
     }
 
     private copyNodeGroupSelectionToClipboard() {

@@ -181,7 +181,8 @@ export class Controller {
         const mouseAbsolutePos = this.getAbsoluteMousePosition(ev);
 
         if (this._mouseDownData) {
-            if (this._mouseDownData.buttonType === MouseButton.Right) {
+            const bMove = this._mouseDownData.buttonType === MouseButton.Right || this._mouseDownData.buttonType === MouseButton.Middle
+            if (bMove) {
                 const delta = currentMousePosition.subtract(this._mousePositionOfPreviousMove);
                 this._mousePositionOfPreviousMove = currentMousePosition;
 

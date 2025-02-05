@@ -16,6 +16,7 @@ type _KeyValuePair = { key: string, value: any }
 const _toKVArrLOT = (arr:any[], lot:Array<string>): _KeyValuePair[] => { return arr.map((x: any, i: number): _KeyValuePair => { return { key: lot[i%arr.length], value: x } }); }
 const _toKVArr = (arr:any[]): _KeyValuePair[] => { return arr.map((x:any): _KeyValuePair => { return { key: "", value: x }; }); }
 
+// add scope: any
 type ValueConstrutor = (raw: any, graph:Graph) => any
 
 const _passOn: ValueConstrutor = (value: any, graph:Graph): any => value;

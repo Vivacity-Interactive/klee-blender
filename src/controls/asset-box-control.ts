@@ -27,7 +27,7 @@ export class AssetBoxControl extends UserControl {
         this.desc = desc;
         this.title = title;
         this.text = ref ? ref.name_full ?? ref.name : "";
-        this.users = ref.users - (+!!ref.use_fake_user);
+        this.users = ref ? ref.users - (+!!ref.use_fake_user) : -1;
         this.height = Constants.DEFAULT_BOX_HEIGHT;
         this.controlLayout |= ControlLayout.FillParentHorizontal | ControlLayout.IgnoreVertical;
         

@@ -1,13 +1,13 @@
 import bpy, json, mathutils
 
-#def _rna_x(val):
-#    return {k:_to_val(getattr(val, k, None), v, None) for k,v in val.rna_type.properties.items()}
+def _rna_x(val):
+    return {k:_to_val(getattr(val, k, None), v, None) for k,v in val.rna_type.properties.items()}
 
 #def _rna_y(val):
 #     return {k:str(v) for k,v in val.properties.items()}
 
-#def _print_x(val):
-#    print(json.dumps(_rna_x(val),indent=2))
+def _print_x(val):
+    print(json.dumps(_rna_x(val),indent=2))
     
 #def _print_y(val):
 #    print(json.dumps(_rna_y(val),indent=2))
@@ -26,6 +26,7 @@ def _arr_or_val(val, desc):
     return [x for x in val] if desc.is_array else val
 
 def _opt_resolve(desc, enum_lot):
+    #_print_y(desc)
     #return { k:_to_val(getattr(desc, k, None), v, enum_lot, 1 if not k in ['rna_type'] else 1) for k,v in desc.rna_type.properties.items() if not k in BLOF._PROPS_X}
     return { k:_to_val(getattr(desc, k, None), v, enum_lot, 6 if not k in ['rna_type'] else 1) for k,v in desc.rna_type.properties.items() if k in BLOF.PROPS_INCLUDE}
 
@@ -71,7 +72,7 @@ def _to_val(val, desc, enum_lot=None, n=1):
 class BLOF:
     DEFAULT_INDENT = None
     ENUM_EXCLUDE = ['id_type','bl_icon','bl_static_type', 'icon']
-    PROPS_INCLUDE = ['name','identifier','description','type', 'subtype', 'is_hidden']
+    PROPS_INCLUDE = ['name','identifier','description','type', 'subtype', 'is_hidden','fixed_type']
     #PROPS_INCLUDE = ['name','identifier','description','type', 'subtype','is_hidden', 'is_runtime', 'is_animatable']
     #_PROPS_X = ['enum_items','enum_items_static','enum_items_static_ui','rna_type']
     ID_INCLUDE = ['rna_type','id_type', 'name','name_full', 'users', 'use_fake_user','session_uid']
@@ -181,7 +182,9 @@ class BLOF:
 
 class _Settings:
     def __init__(self):
-        self.name = "GN_Wireframe"
+        self.name = "GN_Broken"
+        #self.name = "GN_ALL"
+        #self.name = "GN_Wireframe"
         #self.name = "GN_Contribute"
         #self.name = "GN_Test"
         #self.name = "Material"

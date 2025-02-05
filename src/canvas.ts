@@ -217,6 +217,10 @@ export class Canvas2D {
         return this._context;
     }
 
+    getELement() : HTMLCanvasElement {
+        return this._element;
+    }
+
     get width() {
         return this._element.width;
     }

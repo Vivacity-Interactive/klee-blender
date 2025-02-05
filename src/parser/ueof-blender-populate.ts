@@ -127,6 +127,12 @@ export class BLOEFPopulate {
 
         option.subCategory = PropertySubCategory[scope.bl_subtype_label as keyof PropertySubCategory];
         option.type = PropertyType[scope.type[0] as keyof PropertyType];
+        const bFixedType = scope?.fixed_type?.name
+        if (bFixedType) {
+            console.log(scope.fixed_type)
+            option.fixedType = scope.fixed_type.name;
+            option._type = PropertyType[option.fixedType.toUpperCase() as keyof PropertyType]
+        }
         option.toolTip = scope.description;
         option.defaultValue = LOT_VALUE[option.type](value, this.graph);
 

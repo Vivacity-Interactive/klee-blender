@@ -54,9 +54,10 @@ export class OptionControl extends HorizontalPanel {
     }
 
     public postInit(): void {
-        const _BoxClass = this.optionProperty.isValued && LOT_USER_CONTROL[this.optionProperty.type];
+        const _idType = this.optionProperty._type ?? this.optionProperty.type;
+        const _BoxClass = this.optionProperty.isValued && LOT_USER_CONTROL[_idType];
         if (_BoxClass) {
-            const _desc: ValueType = { type: this.optionProperty.type, unit: this.optionProperty.subCategory, min: 0, max: 1, decimal: 3 }
+            const _desc: ValueType = { type: _idType, unit: this.optionProperty.subCategory, min: 0, max: 1, decimal: 3 }
             const _panel = new HorizontalPanel();
             const _box = this.defaultValueBox = new _BoxClass(this.optionProperty.defaultValue, this.optionProperty.formattedName, _desc, this.optionProperty.id);
             const _paddingH = OptionControl.PINS_PADDING_HORIZONTAL + OptionControl.PINS_PADDING_LEFT_DEFAULT_BOX;
