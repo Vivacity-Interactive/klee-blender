@@ -1,6 +1,6 @@
 import { Color } from "../data/color";
 import { PropertyType } from "../data/custom-property-enums";
-import { Enum } from "../data/Enum";
+import { Enum } from "../data/enum";
 import { Graph } from "../data/graph";
 import { decodeHtmlText } from "./text-utils";
 
@@ -56,6 +56,7 @@ export class UserUtils {
 export const LOT_VALUE: { [key in CustomValueClass | PropertyType]: ValueConstrutor } = {
     [PropertyType.VALUE]: _passOn,
     [PropertyType.INT]: _passOn,
+    [PropertyType.FLOAT]: _passOn,
     [PropertyType.BOOLEAN]: _passOn,
     [PropertyType.VECTOR]: _asVector,
     [PropertyType.ROTATION]: _asEuler,

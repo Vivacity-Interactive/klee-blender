@@ -59,7 +59,7 @@ export class ZoneNodeControl extends NodeControl implements DrawableControl {
         canvas.fillStyle(this.headerBackgroundColor)
             .roundedRectangle(0, 0, this.width, headerHeight, { radiusTopLeft: 5, radiusTopRight: 5, radiusBottomLeft: 0, radiusBottomRight: 0 })
             .fill()
-            .font("400 11px sans-serif")
+            .font(Constants.NODE_FONT)
             .textAlign('left')
             .strokeStyle('#333')
             .lineWidth(1.5)

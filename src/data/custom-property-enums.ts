@@ -23,6 +23,7 @@ export enum PropertySubCategory {
 export enum PropertyType {
     VALUE,
     INT,
+    FLOAT,
     BOOLEAN,
     VECTOR,
     ROTATION,

@@ -15,9 +15,6 @@ import { IconCategory } from "../../data/icon-category";
 export class HeadedNodeControl extends NodeControl implements DrawableControl {
 
     private static readonly NODE_HEADER_TITLE_HEIGHT = 23;
-    private static readonly NODE_HEADER_SUBTITLE_HEIGHT = 14;
-    private static readonly NODE_HEADER_SPACE_BETWEEN_TITLE_AND_SUBTITLE = 4;
-    private static readonly NODE_HEADER_ICONS_WIDTH = 50;
 
     protected headerHeight = HeadedNodeControl.NODE_HEADER_TITLE_HEIGHT;
     private header: Header;
@@ -34,14 +31,6 @@ export class HeadedNodeControl extends NodeControl implements DrawableControl {
 
         this.createProperties(new Vector2(0, this.headerHeight));
         this.mainPanel.insert(this.header, 0);
-
-        this.initializeEnabledState();
-    }
-
-    protected initializeEnabledState(): void {
-        // if (this.node.enabledState !== undefined) {
-        //     this.mainPanel.add(new WarningBar(prettifyText(this.node.enabledState)));
-        // }
     }
 
     protected createPin(property: PinProperty) {
@@ -49,11 +38,6 @@ export class HeadedNodeControl extends NodeControl implements DrawableControl {
         this.pins.push(pinControl);
 
         if (property.direction == PinDirection.Output) {
-            // if (property.showInHead) {
-            //     pinControl.fillParentVertical = true;
-            //     this.header.addDelegate(pinControl);
-            //     return;
-            // }
             this.outputPinPanel.add(pinControl);
         } else {
             this.inputPinPanel.add(pinControl);

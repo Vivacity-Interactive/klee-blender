@@ -45,6 +45,7 @@ export class UserUtils {
 
 export const LOT_USER_CONTROL: { [key in CustomUserClass | PropertyType]: UserControlConstrutor } = {
     [PropertyType.VALUE]: ValueBoxControl,
+    [PropertyType.FLOAT]: ValueBoxControl,
     [PropertyType.INT]: ValueBoxControl,
     [PropertyType.BOOLEAN]: CheckBoxControl,
     [PropertyType.VECTOR]: StructBoxControl,

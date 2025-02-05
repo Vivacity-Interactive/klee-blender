@@ -9,5 +9,9 @@ export class Enum {
         this.options = options;
     }
 
-    get title(): string { return decodeHtmlText(String(this.options[this.value])); }
+    get title(): string {
+        try {
+            return decodeHtmlText(String(this.options[this.value]));
+        } catch { return String(this.value); }
+    }
 }
